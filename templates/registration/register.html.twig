@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <section class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Inscription</h1>
+
+                {{ form_errors(registrationForm) }}
+
+                {{ form_start(registrationForm) }}
+                    <fieldset>
+                        <legend>Mon identité</legend>
+                        {{ form_row(registrationForm.email) }}
+                        {{ form_row(registrationForm.firstname) }}
+                        {{ form_row(registrationForm.lastname) }}
+
+                        {{ form_row(registrationForm.plainPassword, {
+                            label: 'Password'
+                            }) 
+                        }}
+                    </fieldset>
+                 {# <fieldset>
+                        <legend>Mes Coordonnées</legend>
+                        {{ form_row(registrationForm.address) }}
+                        {{ form_row(registrationForm.company) }}
+                    </fieldset> #}
+                    {{ form_row(registrationForm.RGPDConsent) }}
+
+                <button type="submit" class="btn">Register</button>
+            </div>
+        </div>
+    </section>
+    {{ form_end(registrationForm) }}
+{% endblock %}
