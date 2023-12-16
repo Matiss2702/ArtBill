@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CompanyRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,7 +19,7 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $commercial_name = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: true, unique: true)]
     private ?int $siren = null;
 
     #[ORM\Column(nullable: true)]
@@ -34,6 +36,18 @@ class Company
 
     #[ORM\Column(nullable: true)]
     private ?int $bank_statement = null;
+
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Quotation::class, orphanRemoval: true)]
+    private Collection $quotations;
+
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Invoice::class, orphanRemoval: true)]
+    private Collection $invoices;
+
+    public function __construct()
+    {
+        $this->quotations = new ArrayCollection();
+        $this->invoices = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +134,66 @@ class Company
     public function setBankStatement(?int $bank_statement): static
     {
         $this->bank_statement = $bank_statement;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Quotation>
+     */
+    public function getQuotations(): Collection
+    {
+        return $this->quotations;
+    }
+
+    public function addQuotation(Quotation $quotation): static
+    {
+        if (!$this->quotations->contains($quotation)) {
+            $this->quotations->add($quotation);
+            $quotation->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuotation(Quotation $quotation): static
+    {
+        if ($this->quotations->removeElement($quotation)) {
+            // set the owning side to null (unless already changed)
+            if ($quotation->getCompany() === $this) {
+                $quotation->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invoice>
+     */
+    public function getInvoices(): Collection
+    {
+        return $this->invoices;
+    }
+
+    public function addInvoice(Invoice $invoice): static
+    {
+        if (!$this->invoices->contains($invoice)) {
+            $this->invoices->add($invoice);
+            $invoice->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoice(Invoice $invoice): static
+    {
+        if ($this->invoices->removeElement($invoice)) {
+            // set the owning side to null (unless already changed)
+            if ($invoice->getCompany() === $this) {
+                $invoice->setCompany(null);
+            }
+        }
 
         return $this;
     }

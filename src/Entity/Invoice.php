@@ -14,127 +14,145 @@ class Invoice
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $price = null;
-
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $vat_rate = null;
+    private ?string $description = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $status = null;
+    #[ORM\Column]
+    private ?float $amount_ht = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $date = null;
+    #[ORM\Column]
+    private ?float $amount_ttc = null;
+
+    #[ORM\Column]
+    private ?int $quantity = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $status = null;
+
+    #[ORM\ManyToOne(inversedBy: 'invoices')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
+    #[ORM\ManyToOne(inversedBy: 'invoices')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Customer $customer = null;
+
+    #[ORM\ManyToOne(inversedBy: 'invoices')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Company $company = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $due_date = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?bool $is_deposit = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $client = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $company = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPrice(): ?int
+    public function getDescription(): ?string
     {
-        return $this->price;
+        return $this->description;
     }
 
-    public function setPrice(?int $price): static
+    public function setDescription(?string $description): static
     {
-        $this->price = $price;
+        $this->description = $description;
 
         return $this;
     }
 
-    public function getVatRate(): ?string
+    public function getAmountHt(): ?float
     {
-        return $this->vat_rate;
+        return $this->amount_ht;
     }
 
-    public function setVatRate(?string $vat_rate): static
+    public function setAmountHt(float $amount_ht): static
     {
-        $this->vat_rate = $vat_rate;
+        $this->amount_ht = $amount_ht;
 
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getAmountTtc(): ?float
+    {
+        return $this->amount_ttc;
+    }
+
+    public function setAmountTtc(float $amount_ttc): static
+    {
+        $this->amount_ttc = $amount_ttc;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): static
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(?int $status): static
+    public function setStatus(string $status): static
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getOwner(): ?User
     {
-        return $this->date;
+        return $this->owner;
     }
 
-    public function setDate(?\DateTimeInterface $date): static
+    public function setOwner(?User $owner): static
     {
-        $this->date = $date;
+        $this->owner = $owner;
 
         return $this;
     }
 
-    public function getDue_Date(): ?\DateTimeInterface
+    public function getCustomer(): ?Customer
     {
-        return $this->due_date;
+        return $this->customer;
     }
 
-    public function setDue_Date(\DateTimeInterface $due_date): static
+    public function setCustomer(?Customer $customer): static
     {
-        $this->due_date = $due_date;
+        $this->customer = $customer;
 
         return $this;
     }
 
-    public function isIsDeposit(): ?bool
-    {
-        return $this->is_deposit;
-    }
-
-    public function setIsDeposit(?bool $is_deposit): static
-    {
-        $this->is_deposit = $is_deposit;
-
-        return $this;
-    }
-
-    public function getClient(): ?int
-    {
-        return $this->client;
-    }
-
-    public function setClient(?int $client): static
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
-    public function getCompany(): ?int
+    public function getCompany(): ?Company
     {
         return $this->company;
     }
 
-    public function setCompany(?int $company): static
+    public function setCompany(?Company $company): static
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    public function getDueDate(): ?\DateTimeInterface
+    {
+        return $this->due_date;
+    }
+
+    public function setDueDate(\DateTimeInterface $due_date): static
+    {
+        $this->due_date = $due_date;
 
         return $this;
     }

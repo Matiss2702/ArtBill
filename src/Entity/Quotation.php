@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\QuotationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuotationRepository::class)]
 class Quotation
@@ -17,23 +18,37 @@ class Quotation
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $price = null;
+    #[ORM\Column]
+    private ?float $amount_ht = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $vat_rate = null;
+    #[ORM\Column]
+    private ?float $amount_ttc = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $status = null;
+    #[ORM\Column]
+    private ?int $quantity = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+
+    #[ORM\Column(length: 100, options: ["default" => "created"])]
+    #[Assert\Choice(['created', 'sent', 'refused', 'accepted', 'paid', 'expired'])]
+    private ?string $status = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $client = null;
+    #[ORM\ManyToOne(inversedBy: 'quotations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $company = null;
+    #[ORM\ManyToOne(inversedBy: 'quotations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Company $company = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $due_date = null;
+
+    #[ORM\ManyToOne(inversedBy: 'quotations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Customer $customer = null;
 
     public function getId(): ?int
     {
@@ -52,36 +67,48 @@ class Quotation
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getAmountHt(): ?float
     {
-        return $this->price;
+        return $this->amount_ht;
     }
 
-    public function setPrice(?int $price): static
+    public function setAmountHt(float $amount_ht): static
     {
-        $this->price = $price;
+        $this->amount_ht = $amount_ht;
 
         return $this;
     }
 
-    public function getVatRate(): ?string
+    public function getAmountTtc(): ?float
     {
-        return $this->vat_rate;
+        return $this->amount_ttc;
     }
 
-    public function setVatRate(?string $vat_rate): static
+    public function setAmountTtc(float $amount_ttc): static
     {
-        $this->vat_rate = $vat_rate;
+        $this->amount_ttc = $amount_ttc;
 
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): static
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(?int $status): static
+    public function setStatus(string $status): static
     {
         $this->status = $status;
 
@@ -93,33 +120,57 @@ class Quotation
         return $this->date;
     }
 
-    public function setDate(?\DateTimeInterface $date): static
+    public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
 
         return $this;
     }
 
-    public function getClient(): ?int
+    public function getOwner(): ?User
     {
-        return $this->client;
+        return $this->owner;
     }
 
-    public function setClient(?int $client): static
+    public function setOwner(?User $owner): static
     {
-        $this->client = $client;
+        $this->owner = $owner;
 
         return $this;
     }
 
-    public function getCompany(): ?int
+    public function getCompany(): ?Company
     {
         return $this->company;
     }
 
-    public function setCompany(?int $company): static
+    public function setCompany(?Company $company): static
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    public function getDueDate(): ?\DateTimeInterface
+    {
+        return $this->due_date;
+    }
+
+    public function setDueDate(\DateTimeInterface $due_date): static
+    {
+        $this->due_date = $due_date;
+
+        return $this;
+    }
+
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?Customer $customer): static
+    {
+        $this->customer = $customer;
 
         return $this;
     }
