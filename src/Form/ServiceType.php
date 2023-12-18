@@ -17,7 +17,7 @@ class ServiceType extends AbstractType
             ->add('label')
             ->add('description')
             ->add('price')
-            ->add('created')
+            ->add('vat_rate')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'label',

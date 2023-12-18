@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ServiceRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -27,9 +28,9 @@ class Service
     private ?Category $category = null;
 
     #[ORM\Column]
-    private ?float $var_rate = null;
+    private ?float $vat_rate = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $created = null;
 
     public function getId(): ?int
@@ -85,14 +86,14 @@ class Service
         return $this;
     }
 
-    public function getVarRate(): ?float
+    public function getVatRate(): ?float
     {
-        return $this->var_rate;
+        return $this->vat_rate;
     }
 
-    public function setVarRate(float $var_rate): static
+    public function setVatRate(float $vat_rate): static
     {
-        $this->var_rate = $var_rate;
+        $this->vat_rate = $vat_rate;
 
         return $this;
     }

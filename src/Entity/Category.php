@@ -22,7 +22,7 @@ class Category
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Service::class)]
     private Collection $services;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $created = null;
 
     public function __construct()
