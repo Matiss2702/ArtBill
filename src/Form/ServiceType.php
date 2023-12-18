@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Service;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,7 +18,10 @@ class ServiceType extends AbstractType
             ->add('description')
             ->add('price')
             ->add('created')
-            ->add('category')
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'label',
+            ])
         ;
     }
 
