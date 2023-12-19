@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client {{ customer.name }}{% endblock %}
+
+{% block body %}
+    <h1>Client {{ customer.name }}</h1>
+
+    {{ customer.address }} <br>
+    {{ customer.email }} <br>
+{% endblock %}

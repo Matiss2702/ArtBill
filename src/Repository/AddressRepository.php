@@ -36,13 +36,19 @@ class AddressRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Address
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+   public function findOneByExactAddress($city, $street, $zip_code, $country): ?Address
+   {
+       return $this->createQueryBuilder('a')
+           ->andWhere('a.city = :city')
+           ->setParameter('city', $city)
+           ->andWhere('a.street = :street')
+           ->setParameter('street', $street)
+           ->andWhere('a.zip_code = :zip_code')
+           ->setParameter('zip_code', $zip_code)
+           ->andWhere('a.country = :country')
+           ->setParameter('country', $country)
+           ->getQuery()
+           ->getOneOrNullResult()
+       ;
+   }
 }

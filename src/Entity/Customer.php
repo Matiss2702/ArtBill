@@ -40,7 +40,7 @@ class Customer
     {
         $this->quotations = new ArrayCollection();
         $this->invoices = new ArrayCollection();
-        $this->created = new DateTime();
+        $this->created = new \DateTime();
     }
 
     public function getId(): ?int

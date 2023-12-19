@@ -45,6 +45,11 @@ class Address
         $this->created = new DateTime();
     }
 
+    public function __toString()
+    {
+        return $this->getStreet() . ", " . $this->getZipCode() . ", " . $this->getCity() . ", " . $this->getCountry();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
