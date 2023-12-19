@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\QuotationRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -43,12 +44,26 @@ class Quotation
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, options: ["default" => "CURRENT_DATE"])]
     private ?\DateTimeInterface $due_date = null;
 
     #[ORM\ManyToOne(inversedBy: 'quotations')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Customer $customer = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    private ?\DateTimeInterface $created = null;
+
+    #[ORM\Column]
+    private array $vat_rates = [];
+
+
+
+    public function __construct()
+    {
+        $this->created = new DateTime();
+        $this->due_date = (new DateTime())->modify('+30 days');
+    }
 
     public function getId(): ?int
     {
@@ -171,6 +186,30 @@ class Quotation
     public function setCustomer(?Customer $customer): static
     {
         $this->customer = $customer;
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTimeInterface $created): static
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    public function getVatRates(): array
+    {
+        return $this->vat_rates;
+    }
+
+    public function setVatRates(array $vat_rates): static
+    {
+        $this->vat_rates = $vat_rates;
 
         return $this;
     }

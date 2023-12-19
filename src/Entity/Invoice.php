@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\InvoiceRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -41,8 +42,19 @@ class Invoice
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, options: ["default" => "CURRENT_DATE"])]
     private ?\DateTimeInterface $due_date = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    private ?\DateTimeInterface $created = null;
+
+    #[ORM\Column]
+    private array $vat_rates = [];
+
+    public function __construct()
+    {
+        $this->created = new DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -153,6 +165,30 @@ class Invoice
     public function setDueDate(\DateTimeInterface $due_date): static
     {
         $this->due_date = $due_date;
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTimeInterface $created): static
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    public function getVatRates(): array
+    {
+        return $this->vat_rates;
+    }
+
+    public function setVatRates(array $vat_rates): static
+    {
+        $this->vat_rates = $vat_rates;
 
         return $this;
     }
