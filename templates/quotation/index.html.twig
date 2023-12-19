@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quotation index{% endblock %}
+
+{% block body %}
+    <h1>Quotation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Amount_ht</th>
+                <th>Amount_ttc</th>
+                <th>Quantity</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Due_date</th>
+                <th>Created</th>
+                <th>Vat_rates</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for quotation in quotations %}
+            <tr>
+                <td>{{ quotation.id }}</td>
+                <td>{{ quotation.description }}</td>
+                <td>{{ quotation.amountHt }}</td>
+                <td>{{ quotation.amountTtc }}</td>
+                <td>{{ quotation.quantity }}</td>
+                <td>{{ quotation.status }}</td>
+                <td>{{ quotation.date ? quotation.date|date('Y-m-d') : '' }}</td>
+                <td>{{ quotation.dueDate ? quotation.dueDate|date('Y-m-d') : '' }}</td>
+                <td>{{ quotation.created ? quotation.created|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ quotation.vatRates ? quotation.vatRates|json_encode : '' }}</td>
+                <td>
+                    <a href="{{ path('app_quotation_show', {'id': quotation.id}) }}">show</a>
+                    <a href="{{ path('app_quotation_edit', {'id': quotation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_quotation_new') }}">Create new</a>
+{% endblock %}

@@ -40,7 +40,7 @@ class CustomerController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $existingCustomer = $customerRepository->findOneByEmail($customer->getEmail());
-    
+
             if ($existingCustomer) {
                 $this->addFlash('danger', "Cette adresse mail est déjà utilisée");
                 return $this->redirectToRoute('customer_new');
@@ -77,14 +77,14 @@ class CustomerController extends AbstractController
                 $this->addFlash('error', 'Cet email n\'est pas disponible.');
             } else {
                 $manager->flush();
-                
+
                 $this->addFlash('success', "Le client {$customer->getName()} a bien été modifié.");
-                
+
                 return $this->redirectToRoute('customer_show', [
                     'id' => $customer->getId()
                 ]);
             }
-        }        
+        }
 
         return $this->render('customer/update.html.twig', [
             'form' => $form,
