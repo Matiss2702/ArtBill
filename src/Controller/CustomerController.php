@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Address;
 use App\Entity\Customer;
+use App\Form\CustomerRegistrationType;
+use App\Form\CustomerUpdateType;
+use App\Repository\AddressRepository;
 use App\Repository\CustomerRepository;
-use App\Form\CustomerType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,7 +71,6 @@ class CustomerController extends AbstractController
         $form = $this->createForm(CustomerType::class, $customer);
 
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $submittedEmail = $form->get('email')->getData();
             $existingCustomer = $customerRepository->findOneBy(['email' => $submittedEmail]);
