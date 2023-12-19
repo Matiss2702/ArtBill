@@ -1,0 +1,8 @@
+{% if app.user and app.user.isVerified() == false %}
+    <div class="alert alert-warning" role="alert">
+        {# <h4 class="alert-heading">Attention  {{user.firstname}} !</h4> #}
+        <p>Votre compte n'est pas encore vérifié, vous ne pouvez pas encore accéder à toutes les fonctionnalités du site.</p>
+        <hr>
+        <p class="mb-0">Veuillez vérifier votre compte en cliquant sur le lien envoyé par mail.</p>
+    </div>
+{% endif %}

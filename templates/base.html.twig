@@ -15,6 +15,7 @@
     </head>
     <body>
         {% block body %}{% endblock %}
+        {% include '_partials/_flash.html.twig' %}
 
         {% for type, flashMessages in app.flashes %}
             {% for message in flashMessages %}
