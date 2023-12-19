@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CompanyRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -28,8 +29,7 @@ class Company
     #[ORM\Column(nullable: true)]
     private ?int $share_capital = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $address = null;
+
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $creation_date = null;
@@ -43,10 +43,18 @@ class Company
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Invoice::class, orphanRemoval: true)]
     private Collection $invoices;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    private ?\DateTimeInterface $created = null;
+
+    #[ORM\ManyToOne(inversedBy: 'companies')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Address $address = null;
+
     public function __construct()
     {
         $this->quotations = new ArrayCollection();
         $this->invoices = new ArrayCollection();
+        $this->created = new DateTime();
     }
 
     public function getId(): ?int
@@ -98,18 +106,6 @@ class Company
     public function setShareCapital(?int $share_capital): static
     {
         $this->share_capital = $share_capital;
-
-        return $this;
-    }
-
-    public function getAddress(): ?int
-    {
-        return $this->address;
-    }
-
-    public function setAddress(?int $address): static
-    {
-        $this->address = $address;
 
         return $this;
     }
@@ -194,6 +190,30 @@ class Company
                 $invoice->setCompany(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTimeInterface $created): static
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): static
+    {
+        $this->address = $address;
 
         return $this;
     }

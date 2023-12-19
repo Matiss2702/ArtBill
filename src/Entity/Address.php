@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\AddressRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
@@ -30,9 +32,17 @@ class Address
     #[ORM\OneToMany(mappedBy: 'address', targetEntity: Customer::class)]
     private Collection $customers;
 
+    #[ORM\OneToMany(mappedBy: 'address', targetEntity: Company::class)]
+    private Collection $companies;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    private ?\DateTimeInterface $created = null;
+
     public function __construct()
     {
         $this->customers = new ArrayCollection();
+        $this->companies = new ArrayCollection();
+        $this->created = new DateTime();
     }
 
     public function getId(): ?int
@@ -114,6 +124,48 @@ class Address
                 $customer->setAddress(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Company>
+     */
+    public function getCompanies(): Collection
+    {
+        return $this->companies;
+    }
+
+    public function addCompany(Company $company): static
+    {
+        if (!$this->companies->contains($company)) {
+            $this->companies->add($company);
+            $company->setAddress($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompany(Company $company): static
+    {
+        if ($this->companies->removeElement($company)) {
+            // set the owning side to null (unless already changed)
+            if ($company->getAddress() === $this) {
+                $company->setAddress(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTimeInterface $created): static
+    {
+        $this->created = $created;
 
         return $this;
     }
