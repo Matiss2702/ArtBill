@@ -78,17 +78,24 @@ class CustomerController extends AbstractController
     public function update(int $id, CustomerRepository $customerRepository, Request $request, EntityManagerInterface $manager, AddressRepository $addressRepository): Response
     {
         $customer = $customerRepository->find($id);
+        $currentAddress = $customer->getAddress();
         $form = $this->createForm(CustomerUpdateType::class, $customer);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $address = $customer->getAddress();
 
-            $existingAddress = $addressRepository->findOneByExactAddress($address->getCity(), $address->getStreet(), $address->getZipCode(), $address->getCountry(),);
+            $existingAddress = $addressRepository->findOneByExactAddress(
+                $address->getCity(),
+                $address->getStreet(),
+                $address->getZipCode(),
+                $address->getCountry()
+            );
     
             if ($existingAddress) {
                 $existingAddress->addCustomer($customer);
             } else {
+                $address = $currentAddress;
                 $newAddress = new Address();
                 $newAddress->setCity($address->getCity());
                 $newAddress->setStreet($address->getStreet());
