@@ -1,9 +1,59 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-$grey: #ccc;
+/* Scrollbar */
 
-body {
-    background-color: $grey;
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #9B9B9B;
+    border-radius: 6px;
+}
+
+/* Table */
+
+table th {
+    @apply font-normal;
+}
+
+table td {
+    @apply max-w-64;
+}
+
+table tr .justify-end svg {
+    @apply invisible opacity-0;
+}
+
+table tr:hover .justify-end svg {
+    @apply visible opacity-100;
+}
+
+table tbody tr {
+    @apply border-y-[24px] border-white;
+}
+
+/* Icon */
+
+svg {
+    @apply transition-all duration-200 ease-in-out
+}
+
+svg:hover {
+    @apply brightness-75;
+}
+
+table svg {
+    @apply fill-primary;
+}
+
+#sidebar li svg {
+    @apply stroke-gray-700;
+}
+
+#sidebar li:hover svg {
+    @apply filter-none stroke-gray-900;
 }
