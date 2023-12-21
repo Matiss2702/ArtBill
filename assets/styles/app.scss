@@ -3,12 +3,6 @@
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-/* Utility */
-
-.init {
-    display: none;
-}
-
 /* Scrollbar */
 
 ::-webkit-scrollbar {
@@ -20,32 +14,6 @@
     border-radius: 6px;
 }
 
-/* Button */
-
-.btn {
-    @apply transition-all ease-in-out duration-100;
-}
-
-.btn:hover {
-    @apply brightness-90 transition-all ease-in-out duration-100;
-}
-
-/* Icon */
-
-#sidebar li svg {
-    @apply stroke-gray-700;
-}
-
-/* Transition */
-
-.transition-normal {
-    @apply transition-all ease-in-out duration-300;
-}
-
-.transition-fast {
-    @apply transition-all ease-in-out duration-100;
-}
-
 /* Table */
 
 table th {
@@ -53,55 +21,39 @@ table th {
 }
 
 table td {
-    @apply max-w-sm;
+    @apply max-w-64;
 }
 
-table tr .justify-end div {
-    @apply invisible opacity-0 transition-all ease-in-out duration-100;
+table tr .justify-end svg {
+    @apply invisible opacity-0;
 }
 
-table tr:hover .justify-end div {
-    @apply visible opacity-100 transition-all ease-in-out duration-100;
+table tr:hover .justify-end svg {
+    @apply visible opacity-100;
 }
 
 table tbody tr {
-    @apply transition-all ease-in-out duration-100;
+    @apply border-y-[24px] border-white;
 }
 
-table tbody tr:not(:last-child) {
-    @apply border-b;
+/* Icon */
+
+svg {
+    @apply transition-all duration-200 ease-in-out
 }
 
-table tbody tr:hover {
-    @apply bg-gray-100 transition-all ease-in-out duration-100;
+svg:hover {
+    @apply brightness-75;
 }
 
-/* Form */
-
-#form label {
-    @apply text-xs text-gray-500;
+table svg {
+    @apply fill-primary;
 }
 
-#form input[type="text"],
-#form input[type="email"],
-#form input[type="password"],
-#form input[type="number"],
-#form input[type="date"] {
-    @apply border rounded-md text-sm outline-primary px-2 py-1;
+#sidebar li svg {
+    @apply stroke-gray-700;
 }
 
-#form input[type="text"]:focus,
-#form input[type="email"]:focus,
-#form input[type="password"]:focus,
-#form input[type="number"]:focus,
-#form input[type="date"]:focus {
-    @apply border-primary;
-}
-
-#form select {
-    @apply border rounded-md text-sm outline-primary px-2 py-1;
-}
-
-#form select:focus {
-    @apply border-primary;
+#sidebar li:hover svg {
+    @apply filter-none stroke-gray-900;
 }
