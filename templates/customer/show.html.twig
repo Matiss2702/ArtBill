@@ -3,9 +3,12 @@
 {% block title %}Client {{ customer.name }}{% endblock %}
 
 {% block body %}
-    <h1>Client {{ customer.name }}</h1>
+    <div class="container mx-auto my-8">
+        <h1 class="text-4xl font-bold mb-6">Client {{ customer.name }}</h1>
 
-    {{ customer.email }} <br>
-    {{ customer.street }} {{ customer.city }} {{ customer.getZipCode() }} {{ customer.country }} <br>
-    <a href="{{ path('customer_update', {'id': customer.id}) }}" class="btn btn-primary">Modifier</a> <br>
+        <p class="mb-4">{{ customer.email }}</p>
+        <p class="mb-4">{{ customer.street }}, {{ customer.city }}, {{ customer.getZipCode() }}, {{ customer.country }}</p>
+
+        <a href="{{ path('customer_update', {'id': customer.id}) }}" class="btn btn-primary">Modifier</a>
+    </div>
 {% endblock %}
