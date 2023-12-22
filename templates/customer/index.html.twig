@@ -11,6 +11,7 @@
                     <th>NOM DU CLIENT</th>
                     <th>EMAIL</th>
                     <th>MODIFIER</th>
+                    <th>SUPPRIMER</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,7 +28,9 @@
                     <td>
                         <a href="{{ path('customer_update', {'id': customer.id}) }}" class="btn btn-primary">Modifier</a> <br>
                     </td>
-                    {# <a href="{{ path('customer_delete', {'id': customer.id, 'token': csrf_token('delete' ~ customer.id)}) }}" class="btn btn-primary" onclick="confirm('Sur sur ?');">Suppression</a> <br> #}
+                    <td>
+                        <a href="{{ path('customer_delete', {'id': customer.id, 'token': csrf_token('delete' ~ customer.id)}) }}" class="btn btn-primary" onclick="return confirm('Êtes-vous sûrs de vouloir supprimer le client {{ customer.name }} ?');">Suppression</a>
+                    </td>
                 </tr>
         {% endfor %}
             </tbody>

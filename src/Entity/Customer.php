@@ -20,10 +20,6 @@ class Customer
     #[ORM\Column(length: 150)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'customers')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Address $address = null;
-
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
@@ -36,11 +32,28 @@ class Customer
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
     private ?\DateTimeInterface $created = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $street = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $city = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $zip_code = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $country = null;
+
     public function __construct()
     {
         $this->quotations = new ArrayCollection();
         $this->invoices = new ArrayCollection();
         $this->created = new \DateTime();
+    }
+
+    public function __toString()
+    {
+        return $this->name . " " . $this->email;
     }
 
     public function getId(): ?int
@@ -56,18 +69,6 @@ class Customer
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getAddress(): ?Address
-    {
-        return $this->address;
-    }
-
-    public function setAddress(?Address $address): static
-    {
-        $this->address = $address;
 
         return $this;
     }
@@ -152,6 +153,54 @@ class Customer
     public function setCreated(\DateTimeInterface $created): static
     {
         $this->created = $created;
+
+        return $this;
+    }
+
+    public function getStreet(): ?string
+    {
+        return $this->street;
+    }
+
+    public function setStreet(?string $street): static
+    {
+        $this->street = $street;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getZipCode(): ?int
+    {
+        return $this->zip_code;
+    }
+
+    public function setZipCode(?int $zip_code): static
+    {
+        $this->zip_code = $zip_code;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): static
+    {
+        $this->country = $country;
 
         return $this;
     }
