@@ -29,8 +29,6 @@ class Company
     #[ORM\Column(nullable: true)]
     private ?int $share_capital = null;
 
-
-
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $creation_date = null;
 
@@ -46,9 +44,17 @@ class Company
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
     private ?\DateTimeInterface $created = null;
 
-    #[ORM\ManyToOne(inversedBy: 'companies')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Address $address = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $street = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $city = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $zip_code = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $country = null;
 
     public function __construct()
     {
@@ -206,14 +212,50 @@ class Company
         return $this;
     }
 
-    public function getAddress(): ?Address
+    public function getStreet(): ?string
     {
-        return $this->address;
+        return $this->street;
     }
 
-    public function setAddress(?Address $address): static
+    public function setStreet(?string $street): static
     {
-        $this->address = $address;
+        $this->street = $street;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getZipCode(): ?int
+    {
+        return $this->zip_code;
+    }
+
+    public function setZipCode(?int $zip_code): static
+    {
+        $this->zip_code = $zip_code;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): static
+    {
+        $this->country = $country;
 
         return $this;
     }

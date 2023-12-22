@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client {{ customer.name }}{% endblock %}
+
+{% block body %}
+    <h1>Client {{ customer.name }}</h1>
+
+    {{ customer.email }} <br>
+    {{ customer.street }} {{ customer.city }} {{ customer.getZipCode() }} {{ customer.country }} <br>
+    <a href="{{ path('customer_update', {'id': customer.id}) }}" class="btn btn-primary">Modifier</a> <br>
+{% endblock %}
