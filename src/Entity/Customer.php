@@ -20,10 +20,6 @@ class Customer
     #[ORM\Column(length: 150)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'customers')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Address $address = null;
-
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
@@ -56,18 +52,6 @@ class Customer
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getAddress(): ?Address
-    {
-        return $this->address;
-    }
-
-    public function setAddress(?Address $address): static
-    {
-        $this->address = $address;
 
         return $this;
     }
