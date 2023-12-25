@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Back;
 
 use App\Entity\Reply;
 use App\Form\ReplyType;
@@ -71,7 +71,7 @@ class ReplyController extends AbstractController
     #[Route('/{id}', name: 'app_reply_delete', methods: ['POST'])]
     public function delete(Request $request, Reply $reply, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$reply->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $reply->getId(), $request->request->get('_token'))) {
             $entityManager->remove($reply);
             $entityManager->flush();
         }

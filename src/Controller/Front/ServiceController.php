@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Front;
 
 use App\Entity\Service;
 use App\Form\ServiceType;
@@ -75,7 +75,7 @@ class ServiceController extends AbstractController
     #[Route('/{id}', name: 'app_service_delete', methods: ['POST'])]
     public function delete(Request $request, Service $service, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$service->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $service->getId(), $request->request->get('_token'))) {
             $entityManager->remove($service);
             $entityManager->flush();
         }

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Back;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/category')]
+#[Security('is_granted("ROLE_ADMIN")')]
 class CategoryController extends AbstractController
 {
     #[Route('/', name: 'app_category_index', methods: ['GET'])]
@@ -75,7 +77,7 @@ class CategoryController extends AbstractController
     #[Route('/{id}', name: 'app_category_delete', methods: ['POST'])]
     public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $category->getId(), $request->request->get('_token'))) {
             $entityManager->remove($category);
             $entityManager->flush();
         }
