@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/reply')]
 class ReplyController extends AbstractController
 {
-    #[Route('/', name: 'app_reply_index', methods: ['GET'])]
+    #[Route('/', name: 'back_app_reply_index', methods: ['GET'])]
     public function index(ReplyRepository $replyRepository): Response
     {
         return $this->render('reply/index.html.twig', [
@@ -22,7 +22,7 @@ class ReplyController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_reply_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'back_app_reply_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $reply = new Reply();
@@ -42,7 +42,7 @@ class ReplyController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_reply_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'back_app_reply_show', methods: ['GET'])]
     public function show(Reply $reply): Response
     {
         return $this->render('reply/show.html.twig', [
@@ -50,7 +50,7 @@ class ReplyController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_reply_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'back_app_reply_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Reply $reply, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ReplyType::class, $reply);
@@ -68,7 +68,7 @@ class ReplyController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_reply_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'back_app_reply_delete', methods: ['POST'])]
     public function delete(Request $request, Reply $reply, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $reply->getId(), $request->request->get('_token'))) {
@@ -76,6 +76,6 @@ class ReplyController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_reply_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('back_app_reply_index', [], Response::HTTP_SEE_OTHER);
     }
 }

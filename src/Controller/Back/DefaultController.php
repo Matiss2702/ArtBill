@@ -8,9 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends AbstractController
 {
-    #[Route('/dashboard', name: 'default_index')]
+    #[Route('/', name: 'default_index')]
     public function index(): Response
     {
-        return $this->render('default/index.html.twig');
+        return $this->render('back/default/index.html.twig');
     }
 }

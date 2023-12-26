@@ -21,8 +21,7 @@
                 <td>{{ category.label }}</td>
                 <td>{{ category.created ? category.created|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_category_show', {'id': category.id}) }}">show</a>
-                    <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
+                    <a href="{{ path('front_app_category_show', {'id': category.id}) }}">show</a>
                 </td>
             </tr>
         {% else %}
@@ -33,5 +32,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_category_new') }}">Create new</a>
 {% endblock %}

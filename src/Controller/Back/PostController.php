@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/post', name: 'post_')]
+#[Route('/post', name: 'back_post_')]
 class PostController extends AbstractController
 {
     #[Route('/', name: 'index', methods: 'get')]
@@ -86,6 +86,6 @@ class PostController extends AbstractController
             $this->addFlash('success', "Le post {$post->getId()} a bien été supprimé");
         }
 
-        return $this->redirectToRoute('post_index');
+        return $this->redirectToRoute('back_post_index');
     }
 }

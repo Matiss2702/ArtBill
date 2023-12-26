@@ -2,13 +2,17 @@ controllers_security:
   resource: ../src/Controller/SecurityController.php
   type: attribute
 
-controllers:
+controllers_register:
+  resource: ../src/Controller/RegistrationController.php
+  type: attribute
+
+controllers_front:
   resource: ../src/Controller/Front
   type: attribute
-  name _prefix: front_
+  name_prefix: front_
 
-controleurs_back:
+controllers_back:
   resource: ../src/Controller/Back
   type: attribute
-  name _prefix: back_
-  predix: /admin
+  name_prefix: back_
+  prefix: /admin
