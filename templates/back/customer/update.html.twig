@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification de {{ customer.name }}{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto my-8">
+        <h1 class="text-4xl font-bold mb-6">Modification de {{ customer.name }}</h1>
+
+        {{ form_start(form, {'attr': {'class': 'max-w-md'}}) }}
+            {{ form_rest(form) }}
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Modifier</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

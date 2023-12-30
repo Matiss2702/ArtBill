@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des clients{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto my-8">
+        <h1 class="text-4xl font-bold mb-6">Liste des clients</h1>
+
+        {% if customers %}
+            <table class="min-w-full bg-white border border-gray-300 shadow-md">
+                <thead>
+                    <tr>
+                        <th class="py-3 px-6 text-left bg-gray-200 font-semibold text-sm">NOM DU CLIENT</th>
+                        <th class="py-3 px-6 text-left bg-gray-200 font-semibold text-sm">EMAIL</th>
+                        <th class="py-3 px-6 text-left bg-gray-200 font-semibold text-sm">MODIFIER</th>
+                        <th class="py-3 px-6 text-left bg-gray-200 font-semibold text-sm">SUPPRIMER</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-4 px-6 border-b">{{ customer.name }}</td>
+                            <td class="py-4 px-6 border-b">{{ customer.email }}</td>
+                            <td class="py-4 px-6 border-b">
+                                <a href="{{ path('back_customer_update', {'id': customer.id}) }}" class="text-blue-500 hover:underline">Modifier</a>
+                            </td>
+                            <td class="py-4 px-6 border-b">
+                                <a href="{{ path('back_customer_delete', {'id': customer.id, 'token': csrf_token('delete' ~ customer.id)}) }}" class="text-red-500 hover:underline" onclick="return confirm('Êtes-vous sûrs de vouloir supprimer le client {{ customer.name }} ?');">Suppression</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="mt-6 text-gray-600">Aucun client</p>
+        {% endif %}
+
+        <a href="{{ path('back_customer_new') }}" class="mt-8 inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Ajouter un client</a>
+    </div>
+{% endblock %}
