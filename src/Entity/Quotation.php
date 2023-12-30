@@ -33,7 +33,7 @@ class Quotation
     #[Assert\Choice(['created', 'sent', 'refused', 'accepted', 'paid', 'expired'])]
     private ?string $status = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, options: ["default" => 'CURRENT_DATE'])]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'quotations')]

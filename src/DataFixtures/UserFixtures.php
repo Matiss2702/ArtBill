@@ -15,7 +15,7 @@ class UserFixtures extends Fixture
         $user = new User();
         $user->setEmail('admin@artbill.com');
         $user->setPassword(password_hash('artbill', PASSWORD_BCRYPT));
-        $user->setRoles(['admin']);
+        $user->setRoles(['ROLE_ADMIN']);
         $user->setFirstName("Super");
         $user->setLastName("User");
         $manager->persist($user);
