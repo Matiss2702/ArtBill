@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ServiceRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,6 +34,14 @@ class Service
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $created = null;
+
+    #[ORM\ManyToMany(targetEntity: Quotation::class, mappedBy: 'services')]
+    private Collection $quotations;
+
+    public function __construct()
+    {
+        $this->quotations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -106,6 +116,33 @@ class Service
     public function setCreated(\DateTimeInterface $created): static
     {
         $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Quotation>
+     */
+    public function getQuotations(): Collection
+    {
+        return $this->quotations;
+    }
+
+    public function addQuotation(Quotation $quotation): static
+    {
+        if (!$this->quotations->contains($quotation)) {
+            $this->quotations->add($quotation);
+            $quotation->addService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuotation(Quotation $quotation): static
+    {
+        if ($this->quotations->removeElement($quotation)) {
+            $quotation->removeService($this);
+        }
 
         return $this;
     }

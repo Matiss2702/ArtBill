@@ -1,0 +1,68 @@
+{{ form_start(form) }}
+
+<div class="flex gap-8">
+	{{ form_label(form.description)}}
+	{{ form_widget(form.description)}}
+	{{ form_errors(form.description )}}
+</div>
+
+<div class='status'>
+	{{form_row(form.status)}}
+</div>
+
+<div class='date'>
+	{{form_row(form.date)}}
+</div>
+
+<div class='due_date'>
+	{{form_row(form.due_date)}}
+</div>
+<div class='customer'>
+	{{form_row(form.customer)}}
+
+</div>
+
+{# the data-index attribute is required for the JavaScript code below #}
+<ul class='services bg-red-500' data-index="{{ form.services|length > 0 ? form.services|last.vars.label + 1 : 0 }}" data-prototype=" {{ form_widget(form.services.vars.prototype)|e('html_attr') }} ">
+	kk
+	{% for service in form.services %}
+
+		{{ form_label(services.label) }}
+		{{ form_widget(services.label) }}
+		{{ form_errors(services.label) }}
+
+
+		{{ form_row(services.description) }}
+		{{ form_row(services.price) }}
+		{{ form_row(services.vat_rate) }}
+		{{ form_row(services.category) }}
+	{% endfor %}
+
+	<button type="button" class="add_item_link" data-collection-holder-class="services">Add a tag</button>
+</ul>
+
+
+<div class='button_save'>
+	<button class="btn">{{ button_label|default('Save') }}</button>
+</div>
+{{ form_end(form) }}
+
+{% block javascripts %}
+	<script>
+		const addFormToCollection = (e) => {
+const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+const item = document.createElement('li');
+
+item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
+
+collectionHolder.appendChild(item);
+
+collectionHolder.dataset.index ++;
+};
+document.querySelectorAll('.add_item_link').forEach(btn => {
+btn.addEventListener("click", addFormToCollection)
+});
+	</script>
+
+{% endblock %}

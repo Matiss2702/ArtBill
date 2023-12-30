@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\QuotationRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -28,9 +30,16 @@ class Quotation
     #[ORM\Column]
     private ?int $quantity = null;
 
-
+    public const QUOTATION_STATUS = [
+        'created',
+        'sent',
+        'refused',
+        'accepted',
+        'paid',
+        'expired',
+    ];
     #[ORM\Column(length: 100, options: ["default" => "created"])]
-    #[Assert\Choice(['created', 'sent', 'refused', 'accepted', 'paid', 'expired'])]
+    #[Assert\Choice(options: self::QUOTATION_STATUS)]
     private ?string $status = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, options: ["default" => 'CURRENT_DATE'])]
@@ -57,12 +66,16 @@ class Quotation
     #[ORM\Column]
     private array $vat_rates = [];
 
+    #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'quotations')]
+    private Collection $services;
+
 
 
     public function __construct()
     {
         $this->created = new DateTime();
         $this->due_date = (new DateTime())->modify('+30 days');
+        $this->services = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -210,6 +223,30 @@ class Quotation
     public function setVatRates(array $vat_rates): static
     {
         $this->vat_rates = $vat_rates;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Service>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Service $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Service $service): static
+    {
+        $this->services->removeElement($service);
 
         return $this;
     }
