@@ -3,6 +3,7 @@
 namespace App\Controller\Front;
 
 use App\Entity\Quotation;
+use App\Entity\Service;
 use App\Form\QuotationType;
 use App\Repository\QuotationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -53,13 +54,20 @@ class QuotationController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Quotation $quotation, EntityManagerInterface $entityManager): Response
     {
+
+        // dummy code - add some example services to the quotation
+        $servicePlaceholder = new Service();
+        $quotation->getServices()->add($servicePlaceholder);
+        // (otherwise, the template will render an empty list of tags)
+
+
         $form = $this->createForm(QuotationType::class, $quotation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_quotation_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('quotation_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('quotation/edit.html.twig', [
