@@ -54,13 +54,6 @@ class QuotationController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Quotation $quotation, EntityManagerInterface $entityManager): Response
     {
-
-        // dummy code - add some example services to the quotation
-        $servicePlaceholder = new Service();
-        $quotation->getServices()->add($servicePlaceholder);
-        // (otherwise, the template will render an empty list of tags)
-
-
         $form = $this->createForm(QuotationType::class, $quotation);
         $form->handleRequest($request);
 

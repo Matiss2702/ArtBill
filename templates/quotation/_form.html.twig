@@ -24,13 +24,8 @@
 
 {# the data-index attribute is required for the JavaScript code below #}
 <ul class='services bg-green-400' data-index="{{ form.services|length > 0 ? form.services|last.vars.name + 1 : 0 }}" data-prototype=" {{ form_widget(form.services.vars.prototype)|e('html_attr') }} ">
-	Services
+	{{ form_row(form.services) }}
 
-	{% for service in form.services %}
-		<li>
-			{{ form_row(service) }}
-		</li>
-	{% endfor %}
 	<button type="button" class="add_item_link" data-collection-holder-class="services">Ajouter un nouveau service
 	</button>
 </ul>
