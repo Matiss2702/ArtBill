@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: QuotationRepository::class)]
 class Quotation
 {
+    use Traits\Timestampable;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -60,8 +61,6 @@ class Quotation
     #[ORM\JoinColumn(nullable: true)]
     private ?Customer $customer = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
-    private ?\DateTimeInterface $created = null;
 
     #[ORM\Column]
     private array $vat_rates = [];
@@ -73,7 +72,6 @@ class Quotation
 
     public function __construct()
     {
-        $this->created = new DateTime();
         $this->due_date = (new DateTime())->modify('+30 days');
         $this->services = new ArrayCollection();
     }
@@ -199,18 +197,6 @@ class Quotation
     public function setCustomer(?Customer $customer): static
     {
         $this->customer = $customer;
-
-        return $this;
-    }
-
-    public function getCreated(): ?\DateTimeInterface
-    {
-        return $this->created;
-    }
-
-    public function setCreated(\DateTimeInterface $created): static
-    {
-        $this->created = $created;
 
         return $this;
     }

@@ -45,16 +45,10 @@ class Invoice
     #[ORM\Column(type: Types::DATE_MUTABLE, options: ["default" => "CURRENT_DATE"])]
     private ?\DateTimeInterface $due_date = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
-    private ?\DateTimeInterface $created = null;
 
     #[ORM\Column]
     private array $vat_rates = [];
 
-    public function __construct()
-    {
-        $this->created = new DateTime();
-    }
 
     public function getId(): ?int
     {
@@ -165,18 +159,6 @@ class Invoice
     public function setDueDate(\DateTimeInterface $due_date): static
     {
         $this->due_date = $due_date;
-
-        return $this;
-    }
-
-    public function getCreated(): ?\DateTimeInterface
-    {
-        return $this->created;
-    }
-
-    public function setCreated(\DateTimeInterface $created): static
-    {
-        $this->created = $created;
 
         return $this;
     }

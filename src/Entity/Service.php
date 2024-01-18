@@ -8,10 +8,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
+    use Traits\Timestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -29,14 +33,21 @@ class Service
     #[ORM\ManyToOne(inversedBy: 'services')]
     private ?Category $category = null;
 
-    #[ORM\Column]
-    private ?float $vat_rate = null;
+    public const VAT_RATES = [
+        0,
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $created = null;
+        10,
+        20
+    ];
+
+    #[ORM\Column(type: 'float', nullable: true, options: ['default' => 0])]
+    #[Assert\Choice(options: self::VAT_RATES)]
+    private ?float $vat_rate = null;
 
     #[ORM\ManyToMany(targetEntity: Quotation::class, mappedBy: 'services')]
     private Collection $quotations;
+
+
 
     public function __construct()
     {
@@ -108,17 +119,6 @@ class Service
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
-    {
-        return $this->created;
-    }
-
-    public function setCreated(\DateTimeInterface $created): static
-    {
-        $this->created = $created;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Quotation>

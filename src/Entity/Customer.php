@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 class Customer
 {
+    use Traits\Timestampable;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -29,9 +30,6 @@ class Customer
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Invoice::class)]
     private Collection $invoices;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
-    private ?\DateTimeInterface $created = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $street = null;
 
@@ -48,7 +46,6 @@ class Customer
     {
         $this->quotations = new ArrayCollection();
         $this->invoices = new ArrayCollection();
-        $this->created = new \DateTime();
     }
 
     public function __toString()
@@ -145,17 +142,7 @@ class Customer
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
-    {
-        return $this->created;
-    }
 
-    public function setCreated(\DateTimeInterface $created): static
-    {
-        $this->created = $created;
-
-        return $this;
-    }
 
     public function getStreet(): ?string
     {
