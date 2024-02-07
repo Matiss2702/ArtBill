@@ -6,6 +6,8 @@ use App\Entity\Quotation;
 use App\Entity\Service;
 use App\Form\QuotationType;
 use App\Repository\QuotationRepository;
+use App\Service\CalculAmount;
+use App\Service\CalculAmountService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,17 +26,22 @@ class QuotationController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, CalculAmountService $calculService): Response
     {
         $quotation = new Quotation();
         $form = $this->createForm(QuotationType::class, $quotation);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $quotation->setOwner($user);
+            $user = $quotation->getOwner();
+            $calculService->calculAmounts($quotation);
+
+
             $entityManager->persist($quotation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('quotation_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('front_quotation_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('quotation/new.html.twig', [
@@ -52,15 +59,17 @@ class QuotationController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Quotation $quotation, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Quotation $quotation, EntityManagerInterface $entityManager, CalculAmountService $calculService): Response
     {
         $form = $this->createForm(QuotationType::class, $quotation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $calculService->calculAmounts($quotation);
+
             $entityManager->flush();
 
-            return $this->redirectToRoute('quotation_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('front_quotation_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('quotation/edit.html.twig', [

@@ -33,16 +33,9 @@ class Service
     #[ORM\ManyToOne(inversedBy: 'services')]
     private ?Category $category = null;
 
-    public const VAT_RATES = [
-        0,
 
-        10,
-        20
-    ];
-
-    #[ORM\Column(type: 'float', nullable: true, options: ['default' => 0])]
-    #[Assert\Choice(options: self::VAT_RATES)]
-    private ?float $vat_rate = null;
+    #[ORM\Column]
+    private ?int $quantity = null;
 
     #[ORM\ManyToMany(targetEntity: Quotation::class, mappedBy: 'services')]
     private Collection $quotations;
@@ -107,14 +100,14 @@ class Service
         return $this;
     }
 
-    public function getVatRate(): ?float
+    public function getQuantity(): ?int
     {
-        return $this->vat_rate;
+        return $this->quantity;
     }
 
-    public function setVatRate(float $vat_rate): static
+    public function setQuantity(int $quantity): static
     {
-        $this->vat_rate = $vat_rate;
+        $this->quantity = $quantity;
 
         return $this;
     }

@@ -18,7 +18,7 @@
 				<th>Date</th>
 				<th>Due_date</th>
 				<th>Created</th>
-				<th>Vat_rates</th>
+				<th>Services</th>
 				<th>actions</th>
 			</tr>
 		</thead>
@@ -29,24 +29,26 @@
 					<td>{{ quotation.description }}</td>
 					<td>{{ quotation.amountHt }}</td>
 					<td>{{ quotation.amountTtc }}</td>
-					<td>{{ quotation.quantity }}</td>
 					<td>{{ quotation.status }}</td>
 					<td>{{ quotation.date ? quotation.date|date('Y-m-d') : '' }}</td>
 					<td>{{ quotation.dueDate ? quotation.dueDate|date('Y-m-d') : '' }}</td>
-					<td>{{ quotation.vatRates ? quotation.vatRates|json_encode : '' }}</td>
 					<td>{{ quotation.createdAt ? quotation.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+					<td>
+						{% if quotation.services %}
+							{% for service in quotation.services %}
+								<td>{{ service.label }}</td>
+							{% endfor %}
+						{% else %}
+							<td></td>
+						{% endif %}
+					</td>
+
 					<td>
 						<a href="{{ path('front_quotation_show', {'id': quotation.id}) }}">show</a>
 						<a href="{{ path('front_quotation_edit', {'id': quotation.id}) }}">edit</a>
 					</td>
 				</tr>
-			{% else %}
-				<tr>
-					<td colspan="11">no records found</td>
-				</tr>
-			{% endfor %}
+			</tbody>
 		</tbody>
-	</table>
-
-	<a href="{{ path('front_quotation_new') }}">Create new</a>
-{% endblock %}
+	</tr>
+</tbody></tbody></tr>{% else %}<tr><td colspan="11">no records found</td></tr>{% endfor %}</tbody></table><a href="{{ path('front_quotation_new') }}">Create new</a>{% endblock %}

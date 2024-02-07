@@ -18,11 +18,7 @@ class ServiceType extends AbstractType
             ->add('label')
             ->add('description')
             ->add('price')
-            ->add(
-                'vat_rate',
-                ChoiceType::class,
-                ['choices' => array_flip(Service::VAT_RATES)],
-            )
+            ->add('quantity')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'label',

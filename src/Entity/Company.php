@@ -54,10 +54,14 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $country = null;
 
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: User::class)]
+    private Collection $users;
+
     public function __construct()
     {
         $this->quotations = new ArrayCollection();
         $this->invoices = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -242,6 +246,36 @@ class Company
     public function setCountry(?string $country): static
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getCompany() === $this) {
+                $user->setCompany(null);
+            }
+        }
 
         return $this;
     }

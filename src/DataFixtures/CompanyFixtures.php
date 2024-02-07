@@ -6,9 +6,7 @@ use App\Entity\Company;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-
-class CompanyFixtures extends Fixture implements DependentFixtureInterface
+class CompanyFixtures extends Fixture
 {
     public const COMPANY_GRAPHIKART = 'Graphikart';
 
@@ -23,12 +21,5 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
 
         $this->addReference(self::COMPANY_GRAPHIKART, $company);
-    }
-
-    public function getDependencies()
-    {
-        return [
-            UserFixtures::class
-        ];
     }
 }

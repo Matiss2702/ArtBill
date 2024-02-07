@@ -41,9 +41,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100)]
     private ?string $lastname = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $company = null;
-
     #[ORM\Column(type: 'boolean')]
     private $is_verified = false;
 
@@ -55,6 +52,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Invoice::class)]
     private Collection $invoices;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Company $company = null;
 
 
     public function __construct()
@@ -181,17 +182,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCompany(): ?int
-    {
-        return $this->company;
-    }
-
-    public function setCompany(?int $company): static
-    {
-        $this->company = $company;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Quotation>
@@ -249,6 +239,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $invoice->setOwner(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }

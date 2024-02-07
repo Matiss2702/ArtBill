@@ -27,7 +27,7 @@ class QuotationType extends AbstractType
             ->add(
                 'status',
                 ChoiceType::class,
-                ['choices' => array_flip(Quotation::QUOTATION_STATUS)],
+                ['choices' => array_combine(Quotation::QUOTATION_STATUS, Quotation::QUOTATION_STATUS)]
             )
             ->add('date')
             ->add('due_date')

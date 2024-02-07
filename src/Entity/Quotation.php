@@ -23,13 +23,10 @@ class Quotation
     private ?string $description = null;
 
     #[ORM\Column]
-    private ?float $amount_ht = null;
+    private ?float $amount_ht = 0;
 
     #[ORM\Column]
-    private ?float $amount_ttc = null;
-
-    #[ORM\Column]
-    private ?int $quantity = null;
+    private ?float $amount_ttc = 0;
 
     public const QUOTATION_STATUS = [
         'created',
@@ -62,12 +59,8 @@ class Quotation
     private ?Customer $customer = null;
 
 
-    #[ORM\Column]
-    private array $vat_rates = [];
-
-    #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'quotations')]
+    #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'quotations', cascade: ["persist"])]
     private Collection $services;
-
 
 
     public function __construct()
@@ -117,17 +110,6 @@ class Quotation
         return $this;
     }
 
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(int $quantity): static
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
 
     public function getStatus(): ?string
     {
@@ -201,17 +183,7 @@ class Quotation
         return $this;
     }
 
-    public function getVatRates(): array
-    {
-        return $this->vat_rates;
-    }
 
-    public function setVatRates(array $vat_rates): static
-    {
-        $this->vat_rates = $vat_rates;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Service>
