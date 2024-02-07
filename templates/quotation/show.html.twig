@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quotation
+{% endblock %}
+
+{% block body %}
+	<h1>Quotation</h1>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ quotation.id }}</td>
+			</tr>
+			<tr>
+				<th>Description</th>
+				<td>{{ quotation.description }}</td>
+			</tr>
+			<tr>
+				<th>Amount_ht</th>
+				<td>{{ quotation.amountHt }}</td>
+			</tr>
+			<tr>
+				<th>Amount_ttc</th>
+				<td>{{ quotation.amountTtc }}</td>
+			</tr>
+
+			<tr>
+				<th>Status</th>
+				<td>{{ quotation.status }}</td>
+			</tr>
+			<tr>
+				<th>Date</th>
+				<td>{{ quotation.date ? quotation.date|date('Y-m-d') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Due_date</th>
+				<td>{{ quotation.dueDate ? quotation.dueDate|date('Y-m-d') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Created</th>
+				<td>{{ quotation.createdAt ? quotation.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+			</tr>
+
+			<tr>
+				<th>Services</th>
+				{% if quotation.services %}
+					{% for service in quotation.services %}
+						<td>{{ service.label }}</td>
+						<td>{{ service.price }}</td>
+						<td>{{ service.quantity }}</td>
+
+					{% endfor %}
+				{% endif %}
+			</tr>
+		</tbody>
+	</td>
+
+</tr></tbody></table><a href="{{ path('front_quotation_index') }}">back to list</a><a href="{{ path('front_quotation_edit', {'id': quotation.id}) }}">edit</a>{{ include('quotation/_delete_form.html.twig') }}{% endblock %}

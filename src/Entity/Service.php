@@ -4,12 +4,18 @@ namespace App\Entity;
 
 use App\Repository\ServiceRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
+    use Traits\Timestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -27,11 +33,19 @@ class Service
     #[ORM\ManyToOne(inversedBy: 'services')]
     private ?Category $category = null;
 
-    #[ORM\Column]
-    private ?float $vat_rate = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $created = null;
+    #[ORM\Column]
+    private ?int $quantity = null;
+
+    #[ORM\ManyToMany(targetEntity: Quotation::class, mappedBy: 'services')]
+    private Collection $quotations;
+
+
+
+    public function __construct()
+    {
+        $this->quotations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,26 +100,42 @@ class Service
         return $this;
     }
 
-    public function getVatRate(): ?float
+    public function getQuantity(): ?int
     {
-        return $this->vat_rate;
+        return $this->quantity;
     }
 
-    public function setVatRate(float $vat_rate): static
+    public function setQuantity(int $quantity): static
     {
-        $this->vat_rate = $vat_rate;
+        $this->quantity = $quantity;
 
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
+
+    /**
+     * @return Collection<int, Quotation>
+     */
+    public function getQuotations(): Collection
     {
-        return $this->created;
+        return $this->quotations;
     }
 
-    public function setCreated(\DateTimeInterface $created): static
+    public function addQuotation(Quotation $quotation): static
     {
-        $this->created = $created;
+        if (!$this->quotations->contains($quotation)) {
+            $this->quotations->add($quotation);
+            $quotation->addService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuotation(Quotation $quotation): static
+    {
+        if ($this->quotations->removeElement($quotation)) {
+            $quotation->removeService($this);
+        }
 
         return $this;
     }

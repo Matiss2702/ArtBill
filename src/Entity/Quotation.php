@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\QuotationRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -11,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: QuotationRepository::class)]
 class Quotation
 {
+    use Traits\Timestampable;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -20,20 +23,24 @@ class Quotation
     private ?string $description = null;
 
     #[ORM\Column]
-    private ?float $amount_ht = null;
+    private ?float $amount_ht = 0;
 
     #[ORM\Column]
-    private ?float $amount_ttc = null;
+    private ?float $amount_ttc = 0;
 
-    #[ORM\Column]
-    private ?int $quantity = null;
-
-
+    public const QUOTATION_STATUS = [
+        'created',
+        'sent',
+        'refused',
+        'accepted',
+        'paid',
+        'expired',
+    ];
     #[ORM\Column(length: 100, options: ["default" => "created"])]
-    #[Assert\Choice(['created', 'sent', 'refused', 'accepted', 'paid', 'expired'])]
+    #[Assert\Choice(options: self::QUOTATION_STATUS)]
     private ?string $status = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, options: ["default" => 'CURRENT_DATE'])]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'quotations')]
@@ -51,18 +58,15 @@ class Quotation
     #[ORM\JoinColumn(nullable: true)]
     private ?Customer $customer = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
-    private ?\DateTimeInterface $created = null;
 
-    #[ORM\Column]
-    private array $vat_rates = [];
-
+    #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'quotations', cascade: ["persist"])]
+    private Collection $services;
 
 
     public function __construct()
     {
-        $this->created = new DateTime();
         $this->due_date = (new DateTime())->modify('+30 days');
+        $this->services = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -106,17 +110,6 @@ class Quotation
         return $this;
     }
 
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(int $quantity): static
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
 
     public function getStatus(): ?string
     {
@@ -190,26 +183,28 @@ class Quotation
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
+
+
+    /**
+     * @return Collection<int, Service>
+     */
+    public function getServices(): Collection
     {
-        return $this->created;
+        return $this->services;
     }
 
-    public function setCreated(\DateTimeInterface $created): static
+    public function addService(Service $service): static
     {
-        $this->created = $created;
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+        }
 
         return $this;
     }
 
-    public function getVatRates(): array
+    public function removeService(Service $service): static
     {
-        return $this->vat_rates;
-    }
-
-    public function setVatRates(array $vat_rates): static
-    {
-        $this->vat_rates = $vat_rates;
+        $this->services->removeElement($service);
 
         return $this;
     }

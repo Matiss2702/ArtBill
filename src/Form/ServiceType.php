@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\Service;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,12 +18,11 @@ class ServiceType extends AbstractType
             ->add('label')
             ->add('description')
             ->add('price')
-            ->add('vat_rate')
+            ->add('quantity')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'label',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

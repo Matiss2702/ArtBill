@@ -17,6 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    use Traits\Timestampable;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -40,9 +41,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100)]
     private ?string $lastname = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $company = null;
-
     #[ORM\Column(type: 'boolean')]
     private $is_verified = false;
 
@@ -55,14 +53,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Invoice::class)]
     private Collection $invoices;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
-    private ?\DateTimeInterface $created = null;
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Company $company = null;
+
 
     public function __construct()
     {
         $this->quotations = new ArrayCollection();
         $this->invoices = new ArrayCollection();
-        $this->created = new DateTime();
     }
 
     public function getId(): ?int
@@ -183,17 +182,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCompany(): ?int
-    {
-        return $this->company;
-    }
-
-    public function setCompany(?int $company): static
-    {
-        $this->company = $company;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Quotation>
@@ -255,14 +243,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
+    public function getCompany(): ?Company
     {
-        return $this->created;
+        return $this->company;
     }
 
-    public function setCreated(\DateTimeInterface $created): static
+    public function setCompany(?Company $company): static
     {
-        $this->created = $created;
+        $this->company = $company;
 
         return $this;
     }

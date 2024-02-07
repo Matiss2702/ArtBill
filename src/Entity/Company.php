@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
 {
+    use Traits\Timestampable;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -41,9 +42,6 @@ class Company
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Invoice::class, orphanRemoval: true)]
     private Collection $invoices;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
-    private ?\DateTimeInterface $created = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $street = null;
 
@@ -56,11 +54,14 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $country = null;
 
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: User::class)]
+    private Collection $users;
+
     public function __construct()
     {
         $this->quotations = new ArrayCollection();
         $this->invoices = new ArrayCollection();
-        $this->created = new DateTime();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -200,17 +201,6 @@ class Company
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
-    {
-        return $this->created;
-    }
-
-    public function setCreated(\DateTimeInterface $created): static
-    {
-        $this->created = $created;
-
-        return $this;
-    }
 
     public function getStreet(): ?string
     {
@@ -256,6 +246,36 @@ class Company
     public function setCountry(?string $country): static
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getCompany() === $this) {
+                $user->setCompany(null);
+            }
+        }
 
         return $this;
     }

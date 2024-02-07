@@ -6,10 +6,7 @@ use App\Entity\Company;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-use App\DataFixtures\AddressFixtures;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-
-class CompanyFixtures extends Fixture implements DependentFixtureInterface
+class CompanyFixtures extends Fixture
 {
     public const COMPANY_GRAPHIKART = 'Graphikart';
 
@@ -20,17 +17,9 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
         $company->setSiren(123456789);
         $company->setTvaNumber(100200300);
         $company->setShareCapital(100000);
-        $company->setAddress($this->getReference(AddressFixtures::ADDRESS_GRAPHIKART));
         $manager->persist($company);
         $manager->flush();
 
         $this->addReference(self::COMPANY_GRAPHIKART, $company);
-    }
-
-    public function getDependencies()
-    {
-        return [
-            UserFixtures::class, AddressFixtures::class
-        ];
     }
 }
