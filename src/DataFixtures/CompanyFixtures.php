@@ -17,6 +17,7 @@ class CompanyFixtures extends Fixture
         $company->setSiren(123456789);
         $company->setTvaNumber(100200300);
         $company->setShareCapital(100000);
+        
         $manager->persist($company);
         $manager->flush();
 

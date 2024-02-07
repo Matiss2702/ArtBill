@@ -25,6 +25,7 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
             $quotation->setDate(new \DateTime());  // Date de création
             $quotation->setOwner($this->getReference(UserFixtures::ADMIN_USER));
             $quotation->setCompany($this->getReference(CompanyFixtures::COMPANY_GRAPHIKART));
+            $quotation->setCustomer($this->getReference(CustomerFixtures::CUSTOMER));
 
             $manager->persist($quotation);
         }
@@ -35,6 +36,7 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             UserFixtures::class,
+            CustomerFixtures::class,
         ];
     }
 }
