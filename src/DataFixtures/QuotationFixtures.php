@@ -13,6 +13,8 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 class QuotationFixtures extends Fixture implements DependentFixtureInterface
 
 {
+    public const QUOTATION = 'Devis';
+
     private $quotationStatus = ['created', 'sent', 'refused', 'accepted', 'paid', 'expired'];
 
     public function load(ObjectManager $manager): void
@@ -30,6 +32,8 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist($quotation);
         }
         $manager->flush();
+
+        $this->addReference(self::QUOTATION, $quotation);
     }
 
     public function getDependencies()

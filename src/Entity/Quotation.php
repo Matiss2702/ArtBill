@@ -58,10 +58,9 @@ class Quotation
     #[ORM\JoinColumn(nullable: true)]
     private ?Customer $customer = null;
 
-
     #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'quotations', cascade: ["persist"])]
     private Collection $services;
-
+  
     #[ORM\Column]
     private ?int $version = null;
 
@@ -70,11 +69,16 @@ class Quotation
 
     #[ORM\OneToOne(mappedBy: 'previous_version', targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $next_quotation = null;
+  
+    #[ORM\OneToMany(mappedBy: 'quotations', targetEntity: Invoice::class)]
+    private Collection $invoices;
+  
 
     public function __construct()
     {
         $this->due_date = (new DateTime())->modify('+30 days');
         $this->services = new ArrayCollection();
+        $this->invoices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -235,10 +239,25 @@ class Quotation
     public function setPreviousVersion(?self $previous_version): static
     {
         $this->previous_version = $previous_version;
+    }
+  
+    /**
+     * @return Collection<int, Invoice>
+     */
+    public function getInvoices(): Collection
+    {
+        return $this->invoices;
+    }
+
+    public function addInvoice(Invoice $invoice): static
+    {
+        if (!$this->invoices->contains($invoice)) {
+            $this->invoices->add($invoice);
+            $invoice->setQuotations($this);
+        }
 
         return $this;
     }
-
     public function getNextQuotation(): ?self
     {
         return $this->next_quotation;
@@ -257,6 +276,16 @@ class Quotation
         }
 
         $this->next_quotation = $next_quotation;
+    }
+  
+    public function removeInvoice(Invoice $invoice): static
+    {
+        if ($this->invoices->removeElement($invoice)) {
+            // set the owning side to null (unless already changed)
+            if ($invoice->getQuotations() === $this) {
+                $invoice->setQuotations(null);
+            }
+        }
 
         return $this;
     }
