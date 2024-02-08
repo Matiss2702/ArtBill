@@ -5,6 +5,7 @@ namespace App\Controller\Front;
 use App\Entity\Customer;
 use App\Repository\CustomerRepository;
 use App\Form\CustomerType;
+use App\Repository\QuotationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,10 +24,11 @@ class CustomerController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', requirements: ['id' => '\d{1,5}'], methods: 'get')]
-    public function show(Customer $customer): Response
+    public function show(Customer $customer, QuotationRepository $quotationRepository): Response
     {
         return $this->render('front/customer/show.html.twig', [
             'customer' => $customer,
+            'quotations' =>  $quotationRepository->findLatestQuotationsForCustomer($customer->getId()),
         ]);
     }
 }

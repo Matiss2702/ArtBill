@@ -17,7 +17,6 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-
         for ($i = 0; $i < 10; $i++) {
             $quotation = new Quotation();
             $quotation->setDescription('description ' . $i);
@@ -26,6 +25,7 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
             $quotation->setOwner($this->getReference(UserFixtures::ADMIN_USER));
             $quotation->setCompany($this->getReference(CompanyFixtures::COMPANY_GRAPHIKART));
             $quotation->setCustomer($this->getReference(CustomerFixtures::CUSTOMER));
+            $quotation->setVersion(0);
 
             $manager->persist($quotation);
         }
