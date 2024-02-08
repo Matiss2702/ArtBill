@@ -30,13 +30,15 @@ security:
 
   access_control:
     - { path: ^/admin, roles: ROLE_ADMIN }
+    - { path: ^/employee, roles: ROLE_EMPLOYEE }
+    - { path: ^/company, roles: ROLE_COMPANY }
     - { path: ^/login, roles: PUBLIC_ACCESS }
     - { path: ^/register, roles: PUBLIC_ACCESS }
     - { path: ^/reset-password, roles: PUBLIC_ACCESS }
     - { path: ^/, roles: ROLE_USER }
 
   role_hierarchy:
-    # ROLE_MODERATOR: ROLE_USER
+    ROLE_EMPLOYEE: ROLE_EMPLOYEE
     ROLE_COMPANY: ROLE_COMPANY
     ROLE_ADMIN: ROLE_ADMIN
 

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quotation index
+{% endblock %}
+
+{% block body %}
+	<h1>Quotation index</h1>
+	{% include '_partials/_quotation.index.html.twig' with {'quotations': quotations}%}
+	<a href="{{ path('admin_quotation_new') }}">Create new</a>
+{% endblock %}

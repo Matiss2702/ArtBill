@@ -19,6 +19,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $user->setRoles(['ROLE_ADMIN']);
         $user->setFirstName("Super");
         $user->setLastName("User");
+        $user->setIsVerified(true);
         $user->setCompany($this->getReference(CompanyFixtures::COMPANY_GRAPHIKART));
         $manager->persist($user);
         $manager->flush();
