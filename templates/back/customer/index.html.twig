@@ -19,7 +19,9 @@
                 <tbody>
                     {% for customer in customers %}
                         <tr class="hover:bg-gray-50">
-                            <td class="py-4 px-6 border-b">{{ customer.name }}</td>
+                            <td class="py-4 px-6 border-b">
+                                <a href="{{ path('back_customer_show', {'id': customer.id}) }}" class="text-blue-500 hover:underline">{{ customer.name }}</a>
+                            </td>
                             <td class="py-4 px-6 border-b">{{ customer.email }}</td>
                             <td class="py-4 px-6 border-b">
                                 <a href="{{ path('back_customer_update', {'id': customer.id}) }}" class="text-blue-500 hover:underline">Modifier</a>
