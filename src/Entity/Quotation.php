@@ -62,11 +62,15 @@ class Quotation
     #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'quotations', cascade: ["persist"])]
     private Collection $services;
 
+    #[ORM\OneToMany(mappedBy: 'quotations', targetEntity: Invoice::class)]
+    private Collection $invoices;
+
 
     public function __construct()
     {
         $this->due_date = (new DateTime())->modify('+30 days');
         $this->services = new ArrayCollection();
+        $this->invoices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -205,6 +209,36 @@ class Quotation
     public function removeService(Service $service): static
     {
         $this->services->removeElement($service);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invoice>
+     */
+    public function getInvoices(): Collection
+    {
+        return $this->invoices;
+    }
+
+    public function addInvoice(Invoice $invoice): static
+    {
+        if (!$this->invoices->contains($invoice)) {
+            $this->invoices->add($invoice);
+            $invoice->setQuotations($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoice(Invoice $invoice): static
+    {
+        if ($this->invoices->removeElement($invoice)) {
+            // set the owning side to null (unless already changed)
+            if ($invoice->getQuotations() === $this) {
+                $invoice->setQuotations(null);
+            }
+        }
 
         return $this;
     }

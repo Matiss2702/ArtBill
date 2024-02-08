@@ -19,23 +19,18 @@ class Invoice
     private ?string $description = null;
 
     #[ORM\Column]
-    private ?float $amount_ht = null;
+    private ?float $amount_ht = 0;
 
     #[ORM\Column]
-    private ?float $amount_ttc = null;
+    private ?float $amount_ttc = 0;
 
-    #[ORM\Column]
-    private ?int $quantity = null;
-
-    #[ORM\Column(length: 100)]
-    private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Customer $customer = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
@@ -46,8 +41,13 @@ class Invoice
     private ?\DateTimeInterface $due_date = null;
 
 
-    #[ORM\Column]
-    private array $vat_rates = [];
+
+    #[ORM\ManyToOne(inversedBy: 'invoices')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Quotation $quotations = null;
+
+    #[ORM\Column(type: 'boolean', options: ["default" => false])]
+    private $is_paid = false;
 
 
     public function getId(): ?int
@@ -91,29 +91,7 @@ class Invoice
         return $this;
     }
 
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
 
-    public function setQuantity(int $quantity): static
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): static
-    {
-        $this->status = $status;
-
-        return $this;
-    }
 
     public function getOwner(): ?User
     {
@@ -163,14 +141,26 @@ class Invoice
         return $this;
     }
 
-    public function getVatRates(): array
+    public function getQuotations(): ?Quotation
     {
-        return $this->vat_rates;
+        return $this->quotations;
     }
 
-    public function setVatRates(array $vat_rates): static
+    public function setQuotations(?Quotation $quotations): static
     {
-        $this->vat_rates = $vat_rates;
+        $this->quotations = $quotations;
+
+        return $this;
+    }
+
+    public function isIsPaid(): ?bool
+    {
+        return $this->is_paid;
+    }
+
+    public function setIsPaid(bool $is_paid): static
+    {
+        $this->is_paid = $is_paid;
 
         return $this;
     }
