@@ -5,14 +5,21 @@ controllers_security:
 controllers_register:
   resource: ../src/Controller/RegistrationController.php
   type: attribute
-
-controllers_front:
-  resource: ../src/Controller/Front
+# artbill
+controllers_superadmin:
+  resource: ../src/Controller/SuperAdmin
   type: attribute
-  name_prefix: front_
-
-controllers_back:
-  resource: ../src/Controller/Back
+  name_prefix: superadmin_
+  prefix: /superadmin
+# company
+controllers_admin:
+  resource: ../src/Controller/Admin
   type: attribute
-  name_prefix: back_
+  name_prefix: admin_
   prefix: /admin
+# emplayee
+controllers_user:
+  resource: ../src/Controller/User
+  type: attribute
+  name_prefix: user_
+  prefix: /user

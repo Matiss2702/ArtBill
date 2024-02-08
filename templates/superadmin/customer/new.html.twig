@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création d'un client{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto my-8">
+        <h1 class="text-4xl font-bold mb-6">Création d'un client</h1>
+
+        {{ form_start(form, {'attr': {'class': 'max-w-md'}}) }}
+            <div class="mb-4">
+                {{ form_row(form.name, {'attr': {'class': 'w-full px-3 py-2 border rounded'}}) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_row(form.email, {'attr': {'class': 'w-full px-3 py-2 border rounded'}}) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_row(form.street, {'attr': {'class': 'w-full px-3 py-2 border rounded'}}) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_row(form.city, {'attr': {'class': 'w-full px-3 py-2 border rounded'}}) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_row(form.zip_code, {'attr': {'class': 'w-full px-3 py-2 border rounded'}}) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_row(form.country, {'attr': {'class': 'w-full px-3 py-2 border rounded'}}) }}
+            </div>
+
+            <div class="mb-6">
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Créer</button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
