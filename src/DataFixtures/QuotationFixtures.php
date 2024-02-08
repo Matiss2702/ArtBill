@@ -26,6 +26,7 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
         $quotation->setOwner($this->getReference(UserFixtures::ADMIN_USER));
         $quotation->setCompany($this->getReference(CompanyFixtures::COMPANY_GRAPHIKART));
         $manager->persist($quotation);
+
         $manager->flush();
 
         $this->addReference(self::QUOTATION, $quotation);
@@ -35,6 +36,7 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             UserFixtures::class,
+            CustomerFixtures::class,
         ];
     }
 }

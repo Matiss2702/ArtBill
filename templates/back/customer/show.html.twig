@@ -8,7 +8,12 @@
 
         <p class="mb-4">{{ customer.email }}</p>
         <p class="mb-4">{{ customer.street }}, {{ customer.city }}, {{ customer.getZipCode() }}, {{ customer.country }}</p>
-
+        <h2>Devis</h2>
+        <br>
+        {% if customer.getQuotations() %}
+            {% include '_partials/_quotation.index.html.twig' with {'quotations': customer.getQuotations()}%}
+        {% endif %}
+        <br>
         <a href="{{ path('back_customer_update', {'id': customer.id}) }}" class="btn btn-primary">Modifier</a>
     </div>
 {% endblock %}
