@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Quotation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,9 +18,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class QuotationRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Quotation::class);
+        $this->entityManager = $entityManager;
     }
 
 //    /**
@@ -45,4 +50,72 @@ class QuotationRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function findAllPreviousVersions(Quotation $quotation): array
+    {
+        $previousQuotations = [];
+
+        while ($quotation !== null && $quotation->getPreviousVersion() !== null) {
+            $previousQuotations[] = $quotation->getPreviousVersion();
+            $quotation = $quotation->getPreviousVersion();
+        }
+
+        return $previousQuotations;
+    }
+
+    public function findAllNextVersions(Quotation $quotation): array
+    {
+        $nextQuotations = [];
+
+        while ($quotation !== null && $quotation->getNextQuotation() !== null) {
+            $nextQuotations[] = $quotation->getNextQuotation();
+            $quotation = $quotation->getNextQuotation();
+        }
+
+        return $nextQuotations;
+    }
+
+    public function findLatestQuotations(): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        $query = $queryBuilder->select('q')
+            ->from('App\Entity\Quotation', 'q')
+            ->where(
+                $queryBuilder->expr()->not(
+                    $queryBuilder->expr()->exists(
+                        $this->entityManager->createQueryBuilder()
+                            ->select('qq.id')
+                            ->from('App\Entity\Quotation', 'qq')
+                            ->where('qq.previous_version = q.id')
+                    )
+                )
+            )
+            ->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function findLatestQuotationsForCustomer($customer): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        $query = $queryBuilder->select('q')
+            ->from('App\Entity\Quotation', 'q')
+            ->where(
+                $queryBuilder->expr()->not(
+                    $queryBuilder->expr()->exists(
+                        $this->entityManager->createQueryBuilder()
+                            ->select('qq.id')
+                            ->from('App\Entity\Quotation', 'qq')
+                            ->where('qq.previous_version = q.id')
+                            ->andWhere('qq.customer = :customer')
+                    )
+                )
+            )
+            ->setParameter('customer', $customer)
+            ->getQuery();
+
+        return $query->getResult();
+    }
 }

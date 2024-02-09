@@ -58,13 +58,21 @@ class Quotation
     #[ORM\JoinColumn(nullable: true)]
     private ?Customer $customer = null;
 
-
     #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'quotations', cascade: ["persist"])]
     private Collection $services;
+  
+    #[ORM\Column]
+    private ?int $version = null;
 
+    #[ORM\OneToOne(inversedBy: 'next_quotation', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $previous_version = null;
+
+    #[ORM\OneToOne(mappedBy: 'previous_version', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $next_quotation = null;
+  
     #[ORM\OneToMany(mappedBy: 'quotations', targetEntity: Invoice::class)]
     private Collection $invoices;
-
+  
 
     public function __construct()
     {
@@ -187,8 +195,6 @@ class Quotation
         return $this;
     }
 
-
-
     /**
      * @return Collection<int, Service>
      */
@@ -213,6 +219,28 @@ class Quotation
         return $this;
     }
 
+    public function getVersion(): ?int
+    {
+        return $this->version;
+    }
+
+    public function setVersion(int $version): static
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    public function getPreviousVersion(): ?self
+    {
+        return $this->previous_version;
+    }
+
+    public function setPreviousVersion(?self $previous_version): static
+    {
+        $this->previous_version = $previous_version;
+    }
+  
     /**
      * @return Collection<int, Invoice>
      */
@@ -230,7 +258,26 @@ class Quotation
 
         return $this;
     }
+    public function getNextQuotation(): ?self
+    {
+        return $this->next_quotation;
+    }
 
+    public function setNextQuotation(?self $next_quotation): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($next_quotation === null && $this->next_quotation !== null) {
+            $this->next_quotation->setPreviousVersion(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($next_quotation !== null && $next_quotation->getPreviousVersion() !== $this) {
+            $next_quotation->setPreviousVersion($this);
+        }
+
+        $this->next_quotation = $next_quotation;
+    }
+  
     public function removeInvoice(Invoice $invoice): static
     {
         if ($this->invoices->removeElement($invoice)) {
