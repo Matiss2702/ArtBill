@@ -21,30 +21,43 @@ class Service
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255,)]
     private ?string $label = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $price = null;
+    #[ORM\Column]
+    private ?int $price = 0;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     private ?Category $category = null;
 
-
     #[ORM\Column]
-    private ?int $quantity = null;
+    private ?int $quantity = 0;
 
     #[ORM\ManyToMany(targetEntity: Quotation::class, mappedBy: 'services')]
     private Collection $quotations;
+
+    #[ORM\ManyToMany(targetEntity: Invoice::class, mappedBy: 'services')]
+    private Collection $invoices;
+
+    public const VAT_RATES = [
+        0,
+        10,
+        20
+    ];
+
+    #[ORM\Column]
+    #[Assert\Choice(options: self::VAT_RATES)]
+    private ?int $vatRate = 0;
 
 
 
     public function __construct()
     {
         $this->quotations = new ArrayCollection();
+        $this->invoices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,6 +149,45 @@ class Service
         if ($this->quotations->removeElement($quotation)) {
             $quotation->removeService($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invoice>
+     */
+    public function getInvoices(): Collection
+    {
+        return $this->invoices;
+    }
+
+    public function addInvoice(Invoice $invoice): static
+    {
+        if (!$this->invoices->contains($invoice)) {
+            $this->invoices->add($invoice);
+            $invoice->addService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoice(Invoice $invoice): static
+    {
+        if ($this->invoices->removeElement($invoice)) {
+            $invoice->removeService($this);
+        }
+
+        return $this;
+    }
+
+    public function getVatRate(): ?int
+    {
+        return $this->vatRate;
+    }
+
+    public function setVatRate(int $vatRate): static
+    {
+        $this->vatRate = $vatRate;
 
         return $this;
     }

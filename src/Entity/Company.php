@@ -18,23 +18,13 @@ class Company
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $commercial_name = null;
+
 
     #[ORM\Column(nullable: true, unique: true)]
     private ?int $siren = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $tva_number = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $share_capital = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $creation_date = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $bank_statement = null;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Quotation::class, orphanRemoval: true)]
     private Collection $quotations;
@@ -48,14 +38,29 @@ class Company
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $city = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $zip_code = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $country = null;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: User::class)]
     private Collection $users;
+
+    #[ORM\Column(length: 150)]
+    private ?string $name = null;
+
+    #[ORM\Column]
+    private ?int $vatNumber = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $shareCapital = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $bankInformationStatement = null;
+
+    #[ORM\Column]
+    private ?int $zipCode = null;
+
+
 
     public function __construct()
     {
@@ -69,17 +74,6 @@ class Company
         return $this->id;
     }
 
-    public function getCommercialName(): ?string
-    {
-        return $this->commercial_name;
-    }
-
-    public function setCommercialName(?string $commercial_name): static
-    {
-        $this->commercial_name = $commercial_name;
-
-        return $this;
-    }
 
     public function getSiren(): ?int
     {
@@ -93,53 +87,8 @@ class Company
         return $this;
     }
 
-    public function getTvaNumber(): ?int
-    {
-        return $this->tva_number;
-    }
 
-    public function setTvaNumber(?int $tva_number): static
-    {
-        $this->tva_number = $tva_number;
 
-        return $this;
-    }
-
-    public function getShareCapital(): ?int
-    {
-        return $this->share_capital;
-    }
-
-    public function setShareCapital(?int $share_capital): static
-    {
-        $this->share_capital = $share_capital;
-
-        return $this;
-    }
-
-    public function getCreationDate(): ?\DateTimeInterface
-    {
-        return $this->creation_date;
-    }
-
-    public function setCreationDate(?\DateTimeInterface $creation_date): static
-    {
-        $this->creation_date = $creation_date;
-
-        return $this;
-    }
-
-    public function getBankStatement(): ?int
-    {
-        return $this->bank_statement;
-    }
-
-    public function setBankStatement(?int $bank_statement): static
-    {
-        $this->bank_statement = $bank_statement;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Quotation>
@@ -226,18 +175,6 @@ class Company
         return $this;
     }
 
-    public function getZipCode(): ?int
-    {
-        return $this->zip_code;
-    }
-
-    public function setZipCode(?int $zip_code): static
-    {
-        $this->zip_code = $zip_code;
-
-        return $this;
-    }
-
     public function getCountry(): ?string
     {
         return $this->country;
@@ -276,6 +213,66 @@ class Company
                 $user->setCompany(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getVatNumber(): ?int
+    {
+        return $this->vatNumber;
+    }
+
+    public function setVatNumber(int $vatNumber): static
+    {
+        $this->vatNumber = $vatNumber;
+
+        return $this;
+    }
+
+    public function getShareCapital(): ?int
+    {
+        return $this->shareCapital;
+    }
+
+    public function setShareCapital(?int $shareCapital): static
+    {
+        $this->shareCapital = $shareCapital;
+
+        return $this;
+    }
+
+    public function getBankInformationStatement(): ?string
+    {
+        return $this->bankInformationStatement;
+    }
+
+    public function setBankInformationStatement(?string $bankInformationStatement): static
+    {
+        $this->bankInformationStatement = $bankInformationStatement;
+
+        return $this;
+    }
+
+    public function getZipCode(): ?int
+    {
+        return $this->zipCode;
+    }
+
+    public function setZipCode(int $zipCode): static
+    {
+        $this->zipCode = $zipCode;
 
         return $this;
     }
