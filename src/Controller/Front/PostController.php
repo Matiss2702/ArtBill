@@ -23,7 +23,7 @@ class PostController extends AbstractController
         ]);
     }
     //liste des posts
-    #[Route('/{id}', name: 'show', requirements: ['id' => '\d{1,5}'], methods: 'get')]
+    #[Route('/{id}', name: 'show', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: 'get')]
     public function show(Post $post): Response
     {
         return $this->render('post/show.html.twig', [
