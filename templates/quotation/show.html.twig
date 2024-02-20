@@ -146,5 +146,7 @@
 	</br>
     <a href="{{ path('front_quotation_edit', {'id': quotation.id}) }}" class="btn btn-primary">Modifier</a>
 	</br>
+    <a href="{{ path('front_generate_pdf', {'id': quotation.id}) }}" class="btn btn-primary">Génerer la facture</a>
+	</br>
     {{ include('quotation/_delete_form.html.twig') }}
 {% endblock %}

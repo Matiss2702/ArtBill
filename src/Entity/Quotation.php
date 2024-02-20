@@ -239,6 +239,7 @@ class Quotation
     public function setPreviousVersion(?self $previous_version): static
     {
         $this->previous_version = $previous_version;
+        return $this;
     }
   
     /**
@@ -265,23 +266,21 @@ class Quotation
 
     public function setNextQuotation(?self $next_quotation): static
     {
-        // unset the owning side of the relation if necessary
         if ($next_quotation === null && $this->next_quotation !== null) {
             $this->next_quotation->setPreviousVersion(null);
         }
 
-        // set the owning side of the relation if necessary
         if ($next_quotation !== null && $next_quotation->getPreviousVersion() !== $this) {
             $next_quotation->setPreviousVersion($this);
         }
 
         $this->next_quotation = $next_quotation;
+        return $this;
     }
   
     public function removeInvoice(Invoice $invoice): static
     {
         if ($this->invoices->removeElement($invoice)) {
-            // set the owning side to null (unless already changed)
             if ($invoice->getQuotations() === $this) {
                 $invoice->setQuotations(null);
             }
