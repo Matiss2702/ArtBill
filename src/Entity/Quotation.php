@@ -263,7 +263,6 @@ class Quotation
     public function removeInvoice(Invoice $invoice): static
     {
         if ($this->invoices->removeElement($invoice)) {
-            // set the owning side to null (unless already changed)
             if ($invoice->getQuotations() === $this) {
                 $invoice->setQuotations(null);
             }
