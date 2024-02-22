@@ -1,20 +1,23 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Back;
 
 use App\Entity\Invoice;
 use App\Form\InvoiceType;
 use App\Repository\InvoiceRepository;
+use App\Service\CalculAmountService;
+use App\Service\SetOwnerAndCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/invoice')]
+#[Route('/invoice', name: 'invoice_')]
+
 class InvoiceController extends AbstractController
 {
-    #[Route('/', name: 'app_invoice_index', methods: ['GET'])]
+    #[Route('/', name: 'index', methods: ['GET'])]
     public function index(InvoiceRepository $invoiceRepository): Response
     {
         return $this->render('invoice/index.html.twig', [
@@ -22,23 +25,21 @@ class InvoiceController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_invoice_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, CalculAmountService $calculService, SetOwnerAndCompanyService $setOwnerAndCompany): Response
     {
         $invoice = new Invoice();
-        $form = $this->createForm(InvoiceType::class, $invoice);
+        $form = $this->createForm(invoiceType::class, $invoice);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $invoiceData = $form->getData();
-            $vatRates = $invoiceData->getVatRates();
-            if (!is_array($vatRates)) {
-                $vatRates = [$vatRates];
-            }
+            $user = $this->getUser();
+            $setOwnerAndCompany->process($invoice, $user);
+            $calculService->calculAmounts($invoice);
+
             $entityManager->persist($invoice);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_invoice_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('back_invoice_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('invoice/new.html.twig', [
@@ -47,7 +48,8 @@ class InvoiceController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_invoice_show', methods: ['GET'])]
+
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Invoice $invoice): Response
     {
         return $this->render('invoice/show.html.twig', [
@@ -55,16 +57,17 @@ class InvoiceController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_invoice_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Invoice $invoice, EntityManagerInterface $entityManager, CalculAmountService $calculAmountService): Response
     {
         $form = $this->createForm(InvoiceType::class, $invoice);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $calculAmountService->calculAmounts($invoice);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_invoice_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('back_invoice_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('invoice/edit.html.twig', [
@@ -73,10 +76,10 @@ class InvoiceController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_invoice_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$invoice->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $invoice->getId(), $request->request->get('_token'))) {
             $entityManager->remove($invoice);
             $entityManager->flush();
         }

@@ -13,11 +13,12 @@ class CompanyFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $company = new Company();
-        $company->setCommercialName('Graphikart');
+        $company->setName('Graphikart');
         $company->setSiren(123456789);
-        $company->setTvaNumber(100200300);
+        $company->setVatNumber(100200300);
         $company->setShareCapital(100000);
-        
+        $company->setZipCode(94000);
+
         $manager->persist($company);
         $manager->flush();
 
