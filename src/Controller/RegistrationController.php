@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Reply;
 use App\Entity\User;
+use App\Entity\Company;
 use App\Form\RegistrationFormType;
+use App\Form\UserRegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\UserAuthenticator;
 use App\Service\JWTService;
@@ -23,57 +25,45 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager, SendMailService $mail, JWTService $jwt): Response
     {
         $user = new User();
+        $company = new Company();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-            $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+            // Set company details
+            $company->setName($form->get('companyName')->getData());
+            $company->setVatNumber($form->get('vatNumber')->getData());
+            $company->setZipCode($form->get('zipCode')->getData());
+            // Vous pouvez ajouter plus de détails de l'entreprise ici si nécessaire
 
+            // Persist company entity
+            $entityManager->persist($company);
+            $entityManager->flush(); // Flush here to ensure that the company ID is generated.
+
+            // Set user details
+            $user->setPassword($userPasswordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
+            $user->setRoles(['ROLE_COMPANY']); // Ou ['ROLE_COMPANY'] si vous avez une logique différente pour les rôles
+            $user->setCompany($company); // Associez la compagnie à l'utilisateur
+
+            // Persist user entity
             $entityManager->persist($user);
             $entityManager->flush();
-            // do anything else you need here, like send an email
 
-            // On génère le JWT de l'utilisateur
-            // On crée le Header
-            $header = [
-                'typ' => 'JWT',
-                'alg' => 'HS256'
-            ];
-
-            // On crée le Payload
-            $payload = [
-                'user_id' => $user->getId()
-            ];
-
-            // On génère le token
+            // Gestion JWT et envoi de mail ici
+            $header = ['typ' => 'JWT', 'alg' => 'HS256'];
+            $payload = ['user_id' => $user->getId()];
             $token = $jwt->generate($header, $payload, $this->getParameter('app.jwtsecret'));
+            $mail->send('team.artbill@outlook.fr', $user->getEmail(), 'Activation de votre compte chez ArtBill', 'register', compact('user', 'token'));
 
-            // On envoie un mail
-            $mail->send(
-                'no-reply@monsite.net',
-                $user->getEmail(),
-                'Activation de votre compte chez ArtBill',
-                'register',
-                compact('user', 'token')
-            );
-
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
+            // Authentification et redirection de l'utilisateur
+            return $userAuthenticator->authenticateUser($user, $authenticator, $request);
         }
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
+
 
     #[Route('/verif/{token}', name: 'verify_user')]
     public function verifyUser($token, JWTService $jwt, UserRepository $usersRepository, EntityManagerInterface $em): Response
@@ -139,5 +129,35 @@ class RegistrationController extends AbstractController
         );
         $this->addFlash('success', 'Email de vérification envoyé');
         return $this->redirectToRoute('/');
+    }
+
+    #[Route('/company/user/register', name: 'company_user_register')]
+    public function registerCompanyUser(Request $request, UserPasswordHasherInterface $passwordHasher, SendMailService $mail,EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_COMPANY');
+        $companyUser = $this->getUser();
+        $company = $companyUser->getCompany();
+        $user = new User();
+        $user->setCompany($company);
+        $user->setIsVerified(true);
+        $form = $this->createForm(UserRegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword($passwordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
+            $user->setRoles(['ROLE_USER']);
+            $user->setCompany($this->getUser()->getCompany());
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $mail->send('team.artbill@outlook.fr', $user->getEmail(), 'Activation de votre compte chez ArtBill', 'register-user', compact('user'));
+
+            // return $this->redirectToRoute('/');
+        }
+
+        return $this->render('registration/company_user_register.html.twig', [
+            'registrationForm' => $form->createView(),
+        ]);
     }
 }
