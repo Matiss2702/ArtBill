@@ -1,0 +1,29 @@
+{% block text_widget %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' w-96 border rounded-md text-sm outline-primary px-2 py-1')|trim}) %}
+    {{ block('form_widget_simple') }}
+{% endblock %}
+
+{% block integer_widget %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' w-96 border rounded-md text-sm outline-primary px-2 py-1')|trim}) %}
+    {{ block('form_widget_simple') }}
+{% endblock %}
+
+{% block number_widget %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' w-96 border rounded-md text-sm outline-primary px-2 py-1')|trim}) %}
+    {{ block('form_widget_simple') }}
+{% endblock %}
+
+{% block choice_widget %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' w-96 border rounded-md text-sm outline-primary px-2 py-1')|trim}) %}
+    {{ block('form_widget_compound') }}
+{% endblock %}
+
+{% block form_errors %}
+    {% if errors|length > 0 %}
+        <ul class="text-red-600">
+            {% for error in errors %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
