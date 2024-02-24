@@ -4,12 +4,15 @@ namespace App\Entity;
 
 use App\Repository\InvoiceRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InvoiceRepository::class)]
 class Invoice
 {
+    use Traits\Timestampable;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -17,13 +20,6 @@ class Invoice
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
-
-    #[ORM\Column]
-    private ?float $amount_ht = 0;
-
-    #[ORM\Column]
-    private ?float $amount_ttc = 0;
-
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
@@ -37,18 +33,48 @@ class Invoice
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, options: ["default" => "CURRENT_DATE"])]
-    private ?\DateTimeInterface $due_date = null;
-
-
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $dueDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Quotation $quotations = null;
 
-    #[ORM\Column(type: 'boolean', options: ["default" => false])]
-    private $is_paid = false;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $date = null;
 
+    #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'invoices', cascade: ["persist"])]
+    private Collection $services;
+
+    #[ORM\Column(type: 'boolean', options: ["default" => false])]
+    private ?bool $isPaid = false;
+
+    #[ORM\Column]
+    private ?float $vatRate10 = 0;
+
+    #[ORM\Column]
+    private ?float $vatRate20 = 0;
+
+    #[ORM\Column]
+    private ?float $baseVatRate10 = 0;
+
+    #[ORM\Column]
+    private ?float $baseVatRate20 = 0;
+
+    #[ORM\Column]
+    private ?float $amountHt = 0;
+
+    #[ORM\Column]
+    private ?float $amountTtc = 0;
+
+    #[ORM\Column]
+    private ?float $baseVatRate0 = 0;
+
+    public function __construct()
+    {
+        $this->dueDate = (new DateTime())->modify('+30 days');
+        $this->services = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -66,32 +92,6 @@ class Invoice
 
         return $this;
     }
-
-    public function getAmountHt(): ?float
-    {
-        return $this->amount_ht;
-    }
-
-    public function setAmountHt(float $amount_ht): static
-    {
-        $this->amount_ht = $amount_ht;
-
-        return $this;
-    }
-
-    public function getAmountTtc(): ?float
-    {
-        return $this->amount_ttc;
-    }
-
-    public function setAmountTtc(float $amount_ttc): static
-    {
-        $this->amount_ttc = $amount_ttc;
-
-        return $this;
-    }
-
-
 
     public function getOwner(): ?User
     {
@@ -131,12 +131,12 @@ class Invoice
 
     public function getDueDate(): ?\DateTimeInterface
     {
-        return $this->due_date;
+        return $this->dueDate;
     }
 
-    public function setDueDate(\DateTimeInterface $due_date): static
+    public function setDueDate(\DateTimeInterface $dueDate): static
     {
-        $this->due_date = $due_date;
+        $this->dueDate = $dueDate;
 
         return $this;
     }
@@ -153,14 +153,135 @@ class Invoice
         return $this;
     }
 
-    public function isIsPaid(): ?bool
+
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->is_paid;
+        return $this->date;
     }
 
-    public function setIsPaid(bool $is_paid): static
+    public function setDate(\DateTimeInterface $date): static
     {
-        $this->is_paid = $is_paid;
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Service>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Service $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Service $service): static
+    {
+        $this->services->removeElement($service);
+
+        return $this;
+    }
+
+    public function isIsPaid(): ?bool
+    {
+        return $this->isPaid;
+    }
+
+    public function setIsPaid(bool $isPaid): static
+    {
+        $this->isPaid = $isPaid;
+
+        return $this;
+    }
+
+    public function getVatRate10(): ?float
+    {
+        return $this->vatRate10;
+    }
+
+    public function setVatRate10(float $vatRate10): static
+    {
+        $this->vatRate10 = $vatRate10;
+
+        return $this;
+    }
+
+    public function getVatRate20(): ?float
+    {
+        return $this->vatRate20;
+    }
+
+    public function setVatRate20(float $vatRate20): static
+    {
+        $this->vatRate20 = $vatRate20;
+
+        return $this;
+    }
+
+    public function getBaseVatRate10(): ?float
+    {
+        return $this->baseVatRate10;
+    }
+
+    public function setBaseVatRate10(float $baseVatRate10): static
+    {
+        $this->baseVatRate10 = $baseVatRate10;
+
+        return $this;
+    }
+
+    public function getAmountHt(): ?float
+    {
+        return $this->amountHt;
+    }
+
+    public function setAmountHt(float $amountHt): static
+    {
+        $this->amountHt = $amountHt;
+
+        return $this;
+    }
+
+    public function getAmountTtc(): ?float
+    {
+        return $this->amountTtc;
+    }
+
+    public function setAmountTtc(float $amountTtc): static
+    {
+        $this->amountTtc = $amountTtc;
+
+        return $this;
+    }
+
+    public function getBaseVatRate20(): ?float
+    {
+        return $this->baseVatRate20;
+    }
+
+    public function setBaseVatRate20(float $baseVatRate20): static
+    {
+        $this->baseVatRate20 = $baseVatRate20;
+
+        return $this;
+    }
+
+    public function getBaseVatRate0(): ?float
+    {
+        return $this->baseVatRate0;
+    }
+
+    public function setBaseVatRate0(float $baseVatRate0): static
+    {
+        $this->baseVatRate0 = $baseVatRate0;
 
         return $this;
     }

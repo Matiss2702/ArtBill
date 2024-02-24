@@ -23,14 +23,16 @@ class QuotationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('description', TextareaType::class)
+            ->add('description', TextareaType::class, [
+                'required' => false,
+            ])
             ->add(
                 'status',
                 ChoiceType::class,
                 ['choices' => array_combine(Quotation::QUOTATION_STATUS, Quotation::QUOTATION_STATUS)]
             )
             ->add('date')
-            ->add('due_date')
+            ->add('dueDate')
             ->add('customer', EntityType::class, [
                 'class' => Customer::class,
                 'choice_label' => 'id',

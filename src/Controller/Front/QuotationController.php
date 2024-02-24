@@ -3,11 +3,10 @@
 namespace App\Controller\Front;
 
 use App\Entity\Quotation;
-use App\Entity\Service;
 use App\Form\QuotationType;
 use App\Repository\QuotationRepository;
-use App\Service\CalculAmount;
 use App\Service\CalculAmountService;
+use App\Service\SetOwnerAndCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -29,15 +28,14 @@ class QuotationController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, CalculAmountService $calculService): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, CalculAmountService $calculService, SetOwnerAndCompanyService $setOwnerAndCompany): Response
     {
         $quotation = new Quotation();
         $form = $this->createForm(QuotationType::class, $quotation);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
-            $quotation->setOwner($user);
-            $user = $quotation->getOwner();
+            $setOwnerAndCompany->process($quotation, $user);
             $calculService->calculAmounts($quotation);
 
 
@@ -71,7 +69,7 @@ class QuotationController extends AbstractController
     public function edit(Request $request, Quotation $quotation, EntityManagerInterface $entityManager, CalculAmountService $calculService, RequestStack $requestStack, SessionInterface $session): Response
     {
         $newQuotation = new Quotation();
-    
+
         $newQuotation->setDescription($quotation->getDescription());
         $newQuotation->setAmountHt($quotation->getAmountHt());
         $newQuotation->setAmountTtc($quotation->getAmountTtc());
@@ -80,8 +78,10 @@ class QuotationController extends AbstractController
         $newQuotation->setDueDate($quotation->getDueDate());
         $newQuotation->setOwner($quotation->getOwner());
         $newQuotation->setCompany($quotation->getCompany());
+        $newQuotation->setCreatedAt($quotation->getCreatedAt());
+        $newQuotation->setUpdatedAt($quotation->getUpdatedAt());
         $newQuotation->setVersion($quotation->getVersion() + 1);
-        
+
         foreach ($quotation->getServices() as $service) {
             $newQuotation->addService($service);
         }
@@ -94,12 +94,12 @@ class QuotationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $calculService->calculAmounts($newQuotation);
-    
+
             $entityManager->persist($newQuotation);
             $entityManager->flush();
-            
+
             $previousUrl = $session->get('previous_url');
-    
+
             return new RedirectResponse($previousUrl);
         }
 

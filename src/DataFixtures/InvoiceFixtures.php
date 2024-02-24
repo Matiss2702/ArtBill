@@ -16,8 +16,8 @@ class InvoiceFixtures extends Fixture implements DependentFixtureInterface
         $invoice->setCompany($this->getReference(CompanyFixtures::COMPANY_GRAPHIKART));
         $invoice->setOwner($this->getReference(UserFixtures::ADMIN_USER));
         $invoice->setQuotations($this->getReference(QuotationFixtures::QUOTATION));
+        $invoice->setDate(new \DateTime());
         $invoice->setDueDate(new \DateTime());
-
         $manager->persist($invoice);
         $manager->flush();
     }

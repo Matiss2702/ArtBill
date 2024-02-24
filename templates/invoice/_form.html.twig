@@ -6,7 +6,8 @@
 </div>
 
 <div class='status'>
-	{{form_row(form.status)}}
+	{{ form_row(form.status is defined ? form.status : form.isPaid) }}
+
 </div>
 
 <div class='date'>
