@@ -1,32 +1,98 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% include '_partials/_flash.html.twig' %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block page_title %}ArtBill{% endblock %}</title>
 
-        {% for flashMessage in app.flashes('success') %}
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-                {{ flashMessage }}
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+        {{ encore_entry_script_tags('icon') }}
+    {% endblock %}
+</head>
+
+<body class="flex overflow-hidden">
+    {% block initializer %}
+        <div class="init w-5 h-5"></div>
+    {% endblock %}
+
+    <header class="fixed top-0 left-0 right-0 z-50 h-11 flex justify-between items-center bg-gray-100 border-b-[1px] px-5 py-2">
+        <img class="w-auto h-full" src="./../../assets/images/logo.png" alt="ArtBill" />
+
+        <div class="w-6 h-6 rounded-full overflow-hidden">
+            <img src="./../../assets/images/avatar-placeholder.png" alt="Avatar" class="w-full h-full object-cover">
+        </div>
+    </header>
+
+    <div id="container" class="h-screen flex flex-grow pt-11">
+        <div id="sidebar" class="w-60 h-full bg-gray-100 text-gray-700 text-sm border-r-[1px]">
+            <div class="h-full flex flex-col sticky top-11 divide-y divide-gray-200 overflow-y-auto">
+                <ul class="flex flex-col p-3">
+                    <a href="#">
+                        <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
+                            <div class="flex items-center gap-2">
+                                <icon name="squares-2x2"></icon>
+                                <span>Tableau de bord</span>
+                            </div>
+                        </li>
+                    </a>
+                </ul>
+
+                <ul class="flex flex-col p-3">
+                    <a href="#">
+                        <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
+                            <div class="flex items-center gap-2">
+                                <icon name="document-text"></icon>
+                                <span>Factures</span>
+                            </div>
+                        </li>
+                    </a>
+                    <a href="#">
+                        <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
+                            <div class="flex items-center gap-2">
+                                <icon name="users"></icon>
+                                <span>Clients</span>
+                            </div>
+                        </li>
+                    </a>
+                </ul>
+
+                <ul class="flex flex-col p-3 mt-auto">
+                    <a href="#">
+                        <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
+                            <div class="flex items-center gap-2">
+                                <icon name="cog-6-tooth"></icon>
+                                <span>Paramètres</span>
+                            </div>
+                        </li>
+                    </a>
+                </ul>
             </div>
-        {% endfor %}
+        </div>
 
-        {% for flashMessage in app.flashes('danger') %}
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                {{ flashMessage }}
+        <div id="content" class="flex flex-grow flex-col overflow-y-auto gap-3 p-6">
+            {% if form is defined %}
+                {{ form_start(form, { 'attr': { 'class': 'flex flex-grow flex-col gap-3' } }) }}
+            {% endif %}
+
+            <div id="content-header" class="w-full flex justify-between items-center">
+                {% block page_header %}<p class="text-2xl font-bold">Bienvenue</p>{% endblock %}
             </div>
-        {% endfor %}
-    </body>
+            <div id="content-box" class="w-full h-full flex flex-col border shadow-md rounded-lg overflow-hidden">
+                {% block page_content %}{% endblock %}
+            </div>
+
+            {% if form is defined %}
+                {{ form_end(form) }}
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</body>
+
 </html>
