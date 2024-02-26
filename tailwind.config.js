@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./public/assets/**/*.js",
+    "./assets/**/*.js",
     "./templates/**/*.html.twig",
   ],
   theme: {
@@ -34,8 +34,8 @@ module.exports = {
         'black': '#000000',
         'white': '#FFFFFF',
         'gray': {
-          '100': '#F7F8F9',
-          '200': '#E5E5E5',
+          '100': '#FAFAFA',
+          '200': '#F0F0F0',
           '300': '#C4C4C4',
           '400': '#9B9B9B',
           '500': '#727272',
