@@ -1,38 +1,61 @@
-{% extends 'base.html.twig' %}
+{% extends 'back/default/sheet.html.twig' %}
 
-{% block title %}Service{% endblock %}
+{% block page_title %}Fiche prestation - ArtBill{% endblock %}
 
-{% block body %}
-    <h1>Service</h1>
+{% block page_header %}
+    <p class="text-2xl font-bold">Fiche prestation</p>
+    <div class="flex justify-end gap-3 text-sm">
+        <a href="{{ path('back_service_edit', {'id': service.id}) }}">
+            <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-primary text-white">
+                <icon name="pencil" display="solid" color="white" size="4"></icon>
+                <span>Modifier</span>
+            </div>
+        </a>
+        <a href="{{ path('back_service_delete', {'id': service.id}) }}">
+            <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-red-500 text-white">
+                <icon name="trash" display="solid" color="white" size="4"></icon>
+                <span>Supprimer</span>
+            </div>
+        </a>
+    </div>
+{% endblock %}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ service.id }}</td>
-            </tr>
-            <tr>
-                <th>Label</th>
-                <td>{{ service.label }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ service.description }}</td>
-            </tr>
-            <tr>
-                <th>Price</th>
-                <td>{{ service.price }}</td>
-            </tr>
-            <tr>
-                <th>Created</th>
-                <td>{{ service.created ? service.created|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+{% block sheet %}
+    <p class="text-lg font-bold mb-1">Informations</p>
 
-    <a href="{{ path('back_app_service_index') }}">back to list</a>
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Libellé
+        </div>
+        <div class="flex-1">
+            {{ service.label }}
+        </div>
+    </div>
 
-    <a href="{{ path('back_app_service_edit', {'id': service.id}) }}">edit</a>
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Description
+        </div>
+        <div class="flex-1">
+            {{ service.description }}
+        </div>
+    </div>
 
-    {{ include('service/_delete_form.html.twig') }}
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Prix
+        </div>
+        <div class="flex-1">
+            {{ service.price }} €
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Date et heure de création
+        </div>
+        <div class="flex-1">
+            {{ service.created|date('d/m/Y à H') }}h{{ service.created|date('i') }}
+        </div>
+    </div>
 {% endblock %}

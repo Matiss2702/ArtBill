@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block page_title %}ArtBill{% endblock %}</title>
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+        {{ encore_entry_script_tags('icon') }}
+    {% endblock %}
+</head>
+
+<body class="flex overflow-hidden">
+    {% block initializer %}{% endblock %}
+
+    <header class="fixed top-0 left-0 right-0 z-50 h-11 flex justify-between items-center bg-gray-100 border-b-[1px] px-5 py-2">
+        <img class="w-auto h-full" src="./../../assets/images/logo.png" alt="ArtBill" />
+    </header>
+
+    {% block page_content %}{% endblock %}
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</body>
+
+</html>
