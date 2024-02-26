@@ -108,7 +108,7 @@ class QuotationRepository extends ServiceEntityRepository
                         $this->entityManager->createQueryBuilder()
                             ->select('qq.id')
                             ->from('App\Entity\Quotation', 'qq')
-                            ->where('qq.previous_version = q.id')
+                            ->where('qq.previousVersion = q.id')
                             ->andWhere('qq.customer = :customer')
                     )
                 )

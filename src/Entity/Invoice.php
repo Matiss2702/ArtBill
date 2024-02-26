@@ -37,8 +37,6 @@ class Invoice
     private ?Company $company = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, options: ["default" => "CURRENT_DATE"])]
-    private ?\DateTimeInterface $due_date = null;
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dueDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
