@@ -64,7 +64,7 @@ class CustomerController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'update', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: ['get', 'post'])]
-    public function update(int $id, CustomerRepository $customerRepository, Request $request, EntityManagerInterface $manager): Response
+    public function update(String $id, CustomerRepository $customerRepository, Request $request, EntityManagerInterface $manager): Response
     {
         $customer = $customerRepository->getOneById($id);
         $form = $this->createForm(CustomerType::class, $customer);
