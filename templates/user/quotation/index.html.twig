@@ -6,5 +6,5 @@
 {% block page_content %}
 	<h1>Quotation index</h1>
 	{% include '_partials/_quotation.index.html.twig' with {'quotations': quotations}%}
-	<a href="{{ path('front_quotation_new') }}">Create new</a>
+	<a href="{{ path('user_quotation_new') }}">Create new</a>
 {% endblock %}

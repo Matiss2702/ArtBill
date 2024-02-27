@@ -1,18 +1,14 @@
 <?php
 
-namespace App\Controller\SuperAdmin;
+namespace App\Controller\Admin;
 
-use App\Entity\Invoice;
 use App\Entity\Quotation;
 use App\Form\QuotationType;
 use App\Repository\QuotationRepository;
 use App\Service\CalculAmountService;
-use App\Service\GenerateInvoiceService;
 use App\Service\SetOwnerAndCompanyService;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -26,7 +22,7 @@ class QuotationController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(QuotationRepository $quotationRepository): Response
     {
-        return $this->render('superadmin/quotation/index.html.twig', [
+        return $this->render('admin/quotation/index.html.twig', [
             'quotations' => $quotationRepository->findLatestQuotations(),
         ]);
     }
@@ -46,10 +42,10 @@ class QuotationController extends AbstractController
             $entityManager->persist($quotation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('superadmin_quotation_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_quotation_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('superadmin/quotation/new.html.twig', [
+        return $this->render('admin/quotation/new.html.twig', [
             'quotation' => $quotation,
             'form' => $form,
         ]);
@@ -60,9 +56,8 @@ class QuotationController extends AbstractController
     {
         $previousVersions = $quotationRepository->findAllPreviousVersions($quotation);
         $nextVersions = $quotationRepository->findAllNextVersions($quotation);
-        // dd($previousVersions);
 
-        return $this->render('superadmin/quotation/show.html.twig', [
+        return $this->render('admin/quotation/show.html.twig', [
             'quotation' => $quotation,
             'previousVersions' => $previousVersions,
             'nextVersions' => $nextVersions,
@@ -109,7 +104,7 @@ class QuotationController extends AbstractController
 
         $session->set('previous_url', $request->headers->get('referer'));
 
-        return $this->render('superadmin/quotation/edit.html.twig', [
+        return $this->render('admin/quotation/edit.html.twig', [
             'quotation' => $quotation,
             'form' => $form,
         ]);
@@ -123,29 +118,6 @@ class QuotationController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('superadmin_quotation_index', [], Response::HTTP_SEE_OTHER);
-    }
-
-    #[Route('/generate-invoice/{id}', name: 'generate_invoice', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function generateInvoice(Quotation $quotation, GenerateInvoiceService $generateInvoiceService, EntityManagerInterface $entityManager): RedirectResponse
-    {
-        try {
-            $invoiceGenerated = $generateInvoiceService->generateInvoice($quotation);
-
-
-            $entityManager->persist($invoiceGenerated);
-            $entityManager->flush();
-
-            $quotation->addInvoice($invoiceGenerated);
-            $id = $invoiceGenerated->getId();
-
-            $this->addFlash('success', 'Facture générée');
-            return $this->redirectToRoute('back_invoice_show', ['id' => $id]);
-
-            // return new JsonResponse(['message' => 'Success', 'id invoice' => $id], JsonResponse::HTTP_OK);
-        } catch (\Exception $e) {
-            // Retournez une réponse JSON appropriée
-            return new JsonResponse(['message' => 'Error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return $this->redirectToRoute('admin_quotation_index', [], Response::HTTP_SEE_OTHER);
     }
 }

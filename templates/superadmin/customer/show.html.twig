@@ -11,6 +11,7 @@
         <h2>Devis</h2>
         <br>
         {% if quotations %}
+            {# a changer suivant le role de l'utilisateur #}
             {% include '_partials/_quotation.index.html.twig' with {'quotations': quotations}%}
         {% endif %}
         <br>

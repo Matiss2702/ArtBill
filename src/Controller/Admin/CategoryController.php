@@ -42,7 +42,7 @@ class CategoryController extends AbstractController
             return $this->redirectToRoute('admin_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('company/category/new.html.twig', [
+        return $this->render('admin/category/new.html.twig', [
             'category' => $category,
             'form' => $form,
         ]);

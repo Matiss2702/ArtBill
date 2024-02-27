@@ -6,7 +6,7 @@
 {% block page_content %}
 	<h1>Create new Invoice</h1>
 
-	{{ include('invoice/_form.html.twig') }}
+	{{ include('user/invoice/_form.html.twig') }}
 
-	<a href="{{ path('back_invoice_index') }}">back to list</a>
+	<a href="{{ path('user_invoice_index') }}">back to list</a>
 {% endblock %}

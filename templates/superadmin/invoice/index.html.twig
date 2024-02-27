@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invoices
+{% endblock %}
+
+{% block body %}
+	<h1>Invoices index</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Description</th>
+				<th>Amount_ht</th>
+				<th>Amount_ttc</th>
+				<th>Statut</th>
+				<th>Date</th>
+				<th>Due_date</th>
+				<th>Created</th>
+				<th>Services</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for invoice in invoices %}
+				<tr>
+					<td>{{ invoice.id }}</td>
+					<td>{{ invoice.description }}</td>
+					<td>{{ invoice.amountHt }}</td>
+					<td>{{ invoice.amountTtc }}</td>
+					<td>{{ invoice.isPaid ? 'Payé' : 'En attente de paiement' }}</td>
+					<td>{{ invoice.date ? invoice.date|date('Y-m-d') : '' }}</td>
+					<td>{{ invoice.dueDate ? invoice.dueDate|date('Y-m-d') : '' }}</td>
+					<td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+					<td>{{ invoice.services|length }}</td>
+					<td>
+						<a href="{{ path('superadmin_invoice_show', {'id': invoice.id}) }}">show</a>
+						<a href="{{ path('superadmin_invoice_edit', {'id': invoice.id}) }}">edit</a>
+
+					</td>
+
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<a href="{{ path('superadmin_invoice_index') }}">Create new</a>
+
+
+{% endblock %}

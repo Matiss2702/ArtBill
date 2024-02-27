@@ -3,9 +3,9 @@
 {% block title %}Quotation index
 {% endblock %}
 
-{% block page_content %}
+{% block body %}
 	<h1>Quotation index</h1>
 	{# a changer suivant le role de l'utilisateur #}
-	{% include '_partials/_quotation.index.html.twig' with {'quotations': quotations}%}
-	<a href="{{ path('admin_quotation_new') }}">Create new</a>
+	{% include '_partials/_quotation.index.html.twig' with {'quotations': quotations}%} 
+	<a href="{{ path('superadmin_quotation_new') }}">Create new</a>
 {% endblock %}

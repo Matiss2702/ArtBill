@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Employee;
+namespace App\Controller\User;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,6 +11,6 @@ class DefaultController extends AbstractController
     #[Route('/', name: 'default_index')]
     public function index(): Response
     {
-        return $this->render('employee/default/index.html.twig');
+        return $this->render('user/default/index.html.twig');
     }
 }
