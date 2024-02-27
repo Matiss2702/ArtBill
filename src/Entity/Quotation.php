@@ -9,15 +9,18 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Ramsey\Uuid\UuidInterface;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[ORM\Entity(repositoryClass: QuotationRepository::class)]
 class Quotation
 {
     use Traits\Timestampable;
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: "uuid", unique: true)]
+    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    private ?UuidInterface $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
@@ -95,7 +98,7 @@ class Quotation
         $this->invoices = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?UuidInterface
     {
         return $this->id;
     }
@@ -247,7 +250,6 @@ class Quotation
     {
         if ($nextQuotation === null && $this->nextQuotation !== null) {
             $this->nextQuotation->setPreviousVersion(null);
-            return $this;
         }
 
         if ($nextQuotation !== null && $nextQuotation->getPreviousVersion() !== $this) {
@@ -255,6 +257,7 @@ class Quotation
         }
 
         $this->nextQuotation = $nextQuotation;
+        return $this;
     }
 
     public function removeInvoice(Invoice $invoice): static

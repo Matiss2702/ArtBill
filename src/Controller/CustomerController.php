@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Controller\Back;
+namespace App\Controller;
 
 use App\Entity\Customer;
 use App\Repository\CustomerRepository;
 use App\Form\CustomerType;
-use App\Repository\QuotationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,17 +17,16 @@ class CustomerController extends AbstractController
     #[Route('/', name: 'index', methods: 'get')]
     public function index(CustomerRepository $customerRepository): Response
     {
-        return $this->render('back/customer/index.html.twig', [
+        return $this->render('customer/index.html.twig', [
             'customers' => $customerRepository->findAll(),
         ]);
     }
 
-    #[Route('/{id}', name: 'show', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: ['GET'])]
-    public function show(Customer $customer, QuotationRepository $quotationRepository): Response
+    #[Route('/{id}', name: 'show', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: 'get')]
+    public function show(Customer $customer): Response
     {
-        return $this->render('back/customer/show.html.twig', [
+        return $this->render('customer/show.html.twig', [
             'customer' => $customer,
-            'quotations' =>  $quotationRepository->findLatestQuotationsForCustomer($customer),
         ]);
     }
 
@@ -45,7 +43,7 @@ class CustomerController extends AbstractController
     
             if ($existingCustomer) {
                 $this->addFlash('danger', "Cette adresse mail est déjà utilisée");
-                return $this->redirectToRoute('back_customer_new');
+                return $this->redirectToRoute('customer_new');
             }
 
             $manager->persist($customer);
@@ -53,18 +51,18 @@ class CustomerController extends AbstractController
 
             $this->addFlash('success', "Le client {$customer->getId()} a bien été enregistré");
 
-            return $this->redirectToRoute('back_customer_show', [
+            return $this->redirectToRoute('customer_show', [
                 'id' => $customer->getId()
             ]);
         }
 
-        return $this->render('back/customer/new.html.twig', [
+        return $this->render('customer/new.html.twig', [
             'form' => $form
         ]);
     }
 
     #[Route('/update/{id}', name: 'update', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: ['get', 'post'])]
-    public function update(String $id, CustomerRepository $customerRepository, Request $request, EntityManagerInterface $manager): Response
+    public function update(int $id, CustomerRepository $customerRepository, Request $request, EntityManagerInterface $manager): Response
     {
         $customer = $customerRepository->getOneById($id);
         $form = $this->createForm(CustomerType::class, $customer);
@@ -82,13 +80,13 @@ class CustomerController extends AbstractController
                 
                 $this->addFlash('success', "Le client {$customer->getName()} a bien été modifié.");
                 
-                return $this->redirectToRoute('back_customer_show', [
+                return $this->redirectToRoute('customer_show', [
                     'id' => $customer->getId()
                 ]);
             }
         }        
 
-        return $this->render('back/customer/update.html.twig', [
+        return $this->render('customer/update.html.twig', [
             'form' => $form,
             'customer' => $customer
         ]);
@@ -105,6 +103,6 @@ class CustomerController extends AbstractController
             $this->addFlash('success', "Le client {$customer->getId()} a bien été supprimé");
         }
 
-        return $this->redirectToRoute('back_customer_index');
+        return $this->redirectToRoute('customer_index');
     }
 }

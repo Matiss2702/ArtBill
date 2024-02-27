@@ -23,7 +23,7 @@ class CustomerController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'show', requirements: ['id' => '\d{1,5}'], methods: 'get')]
+    #[Route('/{id}', name: 'show', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: 'get')]
     public function show(Customer $customer, QuotationRepository $quotationRepository): Response
     {
         return $this->render('front/customer/show.html.twig', [
