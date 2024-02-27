@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .invoice {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .invoice header {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .invoice header h1 {
+            margin: 0;
+        }
+        .invoice .details {
+            margin-bottom: 20px;
+        }
+        .invoice table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .invoice table th, .invoice table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+        .invoice table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <header>
+            <h1>Facture</h1>
+        </header>
+        <div class="details">
+            <p><strong>Nom de l'entreprise :</strong> ArtBill</p>
+            <p><strong>Adresse :</strong> [Adresse de votre entreprise]</p>
+        </div>
+        <div class="details">
+            <p><strong>Nom du client :</strong> {{ quotation.customer.name }}</p>
+            <p><strong>Adresse :</strong> {{ quotation.customer.street }}, {{ quotation.customer.city }}, {{ quotation.customer.getZipCode() }}, {{ quotation.customer.country }}</p>
+        </div>
+        <p><strong>Date :</strong> {{ "now"|date("Y-m-d") }}</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Quantité</th>
+                    <th>Prix unitaire</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in quotation.services %}
+                <tr>
+                    <td>{{ service.label }}</td>
+                    <td>{{ service.quantity }}</td>
+                    <td>{{ service.price }}</td>
+                    <td>{{ service.price * service.quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" style="text-align: right;"><strong>Total HT</strong></td>
+                    <td>{{ quotation.getAmountHt }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: right;"><strong>Total TTC</strong></td>
+                    <td>{{ quotation.getAmountTtc }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</body>
+</html>

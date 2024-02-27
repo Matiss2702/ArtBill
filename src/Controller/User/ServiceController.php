@@ -49,7 +49,7 @@ class ServiceController extends AbstractController
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Service $service): Response
     {
-        return $this->render('employee/service/show.html.twig', [
+        return $this->render('user/service/show.html.twig', [
             'service' => $service,
         ]);
     }

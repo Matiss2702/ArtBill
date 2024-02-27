@@ -55,7 +55,7 @@ class InvoiceController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'admin_invoice_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(InvoiceType::class, $invoice);

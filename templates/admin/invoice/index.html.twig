@@ -34,8 +34,8 @@
 					<td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}</td>
 					<td>{{ invoice.services|length }}</td>
 					<td>
-						<a href="{{ path('back_invoice_show', {'id': invoice.id}) }}">show</a>
-						<a href="{{ path('back_invoice_edit', {'id': invoice.id}) }}">edit</a>
+						<a href="{{ path('admin_invoice_show', {'id': invoice.id}) }}">show</a>
+						<a href="{{ path('admin_invoice_edit', {'id': invoice.id}) }}">edit</a>
 
 					</td>
 
@@ -44,7 +44,7 @@
 		</tbody>
 	</table>
 
-	<a href="{{ path('back_invoice_index') }}">Create new</a>
+	<a href="{{ path('admin_invoice_index') }}">Create new</a>
 
 
 {% endblock %}

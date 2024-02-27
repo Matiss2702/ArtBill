@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\SuperAdmin;
 
 use App\Repository\QuotationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +22,7 @@ class PdfController extends AbstractController
         $options->set('isHtml5ParserEnabled', true);
         $dompdf = new Dompdf($options);
 
-        $html = $this->renderView('admin/pdf/pdf_template.html.twig', [
+        $html = $this->renderView('superadmin/pdf/pdf_template.html.twig', [
             'quotation' => $quotation,
         ]);
 

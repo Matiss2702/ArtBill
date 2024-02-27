@@ -18,7 +18,7 @@ class CustomerController extends AbstractController
     #[Route('/', name: 'index', methods: 'get')]
     public function index(CustomerRepository $customerRepository): Response
     {
-        return $this->render('front/customer/index.html.twig', [
+        return $this->render('superadmin/customer/index.html.twig', [
             'customers' => $customerRepository->findAll(),
         ]);
     }
@@ -26,7 +26,7 @@ class CustomerController extends AbstractController
     #[Route('/{id}', name: 'show', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: 'get')]
     public function show(Customer $customer, QuotationRepository $quotationRepository): Response
     {
-        return $this->render('front/customer/show.html.twig', [
+        return $this->render('superadmin/customer/show.html.twig', [
             'customer' => $customer,
             'quotations' =>  $quotationRepository->findLatestQuotationsForCustomer($customer->getId()),
         ]);

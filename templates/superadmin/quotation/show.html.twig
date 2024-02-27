@@ -3,7 +3,7 @@
 {% block title %}Détails de la citation
 {% endblock %}
 
-{% block page_content %}
+{% block body %}
 <h1>Détails du devis</h1>
 <table class="table">
 	<thead>
@@ -98,8 +98,8 @@
 					{% endif %}
 				</td>
 				<td>
-					<a href="{{ path('user_quotation_show', {'id': previousVersion.id}) }}">show</a>
-					<a href="{{ path('user_quotation_edit', {'id': previousVersion.id}) }}">edit</a>
+					<a href="{{ path('superadmin_quotation_show', {'id': previousVersion.id}) }}">show</a>
+					<a href="{{ path('superadmin_quotation_edit', {'id': previousVersion.id}) }}">edit</a>
 				</td>
 			</tr>
 		{% endfor %}
@@ -146,9 +146,9 @@
 				{% endif %}
 			</td>
 			<td>
-				<a href="{{ path('user_quotation_show', {'id': nextVersion.id}) }}">show</a>
-				<a href="{{ path('user_quotation_edit', {'id': nextVersion.id}) }}">edit</a>
+				<a href="{{ path('superadmin_quotation_show', {'id': nextVersion.id}) }}">show</a>
+				<a href="{{ path('superadmin_quotation_edit', {'id': nextVersion.id}) }}">edit</a>
 			</td>
 		</tr>
 	{% endfor %}
-</tbody></table></br>{% endif %}<a href="{{ path('user_quotation_index') }}" class="btn btn-secondary">Retour à la liste</a></br><a href="{{ path('user_quotation_edit', {'id': quotation.id}) }}" class="btn btn-primary">Modifier</a></br>{{ include('user/quotation/_delete_form.html.twig') }}{% endblock %}
+</tbody></table></br>{% endif %}<a href="{{ path('superadmin_quotation_index') }}" class="btn btn-secondary">Retour à la liste</a></br><a href="{{ path('superadmin_quotation_edit', {'id': quotation.id}) }}" class="btn btn-primary">Modifier</a></br>{{ include('superadmin/quotation/_delete_form.html.twig') }}{% endblock %}

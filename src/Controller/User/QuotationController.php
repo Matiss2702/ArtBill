@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\SuperAdmin;
+namespace App\Controller\User;
 
 use App\Entity\Quotation;
 use App\Form\QuotationType;
@@ -22,7 +22,7 @@ class QuotationController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(QuotationRepository $quotationRepository): Response
     {
-        return $this->render('superadmin/quotation/index.html.twig', [
+        return $this->render('user/quotation/index.html.twig', [
             'quotations' => $quotationRepository->findLatestQuotations(),
         ]);
     }
@@ -42,10 +42,10 @@ class QuotationController extends AbstractController
             $entityManager->persist($quotation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('superadmin_quotation_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('user_quotation_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('superadmin/quotation/new.html.twig', [
+        return $this->render('user/quotation/new.html.twig', [
             'quotation' => $quotation,
             'form' => $form,
         ]);
@@ -56,9 +56,8 @@ class QuotationController extends AbstractController
     {
         $previousVersions = $quotationRepository->findAllPreviousVersions($quotation);
         $nextVersions = $quotationRepository->findAllNextVersions($quotation);
-        // dd($previousVersions);
 
-        return $this->render('superadmin/quotation/show.html.twig', [
+        return $this->render('user/quotation/show.html.twig', [
             'quotation' => $quotation,
             'previousVersions' => $previousVersions,
             'nextVersions' => $nextVersions,
@@ -105,7 +104,7 @@ class QuotationController extends AbstractController
 
         $session->set('previous_url', $request->headers->get('referer'));
 
-        return $this->render('superadmin/quotation/edit.html.twig', [
+        return $this->render('user/quotation/edit.html.twig', [
             'quotation' => $quotation,
             'form' => $form,
         ]);
@@ -119,6 +118,6 @@ class QuotationController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('superadmin_quotation_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('user_quotation_index', [], Response::HTTP_SEE_OTHER);
     }
 }

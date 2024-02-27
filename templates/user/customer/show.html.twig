@@ -9,6 +9,6 @@
         <p class="mb-4">{{ customer.email }}</p>
         <p class="mb-4">{{ customer.street }}, {{ customer.city }}, {{ customer.getZipCode() }}, {{ customer.country }}</p>
 
-        <a href="{{ path('customer_update', {'id': customer.id}) }}" class="btn btn-primary">Modifier</a>
+        <a href="{{ path('user_customer_update', {'id': customer.id}) }}" class="btn btn-primary">Modifier</a>
     </div>
 {% endblock %}

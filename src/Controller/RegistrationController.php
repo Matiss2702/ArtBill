@@ -101,7 +101,7 @@ class RegistrationController extends AbstractController
 
         if ($user->getIsVerified()) {
             $this->addFlash('warning', 'Cet utilisateur est déjà activé');
-            return $this->redirectToRoute('profile_index');
+            return $this->redirectToRoute('admin/profile_index');
         }
 
         // On génère le JWT de l'utilisateur
@@ -121,7 +121,7 @@ class RegistrationController extends AbstractController
         dd($token);
         // On envoie un mail
         $mail->send(
-            'artbill.team@outlook.fr',
+            'team.artbill@outlook.fr',
             $user->getEmail(),
             'Activation de votre compte sur ArtBill',
             'register',

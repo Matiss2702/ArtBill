@@ -29,18 +29,30 @@ security:
         always_remember_me: true
 
   access_control:
+    # Allow ROLE_SUPERADMIN to access any route starting with admin, superadmin, and user
+    - { path: ^/admin, roles: ROLE_SUPERADMIN }
+    - { path: ^/superadmin, roles: ROLE_SUPERADMIN }
+    - { path: ^/user, roles: ROLE_SUPERADMIN }
+
+    # Allow ROLE_ADMIN to access routes starting with admin and user, but not superadmin
     - { path: ^/admin, roles: ROLE_ADMIN }
-    - { path: ^/employee, roles: ROLE_EMPLOYEE }
-    - { path: ^/company, roles: ROLE_COMPANY }
+    - { path: ^/user, roles: ROLE_ADMIN }
+
+    # Restrict ROLE_USER to only access routes starting with user
+    - { path: ^/user, roles: ROLE_USER }
+
+    # Public access routes
     - { path: ^/login, roles: PUBLIC_ACCESS }
     - { path: ^/register, roles: PUBLIC_ACCESS }
     - { path: ^/reset-password, roles: PUBLIC_ACCESS }
+
+    # Default access control for any other routes not specified above
     - { path: ^/, roles: ROLE_USER }
 
   role_hierarchy:
-    ROLE_EMPLOYEE: ROLE_EMPLOYEE
-    ROLE_COMPANY: ROLE_COMPANY
-    ROLE_ADMIN: ROLE_ADMIN
+    ROLE_SUPERADMIN: [ROLE_SUPERADMIN]
+    ROLE_ADMIN: [ROLE_ADMIN]
+    ROLE_USER: [ROLE_USER]
 
 when@test:
   security:

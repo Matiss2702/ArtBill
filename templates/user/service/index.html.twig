@@ -1,4 +1,4 @@
-{% extends 'back/default/list.html.twig' %}
+{% extends 'user/default/list.html.twig' %}
 
 {% block page_title %}Prestations{% endblock %}
 
@@ -6,7 +6,7 @@
     <p class="text-2xl font-bold">Prestations</p>
     <div class="flex gap-3">
         <input class="w-96 border rounded-md text-sm outline-primary px-2 py-1" type="text" name="search" value="" placeholder="Rechercher..." />
-        <a href="{{ path('back_service_new') }}" title="Ajouter">
+        <a href="{{ path('user_service_new') }}" title="Ajouter">
             <div class="btn flex justify-center items-center rounded-md bg-primary h-full px-4">
                 <icon name="plus" display="mini" color="white"></icon>
             </div>
@@ -32,11 +32,11 @@
     {% for service in services %}
         <tr>
             <td class="w-10 h-12">
-                <a href="{{ path('back_service_show', {'id': service.id}) }}" title="Voir">
+                <a href="{{ path('user_service_show', {'id': service.id}) }}" title="Voir">
                     <icon name="eye" display="solid" color="primary" size="4"></icon>
                 </a>
             </td>
-            <td><a class="font-bold text-primary" href="{{ path('back_service_show', {'id': service.id}) }}">{{ service.label }}</a></td>
+            <td><a class="font-bold text-primary" href="{{ path('user_service_show', {'id': service.id}) }}">{{ service.label }}</a></td>
             <td>{{ service.description }}</td>
             <td>{{ service.price }}<span class="text-xs"> €</span></td>
             <td>
@@ -58,13 +58,13 @@
             </td>
             <td>
                 <div class="flex justify-end gap-3">
-                    <a href="{{ path('back_service_edit', {'id': service.id}) }}">
+                    <a href="{{ path('user_service_edit', {'id': service.id}) }}">
                         <div class="h-8 flex justify-center items-center gap-1.5 border shadow-sm rounded-md px-2.5 p-1 bg-primary text-white">
                             <icon name="pencil" display="solid" color="white" size="4"></icon>
                             <span>Modifier</span>
                         </div>
                     </a>
-                    <a href="{{ path('back_service_delete', {'id': service.id}) }}">
+                    <a href="{{ path('user_service_delete', {'id': service.id}) }}">
                         <div class="w-8 h-8 flex justify-center items-center gap-1.5 border shadow-sm rounded-md py-1">
                             <icon name="trash" display="solid" color="primary" size="4"></icon>
                         </div>
