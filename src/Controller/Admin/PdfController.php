@@ -9,7 +9,9 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+#[IsGranted('ROLE_ADMIN')]
 class PdfController extends AbstractController
 {
     #[Route('/generate-pdf', name: 'generate_pdf', methods: ['GET'])]

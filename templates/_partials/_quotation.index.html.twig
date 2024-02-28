@@ -34,8 +34,19 @@
 				<td>{{ quotation.owner.email }}</td>
 				<td>{{ quotation.company.name }}</td>
 				<td>
-					<a href="{{ path('front_quotation_show', {'id': quotation.id}) }}">show</a>
-					<a href="{{ path('front_quotation_edit', {'id': quotation.id}) }}">edit</a>
+					{% if is_granted('ROLE_SUPERADMIN') %}
+						<a href="{{ path('superadmin_quotation_show', {'id': quotation.id}) }}">show</a>
+						<a href="{{ path('superadmin_quotation_edit', {'id': quotation.id}) }}">edit</a>
+					{% endif %}
+					{% if is_granted('ROLE_ADMIN') %}
+
+						<a href="{{ path('admin_quotation_show', {'id': quotation.id}) }}">show</a>
+						<a href="{{ path('admin_quotation_edit', {'id': quotation.id}) }}">edit</a>
+					{% endif %}
+					{% if is_granted('ROLE_USER') %}
+						<a href="{{ path('user_quotation_show', {'id': quotation.id}) }}">show</a>
+						<a href="{{ path('user_quotation_edit', {'id': quotation.id}) }}">edit</a>
+					{% endif %}
 				</td>
 			</tr>
 		{% endfor %}

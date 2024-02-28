@@ -10,7 +10,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+#[IsGranted('ROLE_ADMIN')]
 #[Route('/customer', name: 'customer_')]
 class CustomerController extends AbstractController
 {
@@ -22,7 +24,7 @@ class CustomerController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'show', requirements: ['id' => '\d{1,5}'], methods: 'get')]
+    #[Route('/{id}', name: 'show', requirements: ['id' => '[0-9a-fA-F\-]+'], methods:  ['GET'])]
     public function show(Customer $customer): Response
     {
         return $this->render('admin/customer/show.html.twig', [
@@ -61,8 +63,8 @@ class CustomerController extends AbstractController
         ]);
     }
 
-    #[Route('/update/{id}', name: 'update', requirements: ['id' => '\d{1,5}'], methods: ['get', 'post'])]
-    public function update(int $id, CustomerRepository $customerRepository, Request $request, EntityManagerInterface $manager): Response
+    #[Route('/update/{id}', name: 'update', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: ['get', 'post'])]
+    public function update(String  $id, CustomerRepository $customerRepository, Request $request, EntityManagerInterface $manager): Response
     {
         $customer = $customerRepository->getOneById($id);
         $form = $this->createForm(CustomerType::class, $customer);
@@ -93,7 +95,7 @@ class CustomerController extends AbstractController
     }
 
 
-    #[Route('/delete/{id}/{token}', name: 'delete', requirements: ['id' => '\d{1,5}'], methods: 'get')]
+    #[Route('/delete/{id}/{token}', name: 'delete', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: 'get')]
     public function delete(Customer $customer, string $token, EntityManagerInterface $manager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $customer->getId(), $token)) {

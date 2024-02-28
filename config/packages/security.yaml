@@ -16,43 +16,35 @@ security:
     main:
       lazy: true
       provider: app_user_provider
+      entry_point: App\Security\UserAuthenticator
       custom_authenticator: App\Security\UserAuthenticator
       logout:
         path: app_logout
+        target: app_login
         # where to redirect after logout
         # target: app_any_route
-
       remember_me:
         secret: "%kernel.secret%"
         lifetime: 604800
         path: /
         always_remember_me: true
+      form_login:
+        login_path: app_login
+        check_path: app_login
 
   access_control:
-    # Allow ROLE_SUPERADMIN to access any route starting with admin, superadmin, and user
-    - { path: ^/admin, roles: ROLE_SUPERADMIN }
-    - { path: ^/superadmin, roles: ROLE_SUPERADMIN }
-    - { path: ^/user, roles: ROLE_SUPERADMIN }
-
-    # Allow ROLE_ADMIN to access routes starting with admin and user, but not superadmin
-    - { path: ^/admin, roles: ROLE_ADMIN }
-    - { path: ^/user, roles: ROLE_ADMIN }
-
-    # Restrict ROLE_USER to only access routes starting with user
-    - { path: ^/user, roles: ROLE_USER }
-
-    # Public access routes
     - { path: ^/login, roles: PUBLIC_ACCESS }
     - { path: ^/register, roles: PUBLIC_ACCESS }
     - { path: ^/reset-password, roles: PUBLIC_ACCESS }
-
-    # Default access control for any other routes not specified above
+    - { path: ^/profile, roles: ROLE_USER }
     - { path: ^/, roles: ROLE_USER }
+    - { path: ^/user, roles: ROLE_USER }
+    - { path: ^/admin, roles: ROLE_ADMIN }
+    - { path: ^/superadmin, roles: ROLE_SUPERADMIN }
 
   role_hierarchy:
-    ROLE_SUPERADMIN: [ROLE_SUPERADMIN]
-    ROLE_ADMIN: [ROLE_ADMIN]
-    ROLE_USER: [ROLE_USER]
+    ROLE_SUPERADMIN: ROLE_ADMIN
+    ROLE_ADMIN: ROLE_USER
 
 when@test:
   security:

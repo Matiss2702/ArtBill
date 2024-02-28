@@ -5,10 +5,12 @@ namespace App\Controller\SuperAdmin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+#[IsGranted('ROLE_SUPERADMIN')]
 class ProfileController extends AbstractController
 {
-    #[Route('/profile', name: 'index')]
+    #[Route('/profile', name: 'superadmin_profile_index')]
     public function index(): Response
     {
         return $this->render('superadmin/profile/index.html.twig', [
