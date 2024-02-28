@@ -34,7 +34,6 @@ class RegistrationController extends AbstractController
             $company->setName($form->get('companyName')->getData());
             $company->setVatNumber($form->get('vatNumber')->getData());
             $company->setZipCode($form->get('zipCode')->getData());
-            // Vous pouvez ajouter plus de détails de l'entreprise ici si nécessaire
 
             // Persist company entity
             $entityManager->persist($company);
@@ -42,8 +41,8 @@ class RegistrationController extends AbstractController
 
             // Set user details
             $user->setPassword($userPasswordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
-            $user->setRoles(['ROLE_COMPANY']); // Ou ['ROLE_COMPANY'] si vous avez une logique différente pour les rôles
-            $user->setCompany($company); // Associez la compagnie à l'utilisateur
+            $user->setRoles(['ROLE_ADMIN']);
+            $user->setCompany($company);
 
             // Persist user entity
             $entityManager->persist($user);
@@ -131,10 +130,10 @@ class RegistrationController extends AbstractController
         return $this->redirectToRoute('/');
     }
 
-    #[Route('/company/user/register', name: 'company_user_register')]
+    #[Route('/admin/register', name: 'company_user_register')]
     public function registerCompanyUser(Request $request, UserPasswordHasherInterface $passwordHasher, SendMailService $mail,EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_COMPANY');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $companyUser = $this->getUser();
         $company = $companyUser->getCompany();
         $user = new User();
