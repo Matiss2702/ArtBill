@@ -1,59 +1,191 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Quotation
+{% block title %}Détails de la citation
 {% endblock %}
 
 {% block page_content %}
-	<h1>Quotation</h1>
-
-	<table class="table">
-		<tbody>
-			<tr>
-				<th>Id</th>
-				<td>{{ quotation.id }}</td>
-			</tr>
-			<tr>
-				<th>Description</th>
-				<td>{{ quotation.description }}</td>
-			</tr>
-			<tr>
-				<th>Amount_ht</th>
-				<td>{{ quotation.amountHt }}</td>
-			</tr>
-			<tr>
-				<th>Amount_ttc</th>
-				<td>{{ quotation.amountTtc }}</td>
-			</tr>
-
-			<tr>
-				<th>Status</th>
-				<td>{{ quotation.status }}</td>
-			</tr>
-			<tr>
-				<th>Date</th>
-				<td>{{ quotation.date ? quotation.date|date('Y-m-d') : '' }}</td>
-			</tr>
-			<tr>
-				<th>Due_date</th>
-				<td>{{ quotation.dueDate ? quotation.dueDate|date('Y-m-d') : '' }}</td>
-			</tr>
-			<tr>
-				<th>Created</th>
-				<td>{{ quotation.createdAt ? quotation.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-			</tr>
-
-			<tr>
-				<th>Services</th>
-				{% if quotation.services %}
-					{% for service in quotation.services %}
-						<td>{{ service.label }}</td>
-						<td>{{ service.price }}</td>
-						<td>{{ service.quantity }}</td>
-
-					{% endfor %}
+<h1>Détails du devis</h1>
+<table class="table">
+	<thead>
+		<th>Id</th>
+		<th>Description</th>
+		<th>Montant HT</th>
+		<th>Montant TTC</th>
+		<th>Statut</th>
+		<th>Date</th>
+		<th>Date d'échéance</th>
+		<th>Date de création</th>
+		<th>Services</th>
+		<th>Taux TVA 10%</th>
+		<th>Base TVA 10%</th>
+		<th>Taux TVA 20%</th>
+		<th>Base TVA 20%</th>
+		<th>Base TVA 0%</th>
+		<th>Actions</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>{{ quotation.id }}</td>
+			<td>{{ quotation.description }}</td>
+			<td>{{ quotation.amountHt }}</td>
+			<td>{{ quotation.amountTtc }}</td>
+			<td>{{ quotation.status }}</td>
+			<td>{{ quotation.date ? quotation.date|date('Y-m-d') : '' }}</td>
+			<td>{{ quotation.dueDate ? quotation.dueDate|date('Y-m-d') : '' }}</td>
+			<td>{{ quotation.createdAt ? quotation.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+			<td>
+				{% if quotation.services is not empty %}
+					<ul>
+						{% for service in quotation.services %}
+							<li>{{ service.label }}
+								- Prix:
+								{{ service.price }}
+								- Quantité:
+								{{ service.quantity }}</li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					Aucun service
 				{% endif %}
-			</tr>
-		</tbody>
-	</td>
-
-</tr></tbody></table><a href="{{ path('admin_quotation_index') }}">back to list</a><a href="{{ path('admin_quotation_edit', {'id': quotation.id}) }}">edit</a>{{ include('admin/quotation/_delete_form.html.twig') }}{% endblock %}
+			</td>
+			<td>{{quotation.vatRate10}}</td>
+			<td>{{quotation.baseVatRate10}}</td>
+			<td>{{quotation.vatRate20}}</td>
+			<td>{{quotation.baseVatRate20}}</td>
+			<td>{{quotation.baseVatRate0}}</td>
+			<td>
+				<a href="{{ path('admin_quotation_show', {'id': quotation.id}) }}">show</a>
+				<a href="{{ path('admin_quotation_edit', {'id': quotation.id}) }}">edit</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</br>
+{% if previousVersions %}
+<h2>Version précédentes:</h2>
+<table class="table">
+	<thead>
+		<th>Id</th>
+		<th>Description</th>
+		<th>Montant HT</th>
+		<th>Montant TTC</th>
+		<th>Statut</th>
+		<th>Date</th>
+		<th>Date d'échéance</th>
+		<th>Date de création</th>
+		<th>Services</th>
+		<th>Taux TVA 10%</th>
+		<th>Base TVA 10%</th>
+		<th>Taux TVA 20%</th>
+		<th>Base TVA 20%</th>
+		<th>Base TVA 0%</th>
+		<th>Actions</th>
+	</thead>
+	<tbody>
+		{% for previousVersion in previousVersions %}
+		<tr>
+			<td>{{ previousVersion.id }}</td>
+			<td>{{ previousVersion.description }}</td>
+			<td>{{ previousVersion.amountHt }}</td>
+			<td>{{ previousVersion.amountTtc }}</td>
+			<td>{{ previousVersion.status }}</td>
+			<td>{{ previousVersion.date ? previousVersion.date|date('Y-m-d') : '' }}</td>
+			<td>{{ previousVersion.dueDate ? previousVersion.dueDate|date('Y-m-d') : '' }}</td>
+			<td>{{ previousVersion.createdAt ? previousVersion.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+			<td>
+				{% if previousVersion.services is not empty %}
+					<ul>
+						{% for service in previousVersion.services %}
+							<li>{{ service.label }}
+								- Prix:
+								{{ service.price }}
+								- Quantité:
+								{{ service.quantity }}</li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					Aucun service
+				{% endif %}
+			</td>
+			<td>{{previousVersion.vatRate10}}</td>
+			<td>{{previousVersion.baseVatRate10}}</td>
+			<td>{{previousVersion.vatRate20}}</td>
+			<td>{{previousVersion.baseVatRate20}}</td>
+			<td>{{previousVersion.baseVatRate0}}</td>
+			<td>
+				<a href="{{ path('admin_quotation_show', {'id': previousVersion.id}) }}">show</a>
+				<a href="{{ path('admin_quotation_edit', {'id': previousVersion.id}) }}">edit</a>
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+</br>
+{% endif %}
+{% if nextVersions %}
+<h2>Version suivantes:</h2>
+<table class="table">
+	<thead>
+		<th>Id</th>
+		<th>Description</th>
+		<th>Montant HT</th>
+		<th>Montant TTC</th>
+		<th>Statut</th>
+		<th>Date</th>
+		<th>Date d'échéance</th>
+		<th>Date de création</th>
+		<th>Services</th>
+		<th>Taux TVA 10%</th>
+		<th>Base TVA 10%</th>
+		<th>Taux TVA 20%</th>
+		<th>Base TVA 20%</th>
+		<th>Base TVA 0%</th>
+		<th>Actions</th>
+	</thead>
+	<tbody>
+	{% for nextVersion in nextVersions %}
+		<tr>
+			<td>{{ nextVersion.id }}</td>
+			<td>{{ nextVersion.description }}</td>
+			<td>{{ nextVersion.amountHt }}</td>
+			<td>{{ nextVersion.amountTtc }}</td>
+			<td>{{ nextVersion.status }}</td>
+			<td>{{ nextVersion.date ? nextVersion.date|date('Y-m-d') : '' }}</td>
+			<td>{{ nextVersion.dueDate ? nextVersion.dueDate|date('Y-m-d') : '' }}</td>
+			<td>{{ nextVersion.createdAt ? nextVersion.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+			<td>
+				{% if nextVersion.services is not empty %}
+					<ul>
+						{% for service in nextVersion.services %}
+							<li>{{ service.label }}
+								- Prix:
+								{{ service.price }}
+								- Quantité:
+								{{ service.quantity }}</li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					Aucun service
+				{% endif %}
+			</td>
+			<td>{{nextVersion.vatRate10}}</td>
+			<td>{{nextVersion.baseVatRate10}}</td>
+			<td>{{nextVersion.vatRate20}}</td>
+			<td>{{nextVersion.baseVatRate20}}</td>
+			<td>{{nextVersion.baseVatRate0}}</td>
+			<td>
+				<a href="{{ path('admin_quotation_show', {'id': nextVersion.id}) }}">show</a>
+				<a href="{{ path('admin_quotation_edit', {'id': nextVersion.id}) }}">edit</a>
+			</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+</br>
+{% endif %}
+<a href="{{ path('admin_quotation_index') }}" class="btn btn-secondary">Retour à la liste</a>
+</br>
+<a href="{{ path('admin_quotation_edit', {'id': quotation.id}) }}" class="btn btn-primary">Modifier</a>
+</br>
+{{ include('superadmin/quotation/_delete_form.html.twig') }}
+{% endblock %}
