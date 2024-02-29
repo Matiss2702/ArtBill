@@ -37,7 +37,7 @@ class Invoice
     private ?\DateTimeInterface $dueDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Quotation $quotations = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
