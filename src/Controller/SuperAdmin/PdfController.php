@@ -2,6 +2,7 @@
 
 namespace App\Controller\SuperAdmin;
 
+use App\Repository\InvoiceRepository;
 use App\Repository\QuotationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,17 +16,24 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class PdfController extends AbstractController
 {
     #[Route('/generate-pdf', name: 'generate_pdf', methods: ['GET'])]
-    public function generatePdf(Request $request, QuotationRepository $quotationRepository): Response
+    public function generatePdf(Request $request, QuotationRepository $quotationRepository, InvoiceRepository $invoiceRepository): Response
     {
         $id = $request->query->get('id');
-        $quotation = $quotationRepository->findOneById($id);
+        $type = $request->query->get('type');
+
+        if ($type === 'devis') {
+            $forPdf = $quotationRepository->findOneById($id);
+        } else {
+            $forPdf = $invoiceRepository->findOneById($id);
+        }
 
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $dompdf = new Dompdf($options);
 
         $html = $this->renderView('superadmin/pdf/pdf_template.html.twig', [
-            'quotation' => $quotation,
+            'forPdf' => $forPdf,
+            'type' => $type,
         ]);
 
         $dompdf->loadHtml($html);
