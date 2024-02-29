@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Quotation
+{% endblock %}
+
+{% block page_content %}
+	<h1>Create new Quotation</h1>
+
+	{{ include('user/quotation/_form.html.twig') }}
+
+	<a href="{{ path('user_quotation_index') }}">back to list</a>
+{% endblock %}

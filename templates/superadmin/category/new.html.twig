@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Category{% endblock %}
+
+{% block page_content %}
+    <h1>Create new Category</h1>
+
+    {{ include('superadmin/category/_form.html.twig') }}
+
+    <a href="{{ path('superadmin_category_index') }}">back to list</a>
+{% endblock %}

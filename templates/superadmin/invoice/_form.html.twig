@@ -1,0 +1,77 @@
+{{ form_start(form) }}
+<div class="flex gap-8">
+	{{ form_label(form.description)}}
+	{{ form_widget(form.description)}}
+	{{ form_errors(form.description )}}
+</div>
+
+<div class='status'>
+	{{ form_row(form.status is defined ? form.status : form.isPaid) }}
+
+</div>
+
+<div class='date'>
+	{{form_row(form.date)}}
+</div>
+
+<div class='due_date'>
+	{{form_row(form.dueDate)}}
+</div>
+<div class='customer'>
+	{{form_row(form.customer)}}
+
+</div>
+
+<ul class='services' data-index="{{ form.services|length > 0 ? form.services|last.vars.name + 1 : 0 }}" data-prototype=" {{ form_widget(form.services.vars.prototype)|e('html_attr') }} ">
+	{{ form_row(form.services) }}
+
+	<button type="button" class="add_item_link" data-collection-holder-class="services">Ajouter un nouveau service
+	</button>
+</ul>
+
+
+<div class='button_save'>
+	<button class="btn">{{ button_label|default('Save') }}</button>
+</div>
+{{ form_end(form) }}
+
+
+{% block javascripts %}
+	<script>
+		const addServiceFormDeleteLink = (item) => {
+const removeFormButton = document.createElement('button');
+removeFormButton.innerText = 'Supprimer ce service';
+
+item.append(removeFormButton);
+
+removeFormButton.addEventListener('click', (e) => {
+e.preventDefault();
+// remove the li for the tag form
+item.remove();
+});
+}
+
+const addFormToCollection = (e) => {
+const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+const item = document.createElement('li');
+
+item.classList.add('bg-red-400');
+item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
+
+collectionHolder.insertBefore(item, collectionHolder.lastElementChild);
+
+collectionHolder.dataset.index ++;
+
+addServiceFormDeleteLink(item);
+}
+
+document.querySelectorAll('.add_item_link').forEach(btn => {
+btn.addEventListener("click", addFormToCollection);
+});
+
+document.querySelectorAll('ul.services li').forEach((service) => {
+addServiceFormDeleteLink(service)
+})
+	</script>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit invoice
+{% endblock %}
+
+{% block page_content %}
+	<h1>Edit Invoice</h1>
+
+	{{ include('superadmin/invoice/_form.html.twig', {'button_label': 'Update'}) }}
+
+	<a class='block h-8' href="{{ path('superadmin_invoice_index') }}">Retour aux factures</a>
+
+	{{ include('superadmin/invoice/_delete_form.html.twig') }}
+{% endblock %}

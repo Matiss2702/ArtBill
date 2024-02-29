@@ -16,29 +16,35 @@ security:
     main:
       lazy: true
       provider: app_user_provider
+      entry_point: App\Security\UserAuthenticator
       custom_authenticator: App\Security\UserAuthenticator
       logout:
         path: app_logout
+        target: app_login
         # where to redirect after logout
         # target: app_any_route
-
       remember_me:
         secret: "%kernel.secret%"
         lifetime: 604800
         path: /
         always_remember_me: true
+      form_login:
+        login_path: app_login
+        check_path: app_login
 
   access_control:
-    - { path: ^/admin, roles: ROLE_ADMIN }
     - { path: ^/login, roles: PUBLIC_ACCESS }
     - { path: ^/register, roles: PUBLIC_ACCESS }
     - { path: ^/reset-password, roles: PUBLIC_ACCESS }
+    - { path: ^/profile, roles: ROLE_USER }
     - { path: ^/, roles: ROLE_USER }
+    - { path: ^/user, roles: ROLE_USER }
+    - { path: ^/admin, roles: ROLE_ADMIN }
+    - { path: ^/superadmin, roles: ROLE_SUPERADMIN }
 
   role_hierarchy:
-    # ROLE_MODERATOR: ROLE_USER
-    ROLE_COMPANY: ROLE_COMPANY
-    ROLE_ADMIN: ROLE_ADMIN
+    ROLE_SUPERADMIN: ROLE_ADMIN
+    ROLE_ADMIN: ROLE_USER
 
 when@test:
   security:

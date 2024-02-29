@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Service{% endblock %}
+
+{% block page_content %}
+    <h1>Edit Service</h1>
+
+    {{ include('superadmin/service/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('superadmin_app_service_index') }}">back to list</a>
+
+    {{ include('superadmin/service/_delete_form.html.twig') }}
+{% endblock %}

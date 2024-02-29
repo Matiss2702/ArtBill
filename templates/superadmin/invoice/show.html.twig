@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quotation
+{% endblock %}
+
+{% block page_content %}
+	<h1>invoice</h1>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ invoice.id }}</td>
+			</tr>
+			<tr>
+				<th>Description</th>
+				<td>{{ invoice.description }}</td>
+			</tr>
+			<tr>
+				<th>Amount_ht</th>
+				<td>{{ invoice.amountHt }}</td>
+			</tr>
+			<tr>
+				<th>Amount_ttc</th>
+				<td>{{ invoice.amountTtc }}</td>
+			</tr>
+
+			<tr>
+				<th>Date</th>
+				<td>{{ invoice.date ? invoice.date|date('Y-m-d') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Due_date</th>
+				<td>{{ invoice.dueDate ? invoice.dueDate|date('Y-m-d') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Created</th>
+				<td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+			</tr>
+
+			<tr>
+				<th>Services</th>
+				{% if invoice.services %}
+					{% for service in invoice.services %}
+						<td>{{ service.label }}</td>
+						<td>{{ service.price }}</td>
+						<td>{{ service.quantity }}</td>
+
+					{% endfor %}
+				{% endif %}
+			</tr>
+			<tr>
+				<th>Taux TVA 10%</th>
+				<td>{{ invoice.vatRate10}}</td>
+			</tr>
+			<tr>
+				<th>Base TVA 10%</th>
+				<td>{{ invoice.baseVatRate10}}</td>
+			</tr>
+			<tr>
+				<th>Taux TVA 20%</th>
+				<td>{{ invoice.vatRate20}}</td>
+			</tr>
+			<tr>
+				<th>Base TVA 20%</th>
+				<td>{{ invoice.baseVatRate20}}</td>
+			</tr>
+			<tr>
+				<th>Taux TVA 0%</th>
+				<td>{{ invoice.baseVatRate0 }}</td>
+			</tr>
+			<tr>
+				<th>Montant HT</th>
+				<td>{{ invoice.amountHt }}</td>
+			</tr>
+		</tbody>
+	</table>
+	<a href="{{ path('superadmin_invoice_index') }}">back to list</a>
+	<a href="{{ path('superadmin_invoice_edit', {'id': invoice.id}) }}">edit</a>
+	{{ include('superadmin/invoice/_delete_form.html.twig') }}
+{% endblock %}

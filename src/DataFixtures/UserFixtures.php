@@ -16,9 +16,10 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $user = new User();
         $user->setEmail('admin@artbill.com');
         $user->setPassword(password_hash('artbill', PASSWORD_BCRYPT));
-        $user->setRoles(['ROLE_ADMIN']);
+        $user->setRoles(['ROLE_SUPERADMIN']);
         $user->setFirstName("Super");
         $user->setLastName("User");
+        $user->setIsVerified(true);
         $user->setCompany($this->getReference(CompanyFixtures::COMPANY_GRAPHIKART));
         $manager->persist($user);
         $manager->flush();
