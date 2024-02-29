@@ -50,6 +50,7 @@ class QuotationRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+
     public function findAllPreviousVersions(Quotation $quotation): array
     {
         $previousQuotations = [];
