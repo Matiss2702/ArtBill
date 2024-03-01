@@ -224,5 +224,7 @@ console.error('Erreur lors de la génération de PDF:', error);
 </br>
 <a href="{{ path('user_quotation_edit', {'id': quotation.id}) }}" class="btn btn-primary">Modifier</a>
 </br>
+<a href="{{ path('user_generate_pdf', {'id': quotation.id, 'type': 'devis'}) }}" target="_blank">Générer PDF</a>
+</br>
 {{ include('user/quotation/_delete_form.html.twig') }}
 {% endblock %}

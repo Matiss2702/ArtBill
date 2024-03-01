@@ -77,5 +77,6 @@
 	</table>
 	<a href="{{ path('superadmin_invoice_index') }}">back to list</a>
 	<a href="{{ path('superadmin_invoice_edit', {'id': invoice.id}) }}">edit</a>
+	<a href="{{ path('superadmin_generate_pdf', {'id': invoice.id, 'type': 'invoice'}) }}" target="_blank">Générer PDF</a>
 	{{ include('superadmin/invoice/_delete_form.html.twig') }}
 {% endblock %}

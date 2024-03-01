@@ -4,65 +4,87 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facture</title>
+    <title>{{ type|upper }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f7fafc;
         }
-        .invoice {
-            margin: 20px;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            border: 1px solid #ccc;
+            background-color: #fff;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .invoice header {
-            border-bottom: 1px solid #ccc;
+        .header {
+            border-bottom: 1px solid #cbd5e0;
             padding-bottom: 10px;
             margin-bottom: 20px;
         }
-        .invoice header h1 {
+        .header h1 {
             margin: 0;
+            color: #2d3748;
+            font-size: 24px;
+            text-transform: uppercase;
         }
-        .invoice .details {
+        .details {
             margin-bottom: 20px;
         }
-        .invoice table {
+        table {
             width: 100%;
             border-collapse: collapse;
         }
-        .invoice table th, .invoice table td {
-            border: 1px solid #ccc;
-            padding: 8px;
+        th, td {
+            border: 1px solid #cbd5e0;
+            padding: 10px;
+            text-align: left;
         }
-        .invoice table th {
-            background-color: #f2f2f2;
+        th {
+            background-color: #edf2f7;
+            font-weight: bold;
+        }
+        .total {
+            text-align: right;
+        }
+        .total p {
+            margin: 5px 0;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="invoice">
-        <header>
-            <h1>Facture</h1>
-        </header>
-        <div class="details">
-            <p><strong>Nom de l'entreprise :</strong> ArtBill</p>
-            <p><strong>Adresse :</strong> [Adresse de votre entreprise]</p>
+    <div class="container">
+        <div class="header">
+            <h1>{{ type|upper }}</h1>
         </div>
         <div class="details">
-            <p><strong>Nom du client :</strong> {{ quotation.customer.name }}</p>
-            <p><strong>Adresse :</strong> {{ quotation.customer.street }}, {{ quotation.customer.city }}, {{ quotation.customer.getZipCode() }}, {{ quotation.customer.country }}</p>
+            <p><strong>Customer:</strong></p>
+            <p>{{ forPdf.customer.name }}</p>
+            <p>{{ forPdf.customer.street }}, {{ forPdf.customer.city }}, {{ forPdf.customer.getZipCode() }}, {{ forPdf.customer.country }}</p>
         </div>
-        <p><strong>Date :</strong> {{ "now"|date("Y-m-d") }}</p>
+        <div class="details">
+            <p><strong>Company:</strong></p>
+            <p>{{ forPdf.company.name }}</p>
+            <p>{{ forPdf.company.street }}, {{ forPdf.company.city }}, {{ forPdf.company.getZipCode() }}, {{ forPdf.company.country }}</p>
+        </div>
+        <div class="details">
+            <p><strong>Due Date:</strong></p>
+            <p>{{ forPdf.dueDate ? forPdf.dueDate|date('Y-m-d') : '' }}</p>
+        </div>
         <table>
             <thead>
                 <tr>
-                    <th>Description</th>
-                    <th>Quantité</th>
-                    <th>Prix unitaire</th>
+                    <th>Service</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
                     <th>Total</th>
                 </tr>
             </thead>
             <tbody>
-                {% for service in quotation.services %}
+                {% for service in forPdf.services %}
                 <tr>
                     <td>{{ service.label }}</td>
                     <td>{{ service.quantity }}</td>
@@ -71,17 +93,15 @@
                 </tr>
                 {% endfor %}
             </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3" style="text-align: right;"><strong>Total HT</strong></td>
-                    <td>{{ quotation.getAmountHt }}</td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="text-align: right;"><strong>Total TTC</strong></td>
-                    <td>{{ quotation.getAmountTtc }}</td>
-                </tr>
-            </tfoot>
         </table>
+        <div class="details">
+            <p><strong>TVA 10%:</strong> {{ forPdf.vatRate10 }}</p>
+            <p><strong>TVA 20%:</strong> {{ forPdf.vatRate20 }}</p>
+        </div>
+        <div class="total">
+            <p><strong>Total HT:</strong> {{ forPdf.amountHt }}</p>
+            <p><strong>Total TTC:</strong> {{ forPdf.amountTtc }}</p>
+        </div>
     </div>
 </body>
 </html>

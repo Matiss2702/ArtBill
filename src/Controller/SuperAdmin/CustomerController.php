@@ -107,6 +107,6 @@ class CustomerController extends AbstractController
             $this->addFlash('success', "Le client {$customer->getId()} a bien été supprimé");
         }
 
-        return $this->redirectToRoute('admin_customer_index');
+        return $this->redirectToRoute('superadmin_customer_index');
     }
 }
