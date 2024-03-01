@@ -5,6 +5,7 @@
 
 {% block page_content %}
 <h1>Détails du devis</h1>
+
 <table class="table">
 	<thead>
 		<th>Id</th>
@@ -58,6 +59,42 @@
 				<a href="{{ path('user_quotation_edit', {'id': quotation.id}) }}">edit</a>
 			</td>
 		</tr>
+		<td>
+			{# <button id="generate-invoice-btn" class="btn btn-primary">Générer la facture associée au devis</button> #}
+			<a href="{{ path('front_quotation_generate_invoice', {'id': quotation.id}) }}" class="btn btn-primary">Générer la facture associée au devis</a>
+		</td>
+	</tbody>
+</table>
+
+
+{% block javascript %}
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+const generateInvoiceBtn = document.getElementById('generate-invoice-btn');
+generateInvoiceBtn.addEventListener('click', function () {
+const quotationId = {{ quotation.id }};
+generateInvoice(quotationId);
+});
+
+function generateInvoice(quotationId) { // Envoie d'une requête AJAX pour générer la facture
+fetch (`/quotation/generate-invoice/${quotationId}`, {
+method: 'GET',
+headers: {
+'Content-Type': 'application/json'
+}
+}).then(response => {
+if (response.ok) {
+return response.json();
+}
+}).then(data => console.log(data)).catch(error => {
+console.error('Erreur lors de la génération de PDF:', error);
+});
+}
+});
+	</script>
+
+{% endblock %}</br>{% if previousVersions %}
 	</tbody>
 </table>
 </br>

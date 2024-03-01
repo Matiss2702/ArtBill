@@ -2,10 +2,18 @@
 
 namespace App\Controller\SuperAdmin;
 
+use App\Entity\Invoice;
+
 use App\Entity\Quotation;
 use App\Form\QuotationType;
 use App\Repository\QuotationRepository;
 use App\Service\CalculAmountService;
+use App\Service\GenerateInvoiceService;
+use App\Service\SetOwnerAndCompanyService;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Service\SetOwnerAndCompanyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -123,4 +131,28 @@ class QuotationController extends AbstractController
 
         return $this->redirectToRoute('superadmin_quotation_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/generate-invoice/{id}', name: 'generate_invoice', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function generateInvoice(Quotation $quotation, GenerateInvoiceService $generateInvoiceService, EntityManagerInterface $entityManager): RedirectResponse
+    {
+        try {
+            $invoiceGenerated = $generateInvoiceService->generateInvoice($quotation);
+
+
+            $entityManager->persist($invoiceGenerated);
+            $entityManager->flush();
+
+            $quotation->addInvoice($invoiceGenerated);
+            $id = $invoiceGenerated->getId();
+
+            $this->addFlash('success', 'Facture générée');
+            return $this->redirectToRoute('back_invoice_show', ['id' => $id]);
+
+            // return new JsonResponse(['message' => 'Success', 'id invoice' => $id], JsonResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            // Retournez une réponse JSON appropriée
+            return new JsonResponse(['message' => 'Error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
