@@ -25,7 +25,7 @@ class CustomerController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'show', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: ['GET'])]
+    #[Route('/{id}', name: 'show', requirements: ['id' => '[0-9a-fA-F\-]+'], methods:  ['GET'])]
     public function show(Customer $customer, QuotationRepository $quotationRepository): Response
     {
         return $this->render('user/customer/show.html.twig', [
@@ -66,7 +66,7 @@ class CustomerController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'update', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: ['get', 'post'])]
-    public function update(String $id, CustomerRepository $customerRepository, Request $request, EntityManagerInterface $manager): Response
+    public function update(String  $id, CustomerRepository $customerRepository, Request $request, EntityManagerInterface $manager): Response
     {
         $customer = $customerRepository->getOneById($id);
         $form = $this->createForm(CustomerType::class, $customer);

@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Customer;
 use App\Repository\CustomerRepository;
 use App\Form\CustomerType;
+use App\Repository\QuotationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,10 +26,11 @@ class CustomerController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', requirements: ['id' => '[0-9a-fA-F\-]+'], methods:  ['GET'])]
-    public function show(Customer $customer): Response
+    public function show(Customer $customer, QuotationRepository $quotationRepository): Response
     {
         return $this->render('admin/customer/show.html.twig', [
             'customer' => $customer,
+            'quotations' =>  $quotationRepository->findLatestQuotationsForCustomer($customer),
         ]);
     }
 

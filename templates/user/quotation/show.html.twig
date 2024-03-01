@@ -21,6 +21,7 @@
 		<th>Taux TVA 20%</th>
 		<th>Base TVA 20%</th>
 		<th>Base TVA 0%</th>
+		<th>Actions</th>
 	</thead>
 	<tbody>
 		<tr>
@@ -52,14 +53,19 @@
 			<td>{{quotation.vatRate20}}</td>
 			<td>{{quotation.baseVatRate20}}</td>
 			<td>{{quotation.baseVatRate0}}</td>
+			<td>
+				<a href="{{ path('user_quotation_show', {'id': quotation.id}) }}">show</a>
+				<a href="{{ path('user_quotation_edit', {'id': quotation.id}) }}">edit</a>
+			</td>
 		</tr>
 	</tbody>
-</table></br>{% if previousVersions %}
+</table>
+</br>
+{% if previousVersions %}
 <h2>Version précédentes:</h2>
 <table class="table">
 	<thead>
 		<th>Id</th>
-		<th>Version</th>
 		<th>Description</th>
 		<th>Montant HT</th>
 		<th>Montant TTC</th>
@@ -68,61 +74,78 @@
 		<th>Date d'échéance</th>
 		<th>Date de création</th>
 		<th>Services</th>
+		<th>Taux TVA 10%</th>
+		<th>Base TVA 10%</th>
+		<th>Taux TVA 20%</th>
+		<th>Base TVA 20%</th>
+		<th>Base TVA 0%</th>
 		<th>Actions</th>
 	</thead>
 	<tbody>
 		{% for previousVersion in previousVersions %}
-			<tr>
-				<td>{{ previousVersion.id }}</td>
-				<td>{{ previousVersion.version }}</td>
-				<td>{{ previousVersion.description }}</td>
-				<td>{{ previousVersion.amountHt }}</td>
-				<td>{{ previousVersion.amountTtc }}</td>
-				<td>{{ previousVersion.status }}</td>
-				<td>{{ previousVersion.date ? previousVersion.date|date('Y-m-d') : '' }}</td>
-				<td>{{ previousVersion.dueDate ? previousVersion.dueDate|date('Y-m-d') : '' }}</td>
-				<td>{{ previousVersion.createdAt ? previousVersion.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-				<td>
-					{% if previousVersion.services is not empty %}
-						<ul>
-							{% for service in previousVersion.services %}
-								<li>{{ service.label }}
-									- Prix:
-									{{ service.price }}
-									- Quantité:
-									{{ service.quantity }}</li>
-							{% endfor %}
-						</ul>
-					{% else %}
-						Aucun service
-					{% endif %}
-				</td>
-				<td>
-					<a href="{{ path('user_quotation_show', {'id': previousVersion.id}) }}">show</a>
-					<a href="{{ path('user_quotation_edit', {'id': previousVersion.id}) }}">edit</a>
-				</td>
-			</tr>
+		<tr>
+			<td>{{ previousVersion.id }}</td>
+			<td>{{ previousVersion.description }}</td>
+			<td>{{ previousVersion.amountHt }}</td>
+			<td>{{ previousVersion.amountTtc }}</td>
+			<td>{{ previousVersion.status }}</td>
+			<td>{{ previousVersion.date ? previousVersion.date|date('Y-m-d') : '' }}</td>
+			<td>{{ previousVersion.dueDate ? previousVersion.dueDate|date('Y-m-d') : '' }}</td>
+			<td>{{ previousVersion.createdAt ? previousVersion.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+			<td>
+				{% if previousVersion.services is not empty %}
+					<ul>
+						{% for service in previousVersion.services %}
+							<li>{{ service.label }}
+								- Prix:
+								{{ service.price }}
+								- Quantité:
+								{{ service.quantity }}</li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					Aucun service
+				{% endif %}
+			</td>
+			<td>{{previousVersion.vatRate10}}</td>
+			<td>{{previousVersion.baseVatRate10}}</td>
+			<td>{{previousVersion.vatRate20}}</td>
+			<td>{{previousVersion.baseVatRate20}}</td>
+			<td>{{previousVersion.baseVatRate0}}</td>
+			<td>
+				<a href="{{ path('user_quotation_show', {'id': previousVersion.id}) }}">show</a>
+				<a href="{{ path('user_quotation_edit', {'id': previousVersion.id}) }}">edit</a>
+			</td>
+		</tr>
 		{% endfor %}
 	</tbody>
-</table></br>{% endif %}{% if nextVersions %}<h2>Version suivantes:</h2><table class="table">
-<thead>
-	<th>Id</th>
-	<th>Version</th>
-	<th>Description</th>
-	<th>Montant HT</th>
-	<th>Montant TTC</th>
-	<th>Statut</th>
-	<th>Date</th>
-	<th>Date d'échéance</th>
-	<th>Date de création</th>
-	<th>Services</th>
-	<th>Actions</th>
-</thead>
-<tbody>
+</table>
+</br>
+{% endif %}
+{% if nextVersions %}
+<h2>Version suivantes:</h2>
+<table class="table">
+	<thead>
+		<th>Id</th>
+		<th>Description</th>
+		<th>Montant HT</th>
+		<th>Montant TTC</th>
+		<th>Statut</th>
+		<th>Date</th>
+		<th>Date d'échéance</th>
+		<th>Date de création</th>
+		<th>Services</th>
+		<th>Taux TVA 10%</th>
+		<th>Base TVA 10%</th>
+		<th>Taux TVA 20%</th>
+		<th>Base TVA 20%</th>
+		<th>Base TVA 0%</th>
+		<th>Actions</th>
+	</thead>
+	<tbody>
 	{% for nextVersion in nextVersions %}
 		<tr>
 			<td>{{ nextVersion.id }}</td>
-			<td>{{ nextVersion.version }}</td>
 			<td>{{ nextVersion.description }}</td>
 			<td>{{ nextVersion.amountHt }}</td>
 			<td>{{ nextVersion.amountTtc }}</td>
@@ -145,10 +168,24 @@
 					Aucun service
 				{% endif %}
 			</td>
+			<td>{{nextVersion.vatRate10}}</td>
+			<td>{{nextVersion.baseVatRate10}}</td>
+			<td>{{nextVersion.vatRate20}}</td>
+			<td>{{nextVersion.baseVatRate20}}</td>
+			<td>{{nextVersion.baseVatRate0}}</td>
 			<td>
 				<a href="{{ path('user_quotation_show', {'id': nextVersion.id}) }}">show</a>
 				<a href="{{ path('user_quotation_edit', {'id': nextVersion.id}) }}">edit</a>
 			</td>
 		</tr>
 	{% endfor %}
-</tbody></table></br>{% endif %}<a href="{{ path('user_quotation_index') }}" class="btn btn-secondary">Retour à la liste</a></br><a href="{{ path('user_quotation_edit', {'id': quotation.id}) }}" class="btn btn-primary">Modifier</a></br>{{ include('user/quotation/_delete_form.html.twig') }}{% endblock %}
+	</tbody>
+</table>
+</br>
+{% endif %}
+<a href="{{ path('user_quotation_index') }}" class="btn btn-secondary">Retour à la liste</a>
+</br>
+<a href="{{ path('user_quotation_edit', {'id': quotation.id}) }}" class="btn btn-primary">Modifier</a>
+</br>
+{{ include('user/quotation/_delete_form.html.twig') }}
+{% endblock %}
