@@ -4,8 +4,8 @@
 {% endblock %}
 
 {% block page_content %}
-	<h1>Vos devis</h1>
-	{% include '_partials/_bills.index.html.twig' with {'items': quotations, 'type':"quotation"}%}
-
-	<a href="{{ path('superadmin_quotation_new') }}">Create new</a>
+	<h1>Quotation index</h1>
+	{# a changer suivant le role de l'utilisateur #}
+	<a href="{{ path('admin_quotation_new') }}">Create new</a>
+	{% include '_partials/_quotation.index.html.twig' with {'quotations': quotations}%}
 {% endblock %}
