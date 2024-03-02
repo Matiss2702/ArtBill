@@ -19,10 +19,14 @@ RUN curl -sS https://getcomposer.org/installer -o composer-setup.php \
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
         apt-get install -y nodejs
 
-# Assurez-vous que le répertoire des logs peut être écrit par l'application
-RUN mkdir -p /var/www/symfony/var/log && chmod -R 777 /var/www/symfony/var/log
-
 WORKDIR /var/www/symfony
+
+# Assurez-vous que le répertoire des logs peut être écrit par l'application
+RUN mkdir -p /var/www/symfony/var/log
+RUN chmod -R 777 /var/www/symfony/var/log
+RUN chown -R www-data:www-data /var/www/symfony/var/log
+
+CMD bash -c "php-fpm"
 
 # Optional: Expose port 9000 for fpm
 EXPOSE 9000
