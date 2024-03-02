@@ -1,0 +1,55 @@
+<table class="table">
+	<thead>
+	<th>Id</th>
+		<th>Description</th>
+		<th>Montant HT</th>
+		<th>Montant TTC</th>
+		<th>Statut</th>
+		<th>Date</th>
+		<th>Date d'échéance</th>
+		<th>Date de création</th>
+		<th>Services</th>
+		<th>Taux TVA 10%</th>
+		<th>Base TVA 10%</th>
+		<th>Taux TVA 20%</th>
+		<th>Base TVA 20%</th>
+		<th>Base TVA 0%</th>
+		<th>Actions</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>{{ item.id|slice(0, 5)|upper }}</td>
+			<td>{{ item.description }}</td>
+			<td>{{ item.amountHt }}</td>
+			<td>{{ item.amountTtc }}</td>
+			<td>{{ item.status }}</td>
+			<td>{{ item.date ? item.date|date('Y-m-d') : '' }}</td>
+			<td>{{ item.dueDate ? item.dueDate|date('Y-m-d') : '' }}</td>
+			<td>{{ item.createdAt ? item.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+			<td>
+				{% if item.services is not empty %}
+					<ul>
+						{% for service in item.services %}
+							<li>{{ service.label }}
+								- Prix:
+								{{ service.price }}
+								- Quantité:
+								{{ service.quantity }}</li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					Aucun service
+				{% endif %}
+			</td>
+			<td>{{item.vatRate10}}</td>
+			<td>{{item.baseVatRate10}}</td>
+			<td>{{item.vatRate20}}</td>
+			<td>{{item.baseVatRate20}}</td>
+			<td>{{item.baseVatRate0}}</td>
+			<td>
+				<a href="{{ path('superadmin_'~type~'_show', {'id': item.id}) }}">show</a>
+				<a href="{{ path('superadmin_'~type~'_edit', {'id': item.id}) }}">edit</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
