@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Quotation;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -114,6 +115,31 @@ class QuotationRepository extends ServiceEntityRepository
                 )
             )
             ->setParameter('customer', $customer)
+            ->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function findLatestQuotationsForCompany(User $user): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $company = $user->getCompany();
+
+        $subQueryBuilder = $this->entityManager->createQueryBuilder();
+        $subQuery = $subQueryBuilder
+            ->select('qq.id')
+            ->from('App\Entity\Quotation', 'qq')
+            ->where('qq.previousVersion = q.id');
+
+        $query = $queryBuilder->select('q')
+            ->from('App\Entity\Quotation', 'q')
+            ->where(
+                $queryBuilder->expr()->not(
+                    $queryBuilder->expr()->exists($subQuery)
+                )
+            )
+            ->andWhere('q.company = :company')
+            ->setParameter('company', $company)
             ->getQuery();
 
         return $query->getResult();

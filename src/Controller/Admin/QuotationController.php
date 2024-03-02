@@ -28,8 +28,11 @@ class QuotationController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(QuotationRepository $quotationRepository): Response
     {
+        $user = $this->getUser();
+        $quotations = $quotationRepository->findLatestQuotationsForCompany($user);
+
         return $this->render('admin/quotation/index.html.twig', [
-            'quotations' => $quotationRepository->findLatestQuotations(),
+            'quotations' => $quotations,
         ]);
     }
 
@@ -43,6 +46,7 @@ class QuotationController extends AbstractController
             $user = $this->getUser();
             $setOwnerAndCompany->process($quotation, $user);
             $calculService->calculAmounts($quotation);
+            $quotation->setVersion(0);
 
 
             $entityManager->persist($quotation);
