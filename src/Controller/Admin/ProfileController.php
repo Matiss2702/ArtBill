@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class ProfileController extends AbstractController
 {
-    #[Route('/profile', name: 'admin_profile_index')]
+    #[Route('/profile', name: 'profile_index')]
     public function index(): Response
     {
         return $this->render('admin/profile/index.html.twig', [
