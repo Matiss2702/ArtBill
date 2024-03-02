@@ -118,4 +118,28 @@ class QuotationRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+
+    public function findLatestQuotationsForCompany($user): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $company = $user->getCompany();
+
+        $query = $queryBuilder->select('q')
+            ->from('App\Entity\Quotation', 'q')
+            ->where(
+                $queryBuilder->expr()->not(
+                    $queryBuilder->expr()->exists(
+                        $this->entityManager->createQueryBuilder()
+                            ->select('qq.id')
+                            ->from('App\Entity\Quotation', 'qq')
+                            ->where('qq.previousVersion = q.id')
+                            ->andWhere('qq.company = :company')
+                    )
+                )
+            )
+            ->setParameter('company', $company)
+            ->getQuery();
+
+        return $query->getResult();
+    }
 }
