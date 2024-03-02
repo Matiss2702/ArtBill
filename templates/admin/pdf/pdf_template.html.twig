@@ -88,19 +88,19 @@
                 <tr>
                     <td>{{ service.label }}</td>
                     <td>{{ service.quantity }}</td>
-                    <td>{{ service.price }}</td>
-                    <td>{{ service.price * service.quantity }}</td>
+                    <td>{{ service.price|number_format(2, ',', ' ') }}</td>
+                    <td>{{ (service.price * service.quantity)|number_format(2, ',', ' ') }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
         <div class="details">
-            <p><strong>TVA 10%:</strong> {{ forPdf.vatRate10 }}</p>
-            <p><strong>TVA 20%:</strong> {{ forPdf.vatRate20 }}</p>
+            <p><strong>TVA 10%:</strong> {{ forPdf.vatRate10|number_format(2, ',', ' ') }}</p>
+            <p><strong>TVA 20%:</strong> {{ forPdf.vatRate20|number_format(2, ',', ' ') }}</p>
         </div>
         <div class="total">
-            <p><strong>Total HT:</strong> {{ forPdf.amountHt }}</p>
-            <p><strong>Total TTC:</strong> {{ forPdf.amountTtc }}</p>
+            <p><strong>Total HT:</strong> {{ forPdf.amountHt|number_format(2, ',', ' ') }}</p>
+            <p><strong>Total TTC:</strong> {{ forPdf.amountTtc|number_format(2, ',', ' ') }}</p>
         </div>
     </div>
 </body>

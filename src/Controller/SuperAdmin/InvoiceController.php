@@ -41,8 +41,9 @@ class InvoiceController extends AbstractController
             $calculService->calculAmounts($invoice);
             $entityManager->persist($invoice);
             $entityManager->flush();
+            $id = $invoice->getId();
 
-            return $this->redirectToRoute('superadmin_invoice_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('superadmin_invoice_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/invoice/new.html.twig', [

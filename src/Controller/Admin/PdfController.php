@@ -30,7 +30,6 @@ class PdfController extends AbstractController
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $dompdf = new Dompdf($options);
-
         $html = $this->renderView('admin/pdf/pdf_template.html.twig', [
             'forPdf' => $forPdf,
             'type' => $type,
