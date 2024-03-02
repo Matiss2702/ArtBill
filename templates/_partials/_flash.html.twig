@@ -5,4 +5,10 @@
         <hr>
         <p class="mb-0">Veuillez vérifier votre compte en cliquant sur le lien envoyé par mail.</p>
     </div>
+    {% else %}
+    <div class="alert alert-warning block mt-5" role="alert">
+        {# <h4 class="alert-heading">Attention  {{user.firstname}} !</h4> #}
+        <p>Votre compte est bien vérifié !</p>
+        <hr>
+    </div>
 {% endif %}

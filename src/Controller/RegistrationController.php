@@ -31,18 +31,26 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Set company details
+            $company = new Company();
             $company->setName($form->get('companyName')->getData());
             $company->setVatNumber($form->get('vatNumber')->getData());
             $company->setZipCode($form->get('zipCode')->getData());
-
-            // Persist company entity
+            $company->setSiren($form->get('siren')->getData());
+            $company->setStreet($form->get('street')->getData());
+            $company->setCity($form->get('city')->getData());
+            $company->setCountry($form->get('country')->getData());
+            $company->setShareCapital($form->get('shareCapital')->getData());
+            $company->setBankInformationStatement($form->get('bankInformationStatement')->getData());
+    
+            // Persistez l'entité Company dans la base de données
             $entityManager->persist($company);
-            $entityManager->flush(); // Flush here to ensure that the company ID is generated.
-
+            $entityManager->flush();
+    
+            // Associez l'entité Company à l'utilisateur
+            $user->setCompany($company);
             // Set user details
             $user->setPassword($userPasswordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
             $user->setRoles(['ROLE_ADMIN']);
-            $user->setCompany($company);
 
             // Persist user entity
             $entityManager->persist($user);
@@ -80,8 +88,9 @@ class RegistrationController extends AbstractController
                 $user->setIsVerified(true);
                 $em->flush($user);
                 $this->addFlash('success', 'Utilisateur activé');
-                return $this->redirectToRoute('profile_index');
+                return $this->redirectToRoute('admin_profile_index', [], Response::HTTP_SEE_OTHER);
             }
+            
         }
         // Ici un problème se pose dans le token
         $this->addFlash('danger', 'Le token est invalide ou a expiré');

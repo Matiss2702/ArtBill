@@ -1,37 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block page_title %}Inscription{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block page_content %}
-    <section class="container">
-        <div class="row">
-            <div class="col">
-                <h1>Inscription</h1>
+<div class="container mx-auto p-4">
+    <div class="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
+        <div class="md:flex">
+            <div class="w-full p-3">
+                <h1 class="text-2xl font-semibold text-center text-gray-700 dark:text-white">Inscription</h1>
+                {{ form_start(registrationForm, {'attr': {'class': 'space-y-6'}}) }}
 
-                {{ form_errors(registrationForm) }}
+                <fieldset class="p-3">
+                    <legend class="text-lg font-semibold">Informations personnelles</legend>
+                    {{ form_row(registrationForm.email) }}
+                    {{ form_row(registrationForm.firstname) }}
+                    {{ form_row(registrationForm.lastname) }}
+                    {{ form_row(registrationForm.plainPassword.first) }}
+                    {{ form_row(registrationForm.plainPassword.second) }}
+                </fieldset>
 
-                {{ form_start(registrationForm) }}
-                    <fieldset>
-                            <legend>Ma Compagnie</legend>
-                            {{ form_row(registrationForm.companyName) }}
-                    </legend>
-                    <fieldset>
-                        <legend>Mon identité</legend>
-                        {{ form_row(registrationForm.email) }}
-                        {{ form_row(registrationForm.firstname) }}
-                        {{ form_row(registrationForm.lastname) }}
+                <fieldset class="p-3">
+                    <legend class="text-lg font-semibold">Informations de la compagnie</legend>
+                    {{ form_row(registrationForm.companyName) }}
+                    {{ form_row(registrationForm.siren) }}
+                    {{ form_row(registrationForm.vatNumber) }}
+                    {{ form_row(registrationForm.zipCode) }}
+                    {{ form_row(registrationForm.street) }}
+                    {{ form_row(registrationForm.city) }}
+                    {{ form_row(registrationForm.country) }}
+                    {{ form_row(registrationForm.shareCapital) }}
+                    {{ form_row(registrationForm.bankInformationStatement) }}
+                </fieldset>
 
-                        {{ form_row(registrationForm.plainPassword, {
-                            label: 'Password'
-                            }) 
-                        }}
-                    </fieldset>
-                    {{ form_row(registrationForm.RGPDConsent) }}
+                {{ form_row(registrationForm.RGPDConsent) }}
 
-                <button type="submit" class="btn">Register</button>
+                <button type="submit" class="px-4 py-2 tracking-wide  transition-colors duration-200 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:bg-blue-500">
+                    S'inscrire
+                </button>
+                
+                {{ form_end(registrationForm) }}
             </div>
         </div>
-    </section>
-    {{ form_end(registrationForm) }}
-</section>
+    </div>
+</div>
 {% endblock %}
