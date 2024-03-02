@@ -13,8 +13,17 @@ class ProfileController extends AbstractController
     #[Route('/profile', name: 'profile_index')]
     public function index(): Response
     {
+        // Récupère l'utilisateur connecté
+        $user = $this->getUser();
+
+        // Assurez-vous que $user n'est pas null et qu'il a une compagnie associée
+        if (!$user || !$user->getCompany()) {
+            throw $this->createNotFoundException('Profil ou compagnie de l\'utilisateur non trouvés.');
+        }
+
+        // Renvoyer les données de l'utilisateur à la vue
         return $this->render('admin/profile/index.html.twig', [
-            'controller_name' => 'Profil de l\'utilisateur',
+            'user' => $user,
         ]);
     }
 
