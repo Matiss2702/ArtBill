@@ -44,6 +44,7 @@ class QuotationController extends AbstractController
             $user = $this->getUser();
             $setOwnerAndCompany->process($quotation, $user);
             $calculService->calculAmounts($quotation);
+            $quotation->setVersion(0);
 
 
             $entityManager->persist($quotation);

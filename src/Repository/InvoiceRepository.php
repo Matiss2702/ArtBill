@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Invoice;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -51,6 +52,18 @@ class InvoiceRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('q')
             ->andWhere('q.id = :val')
             ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function findAllByCompany(User $user): ?Invoice
+    {
+        $company = $user->getCompany();
+
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.company = :company')
+            ->setParameter('company', $company)
             ->getQuery()
             ->getOneOrNullResult()
         ;
