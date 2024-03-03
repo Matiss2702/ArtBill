@@ -1,14 +1,14 @@
 {% if app.user and app.user.isVerified() == false %}
-    <div class="alert alert-warning block mt-5" role="alert">
-        {# <h4 class="alert-heading">Attention  {{user.firstname}} !</h4> #}
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mt-5" role="alert">
+        {# <h4 class="font-bold">Attention {{user.firstname}} !</h4> #}
         <p>Votre compte n'est pas encore vérifié, vous ne pouvez pas encore accéder à toutes les fonctionnalités du site.</p>
-        <hr>
+        <hr class="my-2">
         <p class="mb-0">Veuillez vérifier votre compte en cliquant sur le lien envoyé par mail.</p>
     </div>
-    {% else %}
-    <div class="alert alert-warning block mt-5" role="alert">
-        {# <h4 class="alert-heading">Attention  {{user.firstname}} !</h4> #}
+{% else %}
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mt-5" role="alert">
+        {# <h4 class="font-bold">Attention {{user.firstname}} !</h4> #}
         <p>Votre compte est bien vérifié !</p>
-        <hr>
+        <hr class="my-2">
     </div>
 {% endif %}
