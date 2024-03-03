@@ -6,6 +6,5 @@
 {% block page_content %}
 	<h1>Vos devis</h1>
 	{% include '_partials/_bills.index.html.twig' with {'items': quotations, 'type':"quotation"}%}
-
 	<a href="{{ path('superadmin_quotation_new') }}">Create new</a>
 {% endblock %}
