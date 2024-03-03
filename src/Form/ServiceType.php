@@ -15,20 +15,39 @@ class ServiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('label')
-            ->add('description')
+            ->add('label', null, [
+                'attr' => [
+                    'class' => 'w-full'
+                ]
+            ])
+            ->add('description', null, [
+                'attr' => [
+                    'class' => 'w-full'
+                ]
+            ])
             ->add('price', null, [
                 'attr' => [
                     'step' => 0.01,
+                    'class' => 'w-full'
                 ]
             ])
-            ->add('quantity')
+            ->add('quantity', null, [
+                'attr' => [
+                    'class' => 'w-full'
+                ]
+            ])
             ->add('vat_rate', ChoiceType::class, [
-                'choices' => array_combine(["0%", "10%", "20%"], Service::VAT_RATES)
+                'choices' => array_combine(["0%", "10%", "20%"], Service::VAT_RATES),
+                'attr' => [
+                    'class' => 'w-full'
+                ]
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'label',
+                'attr' => [
+                    'class' => 'w-full'
+                ]
             ]);
     }
 

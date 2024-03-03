@@ -2,7 +2,6 @@
 
 namespace App\Controller\SuperAdmin;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
@@ -34,8 +33,8 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (null === $category->getCreated()) {
-                $category->setCreated(new \DateTime());
+            if (null === $category->getCreatedAt()) {
+                $category->setCreatedAt(new \DateTime());
             }
 
             $entityManager->persist($category);
