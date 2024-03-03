@@ -40,8 +40,8 @@ class InvoiceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
             $setOwnerAndCompany->process($invoice, $user);
+            $invoice->setStatus('created');
             $calculService->calculAmounts($invoice);
-
             $entityManager->persist($invoice);
             $entityManager->flush();
             $id = $invoice->getId();
@@ -86,8 +86,8 @@ class InvoiceController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $invoice->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($invoice);
+        if ($this->isCsrfTokenValid('delete'.$invoice->getId(), $request->request->get('_token'))) {
+            $invoice->setStatus('archived');
             $entityManager->flush();
         }
 

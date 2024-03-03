@@ -9,11 +9,13 @@ use Doctrine\Persistence\ObjectManager;
 
 class InvoiceFixtures extends Fixture implements DependentFixtureInterface
 {
+    private $invoiceStatus = ['created', 'sent', 'refused', 'accepted', 'paid', 'expired'];
 
     public function load(ObjectManager $manager): void
     {
         $invoice = new Invoice();
         $invoice->setCompany($this->getReference(CompanyFixtures::COMPANY_GRAPHIKART));
+        $invoice->setStatus($this->invoiceStatus[array_rand($this->invoiceStatus)]);
         $invoice->setOwner($this->getReference(UserFixtures::ADMIN_USER));
         $invoice->setQuotations($this->getReference(QuotationFixtures::QUOTATION));
         $invoice->setDate(new \DateTime());

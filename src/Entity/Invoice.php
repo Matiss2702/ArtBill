@@ -10,6 +10,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: InvoiceRepository::class)]
 class Invoice
@@ -36,6 +37,19 @@ class Invoice
     #[ORM\ManyToOne(inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company = null;
+
+    public const QUOTATION_STATUS = [
+        'created',
+        'sent',
+        'refused',
+        'accepted',
+        'paid',
+        'expired',
+        'archived',
+    ];
+    #[ORM\Column(length: 100, options: ["default" => "created"])]
+    #[Assert\Choice(options: self::QUOTATION_STATUS)]
+    private ?string $status = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, options: ["default" => "CURRENT_DATE"])]
     private ?\DateTimeInterface $dueDate = null;
@@ -117,6 +131,18 @@ class Invoice
     public function setCustomer(?Customer $customer): static
     {
         $this->customer = $customer;
+
+        return $this;
+    }
+    
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

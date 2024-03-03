@@ -27,6 +27,7 @@
 <a href="{{ path('superadmin_quotation_edit', {'id': quotation.id}) }}" class="btn btn-primary">Modifier</a>
 <a href="{{ path('generate_pdf', {'id': quotation.id, 'type': 'devis'}) }}" target="_blank">Générer PDF</a>
 <a href="{{ path('superadmin_quotation_generate_invoice', {'id': quotation.id}) }}" class="btn btn-primary">Générer la facture à partir du devis</a>
+{{ include('superadmin/quotation/_delete_form.html.twig') }}
 
 <button id="togglePreview">Afficher la prévisualisation</button>
 
@@ -52,10 +53,5 @@
         }
     });
 </script>
-
-{% endblock %}
-
-{% block page_actions %}
-{{ include('superadmin/quotation/_delete_form.html.twig') }}
 
 {% endblock %}

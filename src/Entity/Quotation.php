@@ -32,6 +32,7 @@ class Quotation
         'accepted',
         'paid',
         'expired',
+        'archived',
     ];
 
     #[ORM\Column(length: 100, options: ["default" => "created"])]
