@@ -143,7 +143,7 @@
 
     <a href="{{ path('admin_invoice_index') }}" class="btn btn-secondary">Retour à la liste</a>
     <a href="{{ path('admin_invoice_edit', {'id': invoice.id}) }}" class="btn btn-primary">Modifier</a>
-    <a href="{{ path('admin_generate_pdf', {'id': invoice.id, 'type': 'invoice'}) }}" target="_blank">Générer PDF</a>
+    <a href="{{ path('generate_pdf', {'id': invoice.id, 'type': 'invoice'}) }}" target="_blank">Générer PDF</a>
     {{ include('admin/invoice/_delete_form.html.twig') }}
 
     <button id="togglePreview">Afficher la prévisualisation</button>
@@ -162,7 +162,7 @@
                 previewContainer.style.display = 'block';
 
                 const invoiceId = "{{ invoice.id|raw }}";
-                document.getElementById('previewIframe').src = "{{ path('admin_preview_pdf') }}?id=" + invoiceId + "&type=invoice";
+                document.getElementById('previewIframe').src = "{{ path('preview_pdf') }}?id=" + invoiceId + "&type=invoice";
             } else {
                 previewContainer.style.display = 'none';
                 toggleButton.textContent = 'Afficher la prévisualisation';
