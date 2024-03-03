@@ -1,0 +1,22 @@
+{% extends 'superadmin/default/form.html.twig' %}
+
+{% block page_title %}Modifier un utilisateur - ArtBill{% endblock %}
+{% block page_header %}
+    <p class="text-2xl font-bold">Modifier un utilisateur</p>
+    <div class="flex justify-end gap-3 text-sm">
+        <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-primary text-white">
+            <icon name="check" display="solid" color="white" size="4"></icon>
+            <input type="submit" value="Enregistrer">
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_content %}
+    <h1>Edit User</h1>
+
+    {{ include('superadmin/user/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('superadmin_user_index') }}">back to list</a>
+
+    {{ include('superadmin/user/_delete_form.html.twig') }}
+{% endblock %}

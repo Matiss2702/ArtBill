@@ -1,0 +1,75 @@
+{% extends 'superadmin/default/list.html.twig' %}
+
+{% block page_title %}Utilisateurs{% endblock %}
+
+{% block page_header %}
+    <p class="text-2xl font-bold">Utilisateurs</p>
+    <div class="flex gap-3">
+        <input class="w-96 border rounded-md text-sm outline-primary px-2 py-1" type="text" name="search" value="" placeholder="Rechercher..." />
+        <a href="{{ path('superadmin_user_new') }}" title="Ajouter">
+            <div class="btn flex justify-center items-center rounded-md bg-primary h-full px-4">
+                <icon name="plus" display="mini" color="white"></icon>
+            </div>
+        </a>
+    </div>
+{% endblock %}
+
+{% block thead %}
+    {% if users is not empty %}
+        <th></th>
+        <th>Email</th>
+        <th>Roles</th>
+        <th>Mot de passe</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Vérifié</th>
+        <th>Création</th>
+        <th></th>
+    {% else %}
+        <th class="text-center">Aucune donnée</th>
+    {% endif %}
+{% endblock %}
+
+{% block tbody %}
+    {% for user in users %}
+        <tr>
+            <td class="w-10 h-12">
+                <a href="{{ path('superadmin_user_show', {'id': user.id}) }}" title="Voir">
+                    <icon name="eye" display="solid" color="primary" size="4"></icon>
+                </a>
+            </td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+            <td>{{ user.password }}</td>
+            <td>{{ user.firstname }}</td>
+            <td>{{ user.lastname }}</td>
+            <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
+            <td>
+                {% if today == user.createdAt|date('Y-m-d') %}
+                    Aujourd'hui
+                {% elseif today|date_modify('-1 day')|date('Y-m-d') == user.createdAt|date('Y-m-d') %}
+                    Hier
+                {% else %}
+                    {{ user.createdAt|date('d/m/Y') }}
+                {% endif %}
+
+                à {{ user.createdAt|date('H') }}h{{ user.createdAt|date('i') }}
+            </td>
+            <td>
+                <div class="flex justify-end gap-3">
+                    <a href="{{ path('superadmin_user_edit', {'id': user.id}) }}">
+                        <div class="h-8 flex justify-center items-center gap-1.5 border shadow-sm rounded-md px-2.5 p-1 bg-primary text-white">
+                            <icon name="pencil" display="solid" color="white" size="4"></icon>
+                            <span>Modifier</span>
+                        </div>
+                    </a>
+                    <a href="{{ path('superadmin_user_delete', {'id': user.id}) }}">
+                        <div class="w-8 h-8 flex justify-center items-center gap-1.5 border shadow-sm rounded-md py-1">
+                            <icon name="trash" display="solid" color="primary" size="4"></icon>
+                        </div>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
