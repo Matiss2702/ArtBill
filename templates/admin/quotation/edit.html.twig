@@ -27,7 +27,8 @@
             {{ form_errors(form[field]) }}
         </div>
     {% endfor %}
+{% endblock %}
 
-    {{ include('admin/quotation/_form.html.twig', {'button_label': 'Update'}) }}
-
+{% block form_extra %}
+    {{ include('admin/quotation/_service_form.html.twig') }}
 {% endblock %}

@@ -1,0 +1,44 @@
+<ul class="services" data-index="{{ form.services|length > 0 ? form.services|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.services.vars.prototype)|e('html_attr') }}">
+    {{ form_label(form.services) }}
+    <div id="li_container" class="flex gap-2">
+        {{ form_widget(form.services) }}
+    </div>
+    <button type="button" class="add_item_link" data-collection-holder-class="services">Ajouter un nouveau service</button>
+</ul>
+
+{% block javascripts %}
+    <script>
+        const addServiceFormDeleteLink = (item) => {
+            const removeFormButton = document.createElement('button');
+            removeFormButton.innerText = 'Supprimer ce service';
+            item.append(removeFormButton);
+
+            removeFormButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                item.remove();
+            });
+        }
+
+        const addFormToCollection = (e) => {
+            const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+            const item = document.createElement('li');
+
+            item.classList.add('mb-2');
+            item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
+
+            const liContainer = document.getElementById('li_container');
+            liContainer.insertBefore(item, liContainer.lastElementChild);
+            collectionHolder.dataset.index ++;
+
+            addServiceFormDeleteLink(item);
+        }
+
+        document.querySelectorAll('.add_item_link').forEach(btn => {
+            btn.addEventListener("click", addFormToCollection);
+        });
+
+        document.querySelectorAll('ul.services li').forEach((service) => {
+            addServiceFormDeleteLink(service)
+        })
+    </script>
+{% endblock %}
