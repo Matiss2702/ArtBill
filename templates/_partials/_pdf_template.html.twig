@@ -89,8 +89,12 @@
     <div class='sender-receiver'>
         <div class="client">
             <p><strong>Client:</strong></p>
-            <p>{{ forPdf.customer.name }}</p>
-            <p>{{ forPdf.customer.street }}, {{ forPdf.customer.city }}, {{ forPdf.customer.getZipCode() }}, {{ forPdf.customer.country }}</p>
+            {% if forPdf.customer %}
+                <p>{{ forPdf.customer.name }}</p>
+                <p>{{ forPdf.customer.street }}, {{ forPdf.customer.city }}, {{ forPdf.customer.getZipCode() }}, {{ forPdf.customer.country }}</p>
+            {% else %}
+                <p>Pas de client</p>
+            {% endif %}
         </div>
         <div class="company">
             <p><strong>Entreprise:</strong></p>

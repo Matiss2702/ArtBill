@@ -33,31 +33,6 @@ class QuotationController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, CalculAmountService $calculService, SetOwnerAndCompanyService $setOwnerAndCompany): Response
-    {
-        $quotation = new Quotation();
-        $form = $this->createForm(QuotationType::class, $quotation);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->getUser();
-            $setOwnerAndCompany->process($quotation, $user);
-            $calculService->calculAmounts($quotation);
-            $quotation->setVersion(0);
-
-
-            $entityManager->persist($quotation);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('user_quotation_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('user/quotation/new.html.twig', [
-            'quotation' => $quotation,
-            'form' => $form,
-        ]);
-    }
-
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Quotation $quotation, QuotationRepository $quotationRepository): Response
     {
@@ -70,40 +45,6 @@ class QuotationController extends AbstractController
             'previousVersions' => $previousVersions,
             'nextVersions' => $nextVersions,
         ]);
-    }
-
-    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Quotation $quotation, EntityManagerInterface $entityManager, CalculAmountService $calculService, SessionInterface $session, SetVersionsService $setVersion): Response
-    {
-        $bill = new Quotation();
-        $setVersion->process($bill, $quotation);
-        $form = $this->createForm(QuotationType::class, $bill);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $calculService->calculAmounts($bill);
-            $entityManager->persist($bill);
-            $entityManager->flush();
-            $previousUrl = $session->get('previous_url');
-            return new RedirectResponse($previousUrl);
-        }
-        $session->set('previous_url', $request->headers->get('referer'));
-
-        return $this->render('user/quotation/edit.html.twig', [
-            'quotation' => $quotation,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'delete', methods: ['POST'])]
-    public function delete(Request $request, Quotation $quotation, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $quotation->getId(), $request->request->get('_token'))) {
-            $quotation->setStatus('archived');
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('user_quotation_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/generate-invoice/{id}', name: 'generate_invoice', methods: ['GET'])]
