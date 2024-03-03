@@ -26,7 +26,7 @@ class InvoiceType extends AbstractType
             ->add('dueDate')
             ->add('customer', EntityType::class, [
                 'class' => Customer::class,
-                'choice_label' => 'id',
+                'choice_label' => 'email',
             ])
             ->add('services', CollectionType::class, [
                 'entry_type' => ServiceType::class,

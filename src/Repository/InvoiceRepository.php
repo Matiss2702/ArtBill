@@ -57,7 +57,7 @@ class InvoiceRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findAllByCompany(User $user): ?Invoice
+    public function findAllByCompany(User $user): ?array
     {
         $company = $user->getCompany();
 
@@ -65,7 +65,7 @@ class InvoiceRepository extends ServiceEntityRepository
             ->andWhere('q.company = :company')
             ->setParameter('company', $company)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
 }

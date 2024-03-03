@@ -13,6 +13,7 @@
                         <th class="py-3 px-6 text-left bg-gray-200 font-semibold text-sm">NOM DU CLIENT</th>
                         <th class="py-3 px-6 text-left bg-gray-200 font-semibold text-sm">EMAIL</th>
                         <th class="py-3 px-6 text-left bg-gray-200 font-semibold text-sm">MODIFIER</th>
+                        <th class="py-3 px-6 text-left bg-gray-200 font-semibold text-sm">VOIR</th>
                         <th class="py-3 px-6 text-left bg-gray-200 font-semibold text-sm">SUPPRIMER</th>
                     </tr>
                 </thead>
@@ -20,13 +21,12 @@
                     {% for customer in customers %}
                         <tr class="hover:bg-gray-50">
                             <td class="py-4 px-6 border-b">
-                                <a href="{{ path('superadmin_customer_show', {'id': customer.id}) }}" class="text-blue-500 hover:underline">{{ customer.name }}</a>
-                            </td>
-                            <td class="py-4 px-6 border-b">{{ customer.email }}</td>
-                            <td class="py-4 px-6 border-b">
                                 <a href="{{ path('superadmin_customer_update', {'id': customer.id}) }}" class="text-blue-500 hover:underline">Modifier</a>
                             </td>
                             <td class="py-4 px-6 border-b">
+                            <td class="py-4 px-6 border-b">
+                                <a href="{{ path('superadmin_customer_show', {'id': customer.id}) }}" class="text-blue-500 hover:underline">Voir</a>
+                            </td>
                                 <a href="{{ path('superadmin_customer_delete', {'id': customer.id, 'token': csrf_token('delete' ~ customer.id)}) }}" class="text-red-500 hover:underline" onclick="return confirm('Êtes-vous sûrs de vouloir supprimer le client {{ customer.name }} ?');">Suppression</a>
                             </td>
                         </tr>
