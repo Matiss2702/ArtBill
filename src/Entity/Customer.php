@@ -147,8 +147,6 @@ class Customer
         return $this;
     }
 
-
-
     public function getStreet(): ?string
     {
         return $this->street;

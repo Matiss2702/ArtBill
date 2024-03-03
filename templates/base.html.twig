@@ -24,14 +24,14 @@
         <img class="w-auto h-full" src="./../../assets/images/logo.png" alt="ArtBill"/>
 
         <div class="w-6 h-6 rounded-full overflow-hidden">
-            <a href="/logout">
+            <a href="/admin/profile">
                 <img src="./../../assets/images/avatar-placeholder.png" alt="Avatar" class="w-full h-full object-cover">
             </a>
         </div>
     </header>
 
     <div id="container" class="h-screen flex flex-grow pt-11">
-        <div id="sidebar" class="w-60 h-full bg-gray-100 text-gray-700 text-sm border-r-[1px]">
+        <div id="sidebar" class="w-64 h-full bg-gray-100 text-gray-700 text-sm border-r-[1px]">
             <div class="h-full flex flex-col sticky top-11 divide-y divide-gray-200 overflow-y-auto">
                 <ul class="flex flex-col p-3">
                     <a href="/dashboard">
@@ -45,7 +45,7 @@
                 </ul>
 
                 <ul class="flex flex-col p-3">
-                    <a href="/admin/customer/">
+                    <a href="/admin/customer">
                         <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                             <div class="flex items-center gap-2">
                                 <icon name="users"></icon>
@@ -53,7 +53,7 @@
                             </div>
                         </li>
                     </a>
-                    <a href="/admin/quotation/">
+                    <a href="/admin/quotation">
                         <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                             <div class="flex items-center gap-2">
                                 <icon name="document-text"></icon>
@@ -61,11 +61,27 @@
                             </div>
                         </li>
                     </a>
-                    <a href="/admin/invoice/">
+                    <a href="/admin/invoice">
                         <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                             <div class="flex items-center gap-2">
                                 <icon name="document-text"></icon>
                                 <span>Factures</span>
+                            </div>
+                        </li>
+                    </a>
+                    <a href="/admin/service">
+                        <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
+                            <div class="flex items-center gap-2">
+                                <icon name="light-bulb"></icon>
+                                <span>Prestations</span>
+                            </div>
+                        </li>
+                    </a>
+                    <a href="/admin/category">
+                        <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
+                            <div class="flex items-center gap-2">
+                                <icon name="folder"></icon>
+                                <span>Catégories de prestation</span>
                             </div>
                         </li>
                     </a>
