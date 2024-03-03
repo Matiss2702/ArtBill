@@ -1,3 +1,7 @@
+home:
+    path: /
+    controller: App\Controller\HomeController::index
+
 controllers_security:
   resource: ../src/Controller/SecurityController.php
   type: attribute
