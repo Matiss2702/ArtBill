@@ -1,11 +1,67 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/default/form.html.twig' %}
 
-{% block title %}New Quotation{% endblock %}
+{% block page_title %}Ajouter un devis - ArtBill{% endblock %}
+{% block page_header %}
+    <p class="text-2xl font-bold">Ajouter un devis</p>
+    <div class="flex justify-end gap-3 text-sm">
+        <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-primary text-white">
+            <icon name="check" display="solid" color="white" size="4"></icon>
+            <input type="submit" value="Enregistrer">
+        </div>
+    </div>
+{% endblock %}
 
-{% block page_content %}
-    <h1>Create new Quotation</h1>
+{% block form %}
+    {% set fields = {
+        'description': 'Description',
+        'status': 'Statut',
+        'date': 'Date',
+        'dueDate': 'Date d\'échéance',
+        'customer': 'Client',
+        'services': 'Services',
+    } %}
 
-    {{ include('admin/quotation/_form.html.twig') }}
+    {% for field, label in fields %}
+        <div class="w-72 flex flex-col">
+            {{ form_label(form[field], label) }}
+            {{ form_widget(form[field]) }}
+            {{ form_errors(form[field]) }}
+        </div>
+    {% endfor %}
+{% endblock %}
 
-    <a href="{{ path('admin_quotation_index') }}">back to list</a>
+{% block javascripts %}
+	<script>
+		const addServiceFormDeleteLink = (item) => {
+			const removeFormButton = document.createElement('button');
+			removeFormButton.innerText = 'Supprimer ce service';
+
+			item.append(removeFormButton);
+
+			removeFormButton.addEventListener('click', (e) => {
+				e.preventDefault();
+				item.remove();
+			});
+		}
+
+		const addFormToCollection = (e) => {
+			const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+			const item = document.createElement('li');
+
+			item.classList.add('bg-red-400');
+			item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
+
+			collectionHolder.insertBefore(item, collectionHolder.lastElementChild);
+			collectionHolder.dataset.index ++;
+			addServiceFormDeleteLink(item);
+		}
+
+		document.querySelectorAll('.add_item_link').forEach(btn => {
+			btn.addEventListener("click", addFormToCollection);
+		});
+
+		document.querySelectorAll('ul.services li').forEach((service) => {
+			addServiceFormDeleteLink(service)
+		})
+	</script>
 {% endblock %}

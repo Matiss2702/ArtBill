@@ -26,11 +26,9 @@ class Category
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Service::class)]
     private Collection $services;
 
-
     public function __construct()
     {
         $this->services = new ArrayCollection();
-        
     }
 
     public function getId(): ?UuidInterface
