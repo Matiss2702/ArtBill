@@ -1,37 +1,65 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/default/list.html.twig' %}
 
-{% block title %}Category index{% endblock %}
+{% block page_title %}Catégories de prestation{% endblock %}
 
-{% block page_content %}
-    <h1>Category index</h1>
+{% block page_header %}
+    <p class="text-2xl font-bold">Catégories de prestation</p>
+    <div class="flex gap-3">
+        <input class="w-96 border rounded-md text-sm outline-primary px-2 py-1" type="text" name="search" value="" placeholder="Rechercher..." />
+        <a href="{{ path('admin_category_new') }}" title="Ajouter">
+            <div class="btn flex justify-center items-center rounded-md bg-primary h-full px-4">
+                <icon name="plus" display="mini" color="white"></icon>
+            </div>
+        </a>
+    </div>
+{% endblock %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Label</th>
-                <th>Created</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for category in categories %}
-            <tr>
-                <td>{{ category.id }}</td>
-                <td>{{ category.label }}</td>
-                <td>{{ category.created ? category.created|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('user_app_category_show', {'id': category.id}) }}">show</a>
-                    <a href="{{ path('user_app_category_edit', {'id': category.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+{% block thead %}
+    {% if categories is not empty %}
+        <th></th>
+        <th>Libellé</th>
+        <th>Création</th>
+        <th></th>
+    {% else %}
+        <th class="text-center">Aucune donnée</th>
+    {% endif %}
+{% endblock %}
 
-    <a href="{{ path('user_category_new') }}">Create new</a>
+{% block tbody %}
+    {% for category in categories %}
+        <tr>
+            <td class="w-10 h-12">
+                <a href="{{ path('admin_category_show', {'id': category.id}) }}" title="Voir">
+                    <icon name="eye" display="solid" color="primary" size="4"></icon>
+                </a>
+            </td>
+            <td><a class="font-bold text-primary" href="{{ path('admin_category_show', {'id': category.id}) }}">{{ category.label }}</a></td>
+            <td>
+                {% if today == category.createdAt|date('Y-m-d') %}
+                    Aujourd'hui
+                {% elseif today|date_modify('-1 day')|date('Y-m-d') == category.createdAt|date('Y-m-d') %}
+                    Hier
+                {% else %}
+                    {{ category.createdAt|date('d/m/Y') }}
+                {% endif %}
+
+                à {{ category.createdAt|date('H') }}h{{ category.createdAt|date('i') }}
+            </td>
+            <td>
+                <div class="flex justify-end gap-3">
+                    <a href="{{ path('admin_category_edit', {'id': category.id}) }}">
+                        <div class="h-8 flex justify-center items-center gap-1.5 border shadow-sm rounded-md px-2.5 p-1 bg-primary text-white">
+                            <icon name="pencil" display="solid" color="white" size="4"></icon>
+                            <span>Modifier</span>
+                        </div>
+                    </a>
+                    <a href="{{ path('admin_category_delete', {'id': category.id}) }}">
+                        <div class="w-8 h-8 flex justify-center items-center gap-1.5 border shadow-sm rounded-md py-1">
+                            <icon name="trash" display="solid" color="primary" size="4"></icon>
+                        </div>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
 {% endblock %}

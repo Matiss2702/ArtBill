@@ -2,7 +2,6 @@
 
 namespace App\Controller\User;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
@@ -24,7 +23,6 @@ class CategoryController extends AbstractController
             'categories' => $categoryRepository->findAll(),
         ]);
     }
-    //Ajout
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -34,8 +32,8 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (null === $category->getCreated()) {
-                $category->setCreated(new \DateTime());
+            if (null === $category->getCreatedAt()) {
+                $category->setCreatedAt(new \DateTime());
             }
 
             $entityManager->persist($category);
@@ -57,7 +55,7 @@ class CategoryController extends AbstractController
             'category' => $category,
         ]);
     }
-    //Modification
+
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
@@ -67,7 +65,7 @@ class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('user_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/category/edit.html.twig', [
@@ -75,7 +73,7 @@ class CategoryController extends AbstractController
             'form' => $form,
         ]);
     }
-    //Suppression
+
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
