@@ -19,6 +19,7 @@ class CustomerFixtures extends Fixture
         $customer->setCity("City Test");
         $customer->setZipCode("75000");
         $customer->setCountry("Country Test");
+        $customer->setCompany($this->getReference(CompanyFixtures::COMPANY_GRAPHIKART));
         
         $manager->persist($customer);
         $manager->flush();
