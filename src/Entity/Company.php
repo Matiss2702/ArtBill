@@ -56,11 +56,15 @@ class Company
     #[ORM\Column]
     private ?int $zipCode = null;
 
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Customer::class)]
+    private Collection $customers;
+
     public function __construct()
     {
         $this->quotations = new ArrayCollection();
         $this->invoices = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->customers = new ArrayCollection();
     }
 
     public function getId(): ?UuidInterface
@@ -262,6 +266,36 @@ class Company
     public function setZipCode(int $zipCode): static
     {
         $this->zipCode = $zipCode;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Customer>
+     */
+    public function getCustomers(): Collection
+    {
+        return $this->customers;
+    }
+
+    public function addCustomer(Customer $customer): static
+    {
+        if (!$this->customers->contains($customer)) {
+            $this->customers->add($customer);
+            $customer->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCustomer(Customer $customer): static
+    {
+        if ($this->customers->removeElement($customer)) {
+            // set the owning side to null (unless already changed)
+            if ($customer->getCompany() === $this) {
+                $customer->setCompany(null);
+            }
+        }
 
         return $this;
     }

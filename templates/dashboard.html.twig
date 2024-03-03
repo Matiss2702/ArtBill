@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block page_content %}
+    <div class="container mt-5 mb-5">
+        <h1 class="mb-4">Tableau de bord</h1>
+
+        <canvas id="dashboardChart" width="800" height="400"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('dashboardChart').getContext('2d');
+
+            var customers = [];
+            var numberOfInvoices = [];
+            var numberOfQuotations = [];
+            var totalAmountHT = [];
+            var totalAmountTTC = [];
+
+            {% for customer, data in customerData %}
+                customers.push('{{ customer }}');
+                numberOfInvoices.push('{{ data.numberOfInvoices }}');
+                numberOfQuotations.push('{{ data.numberOfQuotations }}');
+                totalAmountHT.push('{{ data.totalAmountHT }}');
+                totalAmountTTC.push('{{ data.totalAmountTTC }}');
+            {% endfor %}
+
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: customers,
+                    datasets: [{
+                        label: 'Nombre de factures',
+                        data: numberOfInvoices,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Nombre de devis',
+                        data: numberOfQuotations,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    var label = context.dataset.label || '';
+
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += context.parsed.y.toLocaleString();
+
+                                    if (context.datasetIndex === 0) {
+                                        label += ' factures';
+                                        label += '\nMontant HT: ' + totalAmountHT[context.dataIndex].toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+                                        label += '\nMontant TTC: ' + totalAmountTTC[context.dataIndex].toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+                                    } else if (context.datasetIndex === 1) {
+                                        label += ' devis';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

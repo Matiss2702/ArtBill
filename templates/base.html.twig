@@ -21,7 +21,7 @@
     {% endblock %}
 
     <header class="fixed top-0 left-0 right-0 z-50 h-11 flex justify-between items-center bg-gray-100 border-b-[1px] px-5 py-2">
-        <img class="w-auto h-full" src="./../../assets/images/logo.png" alt="ArtBill" />
+        <img class="w-auto h-full" src="./../../assets/images/logo.png" alt="ArtBill"/>
 
         <div class="w-6 h-6 rounded-full overflow-hidden">
             <a href="/admin/profile">
@@ -34,7 +34,7 @@
         <div id="sidebar" class="w-64 h-full bg-gray-100 text-gray-700 text-sm border-r-[1px]">
             <div class="h-full flex flex-col sticky top-11 divide-y divide-gray-200 overflow-y-auto">
                 <ul class="flex flex-col p-3">
-                    <a href="#">
+                    <a href="/dashboard">
                         <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                             <div class="flex items-center gap-2">
                                 <icon name="squares-2x2"></icon>
@@ -104,10 +104,6 @@
             {% if form is defined %}
                 {{ form_start(form, { 'attr': { 'class': 'flex flex-grow flex-col gap-3' } }) }}
             {% endif %}
-
-            <div id="content-header" class="w-full flex justify-between items-center">
-                {% block page_header %}<p class="text-2xl font-bold">Bienvenue</p>{% endblock %}
-            </div>
             <div id="content-box" class="w-full h-full flex flex-col border shadow-md rounded-lg overflow-y-auto max-h-300">
                 {% block page_content %}{% endblock %}
             </div>

@@ -44,6 +44,9 @@ class Customer
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $country = null;
 
+    #[ORM\ManyToOne(inversedBy: 'customers')]
+    private ?Company $company = null;
+
     public function __construct()
     {
         $this->quotations = new ArrayCollection();
@@ -188,6 +191,18 @@ class Customer
     public function setCountry(?string $country): static
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }

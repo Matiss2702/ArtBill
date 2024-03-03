@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
@@ -26,8 +28,9 @@ class Service
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column]
-    private ?int $price = 0;
+    #[ORM\Column(type: "float", scale: 2)]
+    #[Assert\Regex(pattern: '/^\d+(\.\d{1,2})?$/', message: 'Le prix doit avoir au plus deux décimales.')]
+    private ?float $price = 0;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     private ?Category $category = null;
@@ -82,12 +85,12 @@ class Service
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice(?int $price): static
+    public function setPrice(?float $price): static
     {
         $this->price = $price;
 

@@ -6,12 +6,13 @@ use App\Entity\Quotation;
 use App\Form\QuotationType;
 use App\Repository\QuotationRepository;
 use App\Service\CalculAmountService;
+use App\Service\GenerateInvoiceService;
 use App\Service\SetOwnerAndCompanyService;
+use App\Service\SetVersionsService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -62,6 +63,7 @@ class QuotationController extends AbstractController
     {
         $previousVersions = $quotationRepository->findAllPreviousVersions($quotation);
         $nextVersions = $quotationRepository->findAllNextVersions($quotation);
+        // dd($previousVersions);
 
         return $this->render('user/quotation/show.html.twig', [
             'quotation' => $quotation,
@@ -71,43 +73,20 @@ class QuotationController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Quotation $quotation, EntityManagerInterface $entityManager, CalculAmountService $calculService, RequestStack $requestStack, SessionInterface $session): Response
+    public function edit(Request $request, Quotation $quotation, EntityManagerInterface $entityManager, CalculAmountService $calculService, SessionInterface $session, SetVersionsService $setVersion): Response
     {
-        $newQuotation = new Quotation();
-
-        $newQuotation->setDescription($quotation->getDescription());
-        $newQuotation->setAmountHt($quotation->getAmountHt());
-        $newQuotation->setAmountTtc($quotation->getAmountTtc());
-        $newQuotation->setStatus($quotation->getStatus());
-        $newQuotation->setDate($quotation->getDate());
-        $newQuotation->setDueDate($quotation->getDueDate());
-        $newQuotation->setOwner($quotation->getOwner());
-        $newQuotation->setCompany($quotation->getCompany());
-        $newQuotation->setCreatedAt($quotation->getCreatedAt());
-        $newQuotation->setUpdatedAt($quotation->getUpdatedAt());
-        $newQuotation->setVersion($quotation->getVersion() + 1);
-
-        foreach ($quotation->getServices() as $service) {
-            $newQuotation->addService($service);
-        }
-
-        $newQuotation->setPreviousVersion($quotation);
-
-        $form = $this->createForm(QuotationType::class, $newQuotation);
+        $bill = new Quotation();
+        $setVersion->process($bill, $quotation);
+        $form = $this->createForm(QuotationType::class, $bill);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $calculService->calculAmounts($newQuotation);
-
-            $entityManager->persist($newQuotation);
+            $calculService->calculAmounts($bill);
+            $entityManager->persist($bill);
             $entityManager->flush();
-
             $previousUrl = $session->get('previous_url');
-
             return new RedirectResponse($previousUrl);
         }
-
         $session->set('previous_url', $request->headers->get('referer'));
 
         return $this->render('user/quotation/edit.html.twig', [
@@ -125,5 +104,21 @@ class QuotationController extends AbstractController
         }
 
         return $this->redirectToRoute('user_quotation_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/generate-invoice/{id}', name: 'generate_invoice', methods: ['GET'])]
+    public function generateInvoice(Quotation $quotation, GenerateInvoiceService $generateInvoiceService, EntityManagerInterface $entityManager): RedirectResponse
+    {
+        try {
+            $invoiceGenerated = $generateInvoiceService->generateInvoice($quotation);
+            $entityManager->persist($invoiceGenerated);
+            $entityManager->flush();
+            $quotation->addInvoice($invoiceGenerated);
+            $id = $invoiceGenerated->getId();
+            $this->addFlash('success', 'Facture générée');
+            return $this->redirectToRoute('user_invoice_show', ['id' => $id]);
+        } catch (\Exception $e) {
+            $this->addFlash('danger', 'Erreur lors de la génération de la facture');
+        }
     }
 }

@@ -1,0 +1,66 @@
+<table class="min-w-full divide-y divide-gray-200">
+	<thead>
+		<tr>
+			<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Description</th>
+			<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Montant HT</th>
+			<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Montant TTC</th>
+			{% if type == "invoice" %}
+				<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Payé</th>
+			{% else %}
+				<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Status</th>
+			{% endif %}
+			<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Date</th>
+			<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Echeance</th>
+			<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Créée</th>
+			<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Services</th>
+			<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">TVA 10%</th>
+			<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">TVA 20%</th>
+			<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Sans TVA</th>
+			<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Auteur</th>
+			<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Entreprise</th>
+			{% if type == "invoice" %}
+				<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Lié au devis</th>
+			{% endif %}
+
+			<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+		</tr>
+	</thead>
+	<tbody class="bg-white divide-y divide-gray-200">
+		{% for item in items %}
+			<tr>
+				<td class="px-3 py-2 whitespace-no-wrap">{{ item.description }}</td>
+				<td class="px-3 py-2 whitespace-no-wrap">{{ item.amountHt|number_format(2, ',', ' ') }}</td>
+				<td class="px-3 py-2 whitespace-no-wrap">{{ item.amountTtc|number_format(2, ',', ' ') }}</td>
+				{% if type == "invoice" %}
+					<td class="px-3 py-2 whitespace-no-wrap">{{ item.isPaid ? "Payé" : "Non payé" }}</td>
+				{% else %}
+					<td class="px-3 py-2 whitespace-no-wrap">{{ item.status }}</td>
+				{% endif %}
+				<td class="px-3 py-2 whitespace-no-wrap">{{ item.date ? item.date|date('d-m-Y') : '' }}</td>
+				<td class="px-3 py-2 whitespace-no-wrap">{{ item.dueDate ? item.dueDate|date('d-m-Y') : '' }}</td>
+				<td class="px-3 py-2 whitespace-no-wrap">{{ item.createdAt ? item.createdAt|date('d-m-Y H:i:s') : '' }}</td>
+				<td class="px-3 py-2 whitespace-no-wrap">{{ item.services|length }}</td>
+				<td class="px-3 py-2 whitespace-no-wrap">{{ item.vatRate10 }}</td>
+				<td class="px-3 py-2 whitespace-no-wrap">{{ item.vatRate20 }}</td>
+				<td class="px-3 py-2 whitespace-no-wrap">{{ item.baseVatRate0 }}</td>
+				<td class="px-3 py-2 whitespace-no-wrap">{{ item.owner.email }}</td>
+				<td class="px-3 py-2 whitespace-no-wrap">{{ item.company.name }}</td>
+				{% if type == "invoice" %}
+					<td class="px-3 py-2 whitespace-no-wrap">{{ item.quotations ? item.quotations.id : '' }}</td>
+				{% endif %}
+				<td class="px-3 py-2 whitespace-no-wrap">
+					{% if is_granted('ROLE_SUPERADMIN') %}
+						<a href="{{ path("superadmin_"~type~"_show", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Afficher</a>
+						<a href="{{ path("superadmin_"~type~"_edit", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Editer</a>
+					{% elseif is_granted('ROLE_ADMIN') %}
+						<a href="{{ path("admin_"~type~"_show", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Afficher</a>
+						<a href="{{ path("admin_"~type~"_edit", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Editer</a>
+					{% elseif is_granted('ROLE_USER') %}
+						<a href="{{ path("user_"~type~"_show", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Afficher</a>
+						<a href="{{ path("user_"~type~"_edit", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Editer</a>
+					{% endif %}
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

@@ -17,7 +17,11 @@ class ServiceType extends AbstractType
         $builder
             ->add('label')
             ->add('description')
-            ->add('price')
+            ->add('price', null, [
+                'attr' => [
+                    'step' => 0.01,
+                ]
+            ])
             ->add('quantity')
             ->add('vat_rate', ChoiceType::class, [
                 'choices' => array_combine(["0%", "10%", "20%"], Service::VAT_RATES)

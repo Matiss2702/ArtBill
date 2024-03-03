@@ -1,9 +1,9 @@
 {% extends 'admin/default/sheet.html.twig' %}
 
-{% block page_title %}Fiche devis - ArtBill{% endblock %}
+{% block page_title %}Fiche facture - ArtBill{% endblock %}
 
 {% block page_header %}
-    <p class="text-2xl font-bold">Fiche devis</p>
+    <p class="text-2xl font-bold">Fiche facture</p>
     <div class="flex justify-end gap-3 text-sm">
         <a href="{{ path('admin_invoice_edit', {'id': invoice.id}) }}">
             <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-primary text-white">
@@ -136,4 +136,38 @@
             {{ invoice.createdAt|date('d/m/Y à H') }}h{{ invoice.createdAt|date('i') }}
         </div>
     </div>
+
+    <h1>Détails de la facture</h1>
+
+    {% include "_partials/_bills.show.html.twig" with {'item':invoice, 'type':"invoice"} %}</br>
+
+    <a href="{{ path('admin_invoice_index') }}" class="btn btn-secondary">Retour à la liste</a>
+    <a href="{{ path('admin_invoice_edit', {'id': invoice.id}) }}" class="btn btn-primary">Modifier</a>
+    <a href="{{ path('admin_generate_pdf', {'id': invoice.id, 'type': 'invoice'}) }}" target="_blank">Générer PDF</a>
+
+    <button id="togglePreview">Afficher la prévisualisation</button>
+
+    <div id="previewContainer">
+        <iframe id="previewIframe" width="600" height="900;"></iframe>
+    </div>
+
+    <script>
+        const toggleButton = document.getElementById('togglePreview');
+        const previewContainer = document.getElementById('previewContainer');
+
+        toggleButton.addEventListener('click', function() {
+            if (previewContainer.style.display === 'none') {
+                toggleButton.textContent = 'Cacher la prévisualisation';
+                previewContainer.style.display = 'block';
+
+                const invoiceId = "{{ invoice.id|raw }}";
+                document.getElementById('previewIframe').src = "{{ path('admin_preview_pdf') }}?id=" + invoiceId + "&type=invoice";
+            } else {
+                previewContainer.style.display = 'none';
+                toggleButton.textContent = 'Afficher la prévisualisation';
+
+            }
+        });
+    </script>
+
 {% endblock %}
