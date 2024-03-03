@@ -40,6 +40,7 @@ class InvoiceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
             $setOwnerAndCompany->process($invoice, $user);
+            $invoice->setStatus('created');
             $calculService->calculAmounts($invoice);
             $entityManager->persist($invoice);
             $entityManager->flush();
