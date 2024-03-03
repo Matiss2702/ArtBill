@@ -75,7 +75,7 @@ class SecurityController extends AbstractController
 
                 // Envoi du mail
                 $mail->send(
-                    'artbill.team@outlook.fr',
+                    'team.artbill@outlook.fr',
                     $user->getEmail(),
                     'Réinitialisation de mot de passe',
                     'password_reset',

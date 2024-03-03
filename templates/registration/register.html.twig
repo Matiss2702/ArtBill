@@ -1,37 +1,72 @@
 {% extends 'base.html.twig' %}
 
-{% block page_title %}Inscription{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block page_content %}
-    <section class="container">
-        <div class="row">
-            <div class="col">
-                <h1>Inscription</h1>
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-xl mx-auto bg-white rounded-lg overflow-hidden md:max-w-2xl shadow-md">
+        <div class="md:flex">
+            <div class="w-full p-6">
+                <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Inscription</h1>
+                {{ form_start(registrationForm, {'attr': {'class': 'space-y-4'}}) }}
 
-                {{ form_errors(registrationForm) }}
+                <fieldset class="space-y-4">
+                    <legend class="text-xl font-semibold text-gray-700">Informations personnelles</legend>
+                    {{ form_row(registrationForm.email, {'attr': {'class': 'input'}}) }}
+                    {% if registrationForm.email.vars.errors %}
+                        <div class="text-red-500">{{ form_errors(registrationForm.email) }}</div>
+                    {% endif %}
+                    {{ form_row(registrationForm.firstname, {'attr': {'class': 'input'}}) }}
+                    {% if registrationForm.firstname.vars.errors %}
+                        <div class="text-red-500">{{ form_errors(registrationForm.firstname) }}</div>
+                    {% endif %}
+                    {{ form_row(registrationForm.lastname, {'attr': {'class': 'input'}}) }}
+                    {% if registrationForm.lastname.vars.errors %}
+                        <div class="text-red-500">{{ form_errors(registrationForm.lastname) }}</div>
+                    {% endif %}
+                    {{ form_row(registrationForm.plainPassword.first, {'attr': {'class': 'input'}}) }}
+                    {% if registrationForm.plainPassword.first.vars.errors %}
+                        <div class="text-red-500">{{ form_errors(registrationForm.plainPassword.first) }}</div>
+                    {% endif %}
+                    {{ form_row(registrationForm.plainPassword.second, {'attr': {'class': 'input'}}) }}
+                    {% if registrationForm.plainPassword.second.vars.errors %}
+                        <div class="text-red-500">{{ form_errors(registrationForm.plainPassword.second) }}</div>
+                    {% endif %}
+                </fieldset>
 
-                {{ form_start(registrationForm) }}
-                    <fieldset>
-                            <legend>Ma Compagnie</legend>
-                            {{ form_row(registrationForm.companyName) }}
-                    </legend>
-                    <fieldset>
-                        <legend>Mon identité</legend>
-                        {{ form_row(registrationForm.email) }}
-                        {{ form_row(registrationForm.firstname) }}
-                        {{ form_row(registrationForm.lastname) }}
+                <fieldset class="space-y-4 mt-6">
+                    <legend class="text-xl font-semibold text-gray-700">Informations de la compagnie</legend>
+                    {{ form_row(registrationForm.companyName, {'attr': {'class': 'input'}}) }}
+                    {% if registrationForm.companyName.vars.errors %}
+                        <div class="text-red-500">{{ form_errors(registrationForm.companyName) }}</div>
+                    {% endif %}
+                    {{ form_row(registrationForm.siren, {'attr': {'class': 'input'}}) }}
+                    {% if registrationForm.siren.vars.errors %}
+                        <div class="text-red-500">{{ form_errors(registrationForm.siren) }}</div>
+                    {% endif %}
+                    {{ form_row(registrationForm.vatNumber, {'attr': {'class': 'input'}}) }}
+                    {{ form_row(registrationForm.zipCode, {'attr': {'class': 'input'}}) }}
+                    {{ form_row(registrationForm.street, {'attr': {'class': 'input'}}) }}
+                    {{ form_row(registrationForm.city, {'attr': {'class': 'input'}}) }}
+                    {{ form_row(registrationForm.country, {'attr': {'class': 'input'}}) }}
+                    {{ form_row(registrationForm.shareCapital, {'attr': {'class': 'input'}}) }}
+                    {{ form_row(registrationForm.bankInformationStatement, {'attr': {'class': 'input'}}) }}
+                </fieldset>
 
-                        {{ form_row(registrationForm.plainPassword, {
-                            label: 'Password'
-                            }) 
-                        }}
-                    </fieldset>
-                    {{ form_row(registrationForm.RGPDConsent) }}
+                {{ form_row(registrationForm.RGPDConsent, {'attr': {'class': 'mt-4'}}) }}
+                {% if registrationForm.RGPDConsent.vars.errors %}
+                    <div class="text-red-500">{{ form_errors(registrationForm.RGPDConsent) }}</div>
+                {% endif %}
 
-                <button type="submit" class="btn">Register</button>
+                <div class="flex justify-center mt-6">
+                    <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition ease-in-out duration-150">
+                        S'inscrire
+                    </button>
+                </div>
+                
+                {{ form_end(registrationForm) }}
             </div>
         </div>
-    </section>
-    {{ form_end(registrationForm) }}
-</section>
+    </div>
+</div>
 {% endblock %}

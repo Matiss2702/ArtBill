@@ -3,44 +3,35 @@
 {% block page_title %}Connexion{% endblock %}
 
 {% block page_content %}
-<section class="container my-3">
-    <div class="row">
-        <div class="col">
+<section class="max-w-4xl mx-auto my-6">
+    <div class="flex flex-wrap">
+        <div class="w-full">
             <form method="post">
                 {% if error %}
-                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}
 
                 {% if app.user %}
-                    <div class="mb-3">
-                        Vous êtes connecté(e) comme {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Me déconnecter</a>
+                    <div class="mb-4">
+                        Vous êtes connecté(e) comme {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" class="text-blue-500 hover:text-blue-700">Me déconnecter</a>
                     </div>
                 {% endif %}
 
-                <h1 class="h3 mb-3 font-weight-normal">Me connecter</h1>
-                <label for="inputEmail">Email</label>
-                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-                <label for="inputPassword">Mot de passe</label>
-                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                <h1 class="text-2xl font-semibold mb-4">Me connecter</h1>
+                <div class="mb-4">
+                    <label for="inputEmail" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autocomplete="email" required autofocus>
+                </div>
+                <div class="mb-4">
+                    <label for="inputPassword" class="block text-gray-700 text-sm font-bold mb-2">Mot de passe</label>
+                    <input type="password" name="password" id="inputPassword" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" autocomplete="current-password" required>
+                </div>
 
-                <input type="hidden" name="_csrf_token"
-                    value="{{ csrf_token('authenticate') }}"
-                >
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                {#
-                    Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-                    See https://symfony.com/doc/current/security/remember_me.html
-
-                    <div class="checkbox mb-3">
-                        <label>
-                            <input type="checkbox" name="_remember_me"> Remember me
-                        </label>
-                    </div>
-                #}
-
-                <button class="btn btn-lg btn-primary mt-3" type="submit">Me connecter</button><br>
-                <a href="{{ path('app_register') }}" class="btn btn-secondary mt-3">M'inscrire</a><br>
-                <a href="{{ path('forgotten_password') }}" class="btn btn-secondary mt-3">Mot de passe oublié</a>
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-3" type="submit">Me connecter</button><br>
+                <a href="{{ path('app_register') }}" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 mt-3">M'inscrire</a><br>
+                <a href="{{ path('forgotten_password') }}" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 mt-3">Mot de passe oublié</a>
 
             </form>
         
