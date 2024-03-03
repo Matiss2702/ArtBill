@@ -55,4 +55,14 @@ class CustomerRepository extends ServiceEntityRepository
            ->getOneOrNullResult()
        ;
    }
+
+   public function findCustomersForCompany($user): ?array
+   {
+        $company = $user->getCompany();
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.company = :company')
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->getResult();
+    }
 }
