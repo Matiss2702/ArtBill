@@ -27,6 +27,7 @@ class InvoiceType extends AbstractType
             ->add('customer', EntityType::class, [
                 'class' => Customer::class,
                 'choice_label' => 'email',
+
             ])
             ->add('services', CollectionType::class, [
                 'entry_type' => ServiceType::class,

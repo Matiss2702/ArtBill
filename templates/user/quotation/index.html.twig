@@ -3,7 +3,7 @@
 {% block title %}Devis{% endblock %}
 
 {% block page_content %}
-    <h1 class="text-3xl font-bold mb-8">Gestion des Devis</h1>
+	<h1>Quotation index</h1>
+	{% include '_partials/_bills.index.html.twig' with {'items': quotations, 'type':"quotation"}%}
     <a href="{{ path('user_quotation_new') }}" class="text-blue-500 hover:text-blue-700">Créer un nouveau devis</a>
-    {% include '_partials/_quotation.index.html.twig' with {'quotations': quotations} %}
 {% endblock %}

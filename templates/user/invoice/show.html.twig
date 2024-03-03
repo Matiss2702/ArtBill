@@ -1,82 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Quotation
-{% endblock %}
+{% block page_title %}Détails du devis{% endblock %}
 
 {% block page_content %}
-	<h1>invoice</h1>
 
-	<table class="table">
-		<tbody>
-			<tr>
-				<th>Id</th>
-				<td>{{ invoice.id }}</td>
-			</tr>
-			<tr>
-				<th>Description</th>
-				<td>{{ invoice.description }}</td>
-			</tr>
-			<tr>
-				<th>Amount_ht</th>
-				<td>{{ invoice.amountHt }}</td>
-			</tr>
-			<tr>
-				<th>Amount_ttc</th>
-				<td>{{ invoice.amountTtc }}</td>
-			</tr>
+<h1>Détails de la facture</h1>
 
-			<tr>
-				<th>Date</th>
-				<td>{{ invoice.date ? invoice.date|date('Y-m-d') : '' }}</td>
-			</tr>
-			<tr>
-				<th>Due_date</th>
-				<td>{{ invoice.dueDate ? invoice.dueDate|date('Y-m-d') : '' }}</td>
-			</tr>
-			<tr>
-				<th>Created</th>
-				<td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-			</tr>
+{% include "_partials/_bills.show.html.twig" with {'item':invoice, 'type':"invoice"} %}</br>
+          
+<a href="{{ path('user_invoice_index') }}" class="btn btn-secondary">Retour à la liste</a>
+<a href="{{ path('user_invoice_edit', {'id': invoice.id}) }}" class="btn btn-primary">Modifier</a>
+<a href="{{ path('user_generate_pdf', {'id': invoice.id, 'type': 'invoice'}) }}" target="_blank">Générer PDF</a>
 
-			<tr>
-				<th>Services</th>
-				{% if invoice.services %}
-					{% for service in invoice.services %}
-						<td>{{ service.label }}</td>
-						<td>{{ service.price }}</td>
-						<td>{{ service.quantity }}</td>
+<button id="togglePreview">Afficher la prévisualisation</button>
 
-					{% endfor %}
-				{% endif %}
-			</tr>
-			<tr>
-				<th>Taux TVA 10%</th>
-				<td>{{ invoice.vatRate10}}</td>
-			</tr>
-			<tr>
-				<th>Base TVA 10%</th>
-				<td>{{ invoice.baseVatRate10}}</td>
-			</tr>
-			<tr>
-				<th>Taux TVA 20%</th>
-				<td>{{ invoice.vatRate20}}</td>
-			</tr>
-			<tr>
-				<th>Base TVA 20%</th>
-				<td>{{ invoice.baseVatRate20}}</td>
-			</tr>
-			<tr>
-				<th>Taux TVA 0%</th>
-				<td>{{ invoice.baseVatRate0 }}</td>
-			</tr>
-			<tr>
-				<th>Montant HT</th>
-				<td>{{ invoice.amountHt }}</td>
-			</tr>
-		</tbody>
-	</table>
-	<a href="{{ path('user_invoice_index') }}">back to list</a>
-	<a href="{{ path('user_invoice_edit', {'id': invoice.id}) }}">edit</a>
-	<a href="{{ path('user_generate_pdf', {'id': invoice.id, 'type': 'invoice'}) }}" target="_blank">Générer PDF</a>
-	{{ include('user/invoice/_delete_form.html.twig') }}
+<div id="previewContainer">
+    <iframe id="previewIframe" width="600" height="900;"></iframe>
+</div>
+
+<script>
+    const toggleButton = document.getElementById('togglePreview');
+    const previewContainer = document.getElementById('previewContainer');
+
+    toggleButton.addEventListener('click', function() {
+        if (previewContainer.style.display === 'none') {
+            toggleButton.textContent = 'Cacher la prévisualisation';
+            previewContainer.style.display = 'block';
+            
+            const invoiceId = "{{ invoice.id|raw }}";
+            document.getElementById('previewIframe').src = "{{ path('user_preview_pdf') }}?id=" + invoiceId + "&type=invoice";
+        } else {
+            previewContainer.style.display = 'none';
+            toggleButton.textContent = 'Afficher la prévisualisation';
+
+        }
+    });
+</script>
+
+{% endblock %}
+
+{% block page_actions %}
+{{ include('user/quotation/_delete_form.html.twig') }}
+
 {% endblock %}
