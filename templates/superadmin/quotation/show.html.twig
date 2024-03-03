@@ -28,6 +28,31 @@
 <a href="{{ path('superadmin_generate_pdf', {'id': quotation.id, 'type': 'devis'}) }}" target="_blank">Générer PDF</a>
 <a href="{{ path('superadmin_quotation_generate_invoice', {'id': quotation.id}) }}" class="btn btn-primary">Générer la facture à partir du devis</a>
 
+<button id="togglePreview">Afficher la prévisualisation</button>
+
+<div id="previewContainer">
+    <iframe id="previewIframe" width="600" height="900;"></iframe>
+</div>
+
+<script>
+    const toggleButton = document.getElementById('togglePreview');
+    const previewContainer = document.getElementById('previewContainer');
+
+    toggleButton.addEventListener('click', function() {
+        if (previewContainer.style.display === 'none') {
+            toggleButton.textContent = 'Cacher la prévisualisation';
+            previewContainer.style.display = 'block';
+            
+            const quotationId = "{{ quotation.id|raw }}";
+            document.getElementById('previewIframe').src = "{{ path('superadmin_preview_pdf') }}?id=" + quotationId + "&type=devis";
+        } else {
+            previewContainer.style.display = 'none';
+            toggleButton.textContent = 'Afficher la prévisualisation';
+
+        }
+    });
+</script>
+
 {% endblock %}
 
 {% block page_actions %}

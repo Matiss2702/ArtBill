@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 #[IsGranted('ROLE_SUPERADMIN')]
 #[Route('/invoice', 'invoice_')]
@@ -39,9 +41,8 @@ class InvoiceController extends AbstractController
             $calculService->calculAmounts($invoice);
             $entityManager->persist($invoice);
             $entityManager->flush();
-            $id = $invoice->getId();
 
-            return $this->redirectToRoute('superadmin_invoice_show', ['id' => $id], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('superadmin_invoice_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/invoice/new.html.twig', [
@@ -59,15 +60,17 @@ class InvoiceController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Invoice $invoice, EntityManagerInterface $entityManager, CalculAmountService $calculService, SessionInterface $session): Response
     {
         $form = $this->createForm(InvoiceType::class, $invoice);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $calculService->calculAmounts($invoice);
+            $entityManager->persist($invoice);
             $entityManager->flush();
-
-            return $this->redirectToRoute('superadmin_invoice_index', [], Response::HTTP_SEE_OTHER);
+            $previousUrl = $session->get('previous_url');
+            return new RedirectResponse($previousUrl);
         }
 
         return $this->render('superadmin/invoice/edit.html.twig', [
