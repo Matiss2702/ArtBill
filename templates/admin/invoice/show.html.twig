@@ -137,10 +137,6 @@
         </div>
     </div>
 
-    <h1>Détails de la facture</h1>
-
-    {% include "_partials/_bills.show.html.twig" with {'item':invoice, 'type':"invoice"} %}</br>
-
     <a href="{{ path('admin_invoice_index') }}" class="btn btn-secondary">Retour à la liste</a>
     <a href="{{ path('admin_invoice_edit', {'id': invoice.id}) }}" class="btn btn-primary">Modifier</a>
     <a href="{{ path('generate_pdf', {'id': invoice.id, 'type': 'invoice'}) }}" target="_blank">Générer PDF</a>

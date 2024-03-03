@@ -1,12 +1,141 @@
-{% extends 'base.html.twig' %}
+{% extends 'superadmin/default/sheet.html.twig' %}
 
-{% block page_title %}Détails du devis{% endblock %}
+{% block page_title %}Fiche facture - ArtBill{% endblock %}
 
-{% block page_content %}
+{% block page_header %}
+    <p class="text-2xl font-bold">Fiche facture</p>
+    <div class="flex justify-end gap-3 text-sm">
+        <a href="{{ path('superadmin_invoice_edit', {'id': invoice.id}) }}">
+            <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-primary text-white">
+                <icon name="pencil" display="solid" color="white" size="4"></icon>
+                <span>Modifier</span>
+            </div>
+        </a>
+        <a href="{{ path('superadmin_invoice_delete', {'id': invoice.id}) }}">
+            <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-red-500 text-white">
+                <icon name="trash" display="solid" color="white" size="4"></icon>
+                <span>Supprimer</span>
+            </div>
+        </a>
+    </div>
+{% endblock %}
 
-<h1>Détails de la facture</h1>
+{% block sheet %}
+    <p class="text-lg font-bold mb-1">Informations</p>
 
-{% include "_partials/_bills.show.html.twig" with {'item':invoice, 'type':"invoice"} %}</br>
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Description
+        </div>
+        <div class="flex-1">
+            {{ invoice.description }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Montant HT
+        </div>
+        <div class="flex-1">
+            {{ invoice.amountHt }} €
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Montant HT
+        </div>
+        <div class="flex-1">
+            {{ invoice.amountTtc }} €
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Date
+        </div>
+        <div class="flex-1">
+            {{ invoice.date ? invoice.date|date('Y-m-d') : '' }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Date d'échéance
+        </div>
+        <div class="flex-1">
+            {{ invoice.dueDate ? invoice.dueDate|date('Y-m-d') : '' }}
+        </div>
+    </div>
+
+	{% if invoice.services %}
+		<div class="w-full flex">
+			<div class="w-1/4 text-xs text-gray-500">
+				Prestations
+			</div>
+			<div class="flex-1">
+				{% for service in invoice.services %}
+					{{ service.label }}
+					{{ service.price }}
+					{{ service.quantity }}
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Taux TVA 0%
+        </div>
+        <div class="flex-1">
+            {{ invoice.baseVatRate0 }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Taux TVA 10%
+        </div>
+        <div class="flex-1">
+            {{ invoice.vatRate10 }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Base TVA 10%
+        </div>
+        <div class="flex-1">
+            {{ invoice.baseVatRate10 }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Taux TVA 20%
+        </div>
+        <div class="flex-1">
+            {{ invoice.vatRate20 }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Base TVA 20%
+        </div>
+        <div class="flex-1">
+            {{ invoice.baseVatRate20 }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Date et heure de création
+        </div>
+        <div class="flex-1">
+            {{ invoice.createdAt|date('d/m/Y à H') }}h{{ invoice.createdAt|date('i') }}
+        </div>
+    </div>
           
 <a href="{{ path('superadmin_invoice_index') }}" class="btn btn-secondary">Retour à la liste</a>
 <a href="{{ path('superadmin_invoice_edit', {'id': invoice.id}) }}" class="btn btn-primary">Modifier</a>

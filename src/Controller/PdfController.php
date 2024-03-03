@@ -31,7 +31,7 @@ class PdfController extends AbstractController
 
         $dompdf = new Dompdf($options);
 
-        $html = $this->renderView('_partials/_pdf_generate.html.twig', [
+        $html = $this->renderView('_partials/_pdf_template.html.twig', [
             'forPdf' => $forPdf,
             'type' => $type,
         ]);
