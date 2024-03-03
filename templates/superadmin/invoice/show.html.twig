@@ -8,10 +8,9 @@
 
 {% include "_partials/_bills.show.html.twig" with {'item':invoice, 'type':"invoice"} %}</br>
           
-<a href="{{ path('superadmin_quotation_index') }}" class="btn btn-secondary">Retour à la liste</a>
-<a href="{{ path('superadmin_quotation_edit', {'id': quotation.id}) }}" class="btn btn-primary">Modifier</a>
-<a href="{{ path('superadmin_generate_pdf', {'id': quotation.id, 'type': 'devis'}) }}" target="_blank">Générer PDF</a>
-<a href="{{ path('superadmin_quotation_generate_invoice', {'id': quotation.id}) }}" class="btn btn-primary">Générer la facture à partir du devis</a>
+<a href="{{ path('superadmin_invoice_index') }}" class="btn btn-secondary">Retour à la liste</a>
+<a href="{{ path('superadmin_invoice_edit', {'id': invoice.id}) }}" class="btn btn-primary">Modifier</a>
+<a href="{{ path('superadmin_generate_pdf', {'id': invoice.id, 'type': 'invoice'}) }}" target="_blank">Générer PDF</a>
 
 <button id="togglePreview">Afficher la prévisualisation</button>
 
@@ -28,8 +27,8 @@
             toggleButton.textContent = 'Cacher la prévisualisation';
             previewContainer.style.display = 'block';
             
-            const quotationId = "{{ quotation.id|raw }}";
-            document.getElementById('previewIframe').src = "{{ path('superadmin_preview_pdf') }}?id=" + quotationId + "&type=devis";
+            const invoiceId = "{{ invoice.id|raw }}";
+            document.getElementById('previewIframe').src = "{{ path('superadmin_preview_pdf') }}?id=" + invoiceId + "&type=invoice";
         } else {
             previewContainer.style.display = 'none';
             toggleButton.textContent = 'Afficher la prévisualisation';

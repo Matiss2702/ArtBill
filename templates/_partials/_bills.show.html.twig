@@ -4,7 +4,11 @@
 		<th>Description</th>
 		<th>Montant HT</th>
 		<th>Montant TTC</th>
-		<th>Statut</th>
+			{% if type == "invoice" %}
+				<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Payé</th>
+			{% else %}
+				<th class="px-3 py-2 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Status</th>
+			{% endif %}
 		<th>Date</th>
 		<th>Date d'échéance</th>
 		<th>Date de création</th>
@@ -14,7 +18,6 @@
 		<th>Taux TVA 20%</th>
 		<th>Base TVA 20%</th>
 		<th>Base TVA 0%</th>
-		<th>Actions</th>
 	</thead>
 	<tbody>
 		<tr>
@@ -22,7 +25,11 @@
 			<td>{{ item.description }}</td>
 			<td>{{ item.amountHt }}</td>
 			<td>{{ item.amountTtc }}</td>
-			<td>{{ item.status }}</td>
+			{% if type == "invoice" %}
+					<td class="px-3 py-2 whitespace-no-wrap">{{ item.isPaid ? "Payé" : "Non payé" }}</td>
+				{% else %}
+					<td class="px-3 py-2 whitespace-no-wrap">{{ item.status }}</td>
+				{% endif %}
 			<td>{{ item.date ? item.date|date('Y-m-d') : '' }}</td>
 			<td>{{ item.dueDate ? item.dueDate|date('Y-m-d') : '' }}</td>
 			<td>{{ item.createdAt ? item.createdAt|date('Y-m-d H:i:s') : '' }}</td>
@@ -46,10 +53,18 @@
 			<td>{{item.vatRate20}}</td>
 			<td>{{item.baseVatRate20}}</td>
 			<td>{{item.baseVatRate0}}</td>
-			<td>
-				<a href="{{ path('superadmin_'~type~'_show', {'id': item.id}) }}">show</a>
-				<a href="{{ path('superadmin_'~type~'_edit', {'id': item.id}) }}">edit</a>
-			</td>
+			<td class="px-3 py-2 whitespace-no-wrap">
+					{% if is_granted('ROLE_SUPERADMIN') %}
+						<a href="{{ path("superadmin_"~type~"_show", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Afficher</a>
+						<a href="{{ path("superadmin_"~type~"_edit", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Editer</a>
+					{% elseif is_granted('ROLE_ADMIN') %}
+						<a href="{{ path("admin_"~type~"_show", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Afficher</a>
+						<a href="{{ path("admin_"~type~"_edit", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Editer</a>
+					{% elseif is_granted('ROLE_USER') %}
+						<a href="{{ path("user_"~type~"_show", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Afficher</a>
+						<a href="{{ path("user_"~type~"_edit", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Editer</a>
+					{% endif %}
+				</td>
 		</tr>
 	</tbody>
 </table>
