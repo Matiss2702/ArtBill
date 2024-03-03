@@ -39,6 +39,7 @@ class InvoiceController extends AbstractController
             $user = $this->getUser();
             $setOwnerAndCompany->process($invoice, $user);
             $calculService->calculAmounts($invoice);
+
             $entityManager->persist($invoice);
             $entityManager->flush();
             $id = $invoice->getId();

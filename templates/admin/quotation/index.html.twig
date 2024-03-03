@@ -1,12 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block page_title %}Quotations
+{% block page_title %}Devis
 {% endblock %}
 
 {% block page_content %}
-	<h1>Vos devis</h1>
+    <h1 class="text-3xl font-bold mb-8">Gestion des Devis</h1>
 	{% include '_partials/_bills.index.html.twig' with {'items': quotations, 'type':"quotation"}%}
-
-	<a href="{{ path('admin_quotation_new') }}">Create new</a>
 {% endblock %}
 

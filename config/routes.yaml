@@ -1,6 +1,10 @@
 home:
     path: /
     controller: App\Controller\HomeController::index
+    
+dashboard:
+    path: /dashboard
+    controller: App\Controller\DashboardController::index
 
 controllers_security:
   resource: ../src/Controller/SecurityController.php
