@@ -1,16 +1,92 @@
-{% extends 'base.html.twig' %}
-{% block title %}Client {{ customer.name }}{% endblock %}
-{% block page_content %}
-    <div class="container mx-auto my-8">
-        <h1 class="text-4xl font-bold mb-6">Client {{ customer.name }}</h1>
-        <p class="mb-4">{{ customer.email }}</p>
-        <p class="mb-4">{{ customer.street }}, {{ customer.city }}, {{ customer.getZipCode() }}, {{ customer.country }}</p>
-        <h2>Devis</h2>
-        <br>
-        {% if quotations %}
-            {% include '_partials/_quotation.index.html.twig' with {'quotations': quotations}%}
-        {% endif %}
-        <br>
-        <a href="{{ path('admin_customer_update', {'id': customer.id}) }}" class="btn btn-primary">Modifier</a>
+{% extends 'admin/default/sheet.html.twig' %}
+
+{% block page_title %}Fiche client - ArtBill{% endblock %}
+
+{% block page_header %}
+    <p class="text-2xl font-bold">Fiche client</p>
+    <div class="flex justify-end gap-3 text-sm">
+        <a href="{{ path('admin_customer_edit', {'id': customer.id}) }}">
+            <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-primary text-white">
+                <icon name="pencil" display="solid" color="white" size="4"></icon>
+                <span>Modifier</span>
+            </div>
+        </a>
+        <a href="{{ path('admin_customer_delete', {'id': customer.id}) }}">
+            <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-red-500 text-white">
+                <icon name="trash" display="solid" color="white" size="4"></icon>
+                <span>Supprimer</span>
+            </div>
+        </a>
     </div>
+{% endblock %}
+
+{% block sheet %}
+    <p class="text-lg font-bold mb-1">Informations</p>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Nom
+        </div>
+        <div class="flex-1">
+            {{ customer.name }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            E-mail
+        </div>
+        <div class="flex-1">
+            {{ customer.email }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Rue
+        </div>
+        <div class="flex-1">
+            {{ customer.street }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Ville
+        </div>
+        <div class="flex-1">
+            {{ customer.city }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Code postal
+        </div>
+        <div class="flex-1">
+            {{ customer.getZipCode() }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Pays
+        </div>
+        <div class="flex-1">
+            {{ customer.country }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Date et heure de création
+        </div>
+        <div class="flex-1">
+            {{ customer.createdAt|date('d/m/Y à H') }}h{{ customer.createdAt|date('i') }}
+        </div>
+    </div>
+
+    {% if quotations %}
+        {% include '_partials/_quotation.index.html.twig' with {'quotations': quotations}%}
+    {% endif %}
 {% endblock %}

@@ -1,83 +1,139 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/default/sheet.html.twig' %}
 
-{% block title %}Quotation
+{% block page_title %}Fiche devis - ArtBill{% endblock %}
+
+{% block page_header %}
+    <p class="text-2xl font-bold">Fiche devis</p>
+    <div class="flex justify-end gap-3 text-sm">
+        <a href="{{ path('admin_invoice_edit', {'id': invoice.id}) }}">
+            <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-primary text-white">
+                <icon name="pencil" display="solid" color="white" size="4"></icon>
+                <span>Modifier</span>
+            </div>
+        </a>
+        <a href="{{ path('admin_invoice_delete', {'id': invoice.id}) }}">
+            <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-red-500 text-white">
+                <icon name="trash" display="solid" color="white" size="4"></icon>
+                <span>Supprimer</span>
+            </div>
+        </a>
+    </div>
 {% endblock %}
 
-{% block page_content %}
-	<h1>invoice</h1>
+{% block sheet %}
+    <p class="text-lg font-bold mb-1">Informations</p>
 
-	<table class="table">
-		<tbody>
-			<tr>
-				<th>Id</th>
-				<td>{{ invoice.id }}</td>
-			</tr>
-			<tr>
-				<th>Description</th>
-				<td>{{ invoice.description }}</td>
-			</tr>
-			<tr>
-				<th>Amount_ht</th>
-				<td>{{ invoice.amountHt }}</td>
-			</tr>
-			<tr>
-				<th>Amount_ttc</th>
-				<td>{{ invoice.amountTtc }}</td>
-			</tr>
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Description
+        </div>
+        <div class="flex-1">
+            {{ invoice.description }}
+        </div>
+    </div>
 
-			<tr>
-				<th>Date</th>
-				<td>{{ invoice.date ? invoice.date|date('Y-m-d') : '' }}</td>
-			</tr>
-			<tr>
-				<th>Due_date</th>
-				<td>{{ invoice.dueDate ? invoice.dueDate|date('Y-m-d') : '' }}</td>
-			</tr>
-			<tr>
-				<th>Created</th>
-				<td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-			</tr>
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Montant HT
+        </div>
+        <div class="flex-1">
+            {{ invoice.amountHt }} €
+        </div>
+    </div>
 
-			<tr>
-				<th>Services</th>
-				{% if invoice.services %}
-					{% for service in invoice.services %}
-						<td>{{ service.label }}</td>
-						<td>{{ service.price }}</td>
-						<td>{{ service.quantity }}</td>
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Montant HT
+        </div>
+        <div class="flex-1">
+            {{ invoice.amountTtc }} €
+        </div>
+    </div>
 
-					{% endfor %}
-				{% endif %}
-			</tr>
-			<tr>
-				<th>Taux TVA 10%</th>
-				<td>{{ invoice.vatRate10}}</td>
-			</tr>
-			<tr>
-				<th>Base TVA 10%</th>
-				<td>{{ invoice.baseVatRate10}}</td>
-			</tr>
-			<tr>
-				<th>Taux TVA 20%</th>
-				<td>{{ invoice.vatRate20}}</td>
-			</tr>
-			<tr>
-				<th>Base TVA 20%</th>
-				<td>{{ invoice.baseVatRate20}}</td>
-			</tr>
-			<tr>
-				<th>Taux TVA 0%</th>
-				<td>{{ invoice.baseVatRate0 }}</td>
-			</tr>
-			<tr>
-				<th>Montant HT</th>
-				<td>{{ invoice.amountHt }}</td>
-			</tr>
-		</tbody>
-	</table>
-	<a href="{{ path('admin_invoice_index') }}">back to list</a>
-	<a href="{{ path('admin_invoice_edit', {'id': invoice.id}) }}">edit</a>
-	<a href="{{ path('superadmin_generate_pdf', {'id': invoice.id, 'type': 'invoice'}) }}" target="_blank">Générer PDF</a>
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Date
+        </div>
+        <div class="flex-1">
+            {{ invoice.date ? invoice.date|date('Y-m-d') : '' }}
+        </div>
+    </div>
 
-	{{ include('admin/invoice/_delete_form.html.twig') }}
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Date d'échéance
+        </div>
+        <div class="flex-1">
+            {{ invoice.dueDate ? invoice.dueDate|date('Y-m-d') : '' }}
+        </div>
+    </div>
+
+	{% if invoice.services %}
+		<div class="w-full flex">
+			<div class="w-1/4 text-xs text-gray-500">
+				Prestations
+			</div>
+			<div class="flex-1">
+				{% for service in invoice.services %}
+					{{ service.label }}
+					{{ service.price }}
+					{{ service.quantity }}
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Taux TVA 0%
+        </div>
+        <div class="flex-1">
+            {{ invoice.baseVatRate0 }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Taux TVA 10%
+        </div>
+        <div class="flex-1">
+            {{ invoice.vatRate10 }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Base TVA 10%
+        </div>
+        <div class="flex-1">
+            {{ invoice.baseVatRate10 }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Taux TVA 20%
+        </div>
+        <div class="flex-1">
+            {{ invoice.vatRate20 }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Base TVA 20%
+        </div>
+        <div class="flex-1">
+            {{ invoice.baseVatRate20 }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Date et heure de création
+        </div>
+        <div class="flex-1">
+            {{ invoice.createdAt|date('d/m/Y à H') }}h{{ invoice.createdAt|date('i') }}
+        </div>
+    </div>
 {% endblock %}

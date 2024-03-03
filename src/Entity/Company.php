@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
@@ -21,13 +20,8 @@ class Company
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private ?UuidInterface $id = null;
 
-
-
     #[ORM\Column(nullable: true, unique: true)]
     private ?int $siren = null;
-
-
-
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Quotation::class, orphanRemoval: true)]
     private Collection $quotations;
@@ -40,7 +34,6 @@ class Company
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $city = null;
-
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $country = null;
@@ -63,8 +56,6 @@ class Company
     #[ORM\Column]
     private ?int $zipCode = null;
 
-
-
     public function __construct()
     {
         $this->quotations = new ArrayCollection();
@@ -77,7 +68,6 @@ class Company
         return $this->id;
     }
 
-
     public function getSiren(): ?int
     {
         return $this->siren;
@@ -89,9 +79,6 @@ class Company
 
         return $this;
     }
-
-
-
 
     /**
      * @return Collection<int, Quotation>
@@ -152,7 +139,6 @@ class Company
 
         return $this;
     }
-
 
     public function getStreet(): ?string
     {

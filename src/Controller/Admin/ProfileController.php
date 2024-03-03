@@ -8,9 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
+#[Route('/profile', name: 'profile_')]
 class ProfileController extends AbstractController
 {
-    #[Route('/profile', name: 'profile_index')]
+    #[Route('/', name: 'index')]
     public function index(): Response
     {
         // Récupère l'utilisateur connecté
@@ -24,14 +25,6 @@ class ProfileController extends AbstractController
         // Renvoyer les données de l'utilisateur à la vue
         return $this->render('admin/profile/index.html.twig', [
             'user' => $user,
-        ]);
-    }
-
-    #[Route('/commandes', name: 'orders')]
-    public function orders(): Response
-    {
-        return $this->render('admin/profile/index.html.twig', [
-            'controller_name' => 'Commandes de l\'utilisateur',
         ]);
     }
 }

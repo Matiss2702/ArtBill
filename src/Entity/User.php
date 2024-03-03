@@ -58,7 +58,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company = null;
 
-
     public function __construct()
     {
         $this->quotations = new ArrayCollection();
@@ -183,7 +182,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 
     /**
      * @return Collection<int, Quotation>

@@ -1,50 +1,75 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/default/list.html.twig' %}
 
-{% block title %}Invoices
+{% block page_title %}Factures{% endblock %}
+
+{% block page_header %}
+    <p class="text-2xl font-bold">Factures</p>
+    <div class="flex gap-3">
+        <input class="w-96 border rounded-md text-sm outline-primary px-2 py-1" type="text" name="search" value="" placeholder="Rechercher..." />
+        <a href="{{ path('admin_invoice_new') }}" title="Ajouter">
+            <div class="btn flex justify-center items-center rounded-md bg-primary h-full px-4">
+                <icon name="plus" display="mini" color="white"></icon>
+            </div>
+        </a>
+    </div>
 {% endblock %}
 
-{% block page_content %}
-	<h1>Invoices index</h1>
+{% block thead %}
+    {% if invoices is not empty %}
+        <th></th>
+        <th>Description</th>
+        <th>Montant HT</th>
+        <th>Montant TTC</th>
+        <th>Statut</th>
+        <th>Date de la facture</th>
+        <th>Date d'échéance</th>
+        <th>Création</th>
+        <th></th>
+    {% else %}
+        <th class="text-center">Aucune donnée</th>
+    {% endif %}
+{% endblock %}
 
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>Description</th>
-				<th>Amount_ht</th>
-				<th>Amount_ttc</th>
-				<th>Statut</th>
-				<th>Date</th>
-				<th>Due_date</th>
-				<th>Created</th>
-				<th>Services</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for invoice in invoices %}
-				<tr>
-					<td>{{ invoice.id }}</td>
-					<td>{{ invoice.description }}</td>
-					<td>{{ invoice.amountHt }}</td>
-					<td>{{ invoice.amountTtc }}</td>
-					<td>{{ invoice.isPaid ? 'Payé' : 'En attente de paiement' }}</td>
-					<td>{{ invoice.date ? invoice.date|date('Y-m-d') : '' }}</td>
-					<td>{{ invoice.dueDate ? invoice.dueDate|date('Y-m-d') : '' }}</td>
-					<td>{{ invoice.createdAt ? invoice.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-					<td>{{ invoice.services|length }}</td>
-					<td>
-						<a href="{{ path('admin_invoice_show', {'id': invoice.id}) }}">show</a>
-						<a href="{{ path('admin_invoice_edit', {'id': invoice.id}) }}">edit</a>
+{% block tbody %}
+    {% for invoice in invoices %}
+        <tr>
+            <td class="w-10 h-12">
+                <a href="{{ path('admin_invoice_show', {'id': invoice.id}) }}" title="Voir">
+                    <icon name="eye" display="solid" color="primary" size="4"></icon>
+                </a>
+            </td>
+            <td>{{ invoice.description }}</td>
+            <td>{{ invoice.amountHt }}<span class="text-xs"> €</span></td>
+            <td>{{ invoice.amountTtc }}<span class="text-xs"> €</span></td>
+            <td>{{ invoice.isPaid ? 'Payé' : 'En attente de paiement' }}</td>
+			<td>{{ invoice.date ? invoice.date|date('Y-m-d') : '' }}</td>
+			<td>{{ invoice.dueDate ? invoice.dueDate|date('Y-m-d') : '' }}</td>
+            <td>
+                {% if today == invoice.createdAt|date('Y-m-d') %}
+                    Aujourd'hui
+                {% elseif today|date_modify('-1 day')|date('Y-m-d') == invoice.createdAt|date('Y-m-d') %}
+                    Hier
+                {% else %}
+                    {{ invoice.createdAt|date('d/m/Y') }}
+                {% endif %}
 
-					</td>
-
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-
-	<a href="{{ path('admin_invoice_index') }}">Create new</a>
-
-
+                à {{ invoice.createdAt|date('H') }}h{{ invoice.createdAt|date('i') }}
+            </td>
+            <td>
+                <div class="flex justify-end gap-3">
+                    <a href="{{ path('admin_invoice_edit', {'id': invoice.id}) }}">
+                        <div class="h-8 flex justify-center items-center gap-1.5 border shadow-sm rounded-md px-2.5 p-1 bg-primary text-white">
+                            <icon name="pencil" display="solid" color="white" size="4"></icon>
+                            <span>Modifier</span>
+                        </div>
+                    </a>
+                    <a href="{{ path('admin_invoice_delete', {'id': invoice.id}) }}">
+                        <div class="w-8 h-8 flex justify-center items-center gap-1.5 border shadow-sm rounded-md py-1">
+                            <icon name="trash" display="solid" color="primary" size="4"></icon>
+                        </div>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
 {% endblock %}

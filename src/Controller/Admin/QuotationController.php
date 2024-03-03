@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller\Admin;
-use App\Entity\Invoice;
 
 use App\Entity\Quotation;
 use App\Form\QuotationType;
@@ -9,7 +8,6 @@ use App\Repository\QuotationRepository;
 use App\Service\CalculAmountService;
 use App\Service\GenerateInvoiceService;
 use App\Service\SetOwnerAndCompanyService;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -48,7 +46,6 @@ class QuotationController extends AbstractController
             $calculService->calculAmounts($quotation);
             $quotation->setVersion(0);
 
-
             $entityManager->persist($quotation);
             $entityManager->flush();
 
@@ -75,7 +72,7 @@ class QuotationController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Quotation $quotation, EntityManagerInterface $entityManager, CalculAmountService $calculService, RequestStack $requestStack, SessionInterface $session): Response
+    public function edit(Request $request, Quotation $quotation, EntityManagerInterface $entityManager, CalculAmountService $calculService, SessionInterface $session): Response
     {
         $newQuotation = new Quotation();
 
@@ -99,7 +96,6 @@ class QuotationController extends AbstractController
 
         $form = $this->createForm(QuotationType::class, $newQuotation);
         $form->handleRequest($request);
-
 
         if ($form->isSubmitted() && $form->isValid()) {
             $calculService->calculAmounts($newQuotation);
@@ -137,7 +133,6 @@ class QuotationController extends AbstractController
         try {
             $invoiceGenerated = $generateInvoiceService->generateInvoice($quotation);
 
-
             $entityManager->persist($invoiceGenerated);
             $entityManager->flush();
 
@@ -146,12 +141,8 @@ class QuotationController extends AbstractController
 
             $this->addFlash('success', 'Facture générée');
             return $this->redirectToRoute('back_invoice_show', ['id' => $id]);
-
-            // return new JsonResponse(['message' => 'Success', 'id invoice' => $id], JsonResponse::HTTP_OK);
         } catch (\Exception $e) {
-            // Retournez une réponse JSON appropriée
-            return new JsonResponse(['message' => 'Error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => 'Erreur: '. $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
 }

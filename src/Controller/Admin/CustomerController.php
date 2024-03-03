@@ -25,17 +25,7 @@ class CustomerController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'show', requirements: ['id' => '[0-9a-fA-F\-]+'], methods:  ['GET'])]
-    public function show(Customer $customer, QuotationRepository $quotationRepository): Response
-    {
-        return $this->render('admin/customer/show.html.twig', [
-            'customer' => $customer,
-            'quotations' =>  $quotationRepository->findLatestQuotationsForCustomer($customer),
-        ]);
-    }
-
-
-    #[Route('/new', name: 'new', methods: ['get', 'post'])]
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $manager, CustomerRepository $customerRepository): Response
     {
         $customer = new Customer();
@@ -65,12 +55,20 @@ class CustomerController extends AbstractController
         ]);
     }
 
-    #[Route('/update/{id}', name: 'update', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: ['get', 'post'])]
-    public function update(String  $id, CustomerRepository $customerRepository, Request $request, EntityManagerInterface $manager): Response
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    public function show(Customer $customer, QuotationRepository $quotationRepository): Response
+    {
+        return $this->render('admin/customer/show.html.twig', [
+            'customer' => $customer,
+            'quotations' =>  $quotationRepository->findLatestQuotationsForCustomer($customer),
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    public function update(Request $request, CustomerRepository $customerRepository, EntityManagerInterface $entityManager, string $id,): Response
     {
         $customer = $customerRepository->getOneById($id);
         $form = $this->createForm(CustomerType::class, $customer);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -80,7 +78,7 @@ class CustomerController extends AbstractController
             if ($existingCustomer && $existingCustomer->getId() !== $customer->getId()) {
                 $this->addFlash('error', 'Cet email n\'est pas disponible.');
             } else {
-                $manager->flush();
+                $entityManager->flush();
                 
                 $this->addFlash('success', "Le client {$customer->getName()} a bien été modifié.");
                 
@@ -90,23 +88,20 @@ class CustomerController extends AbstractController
             }
         }        
 
-        return $this->render('admin/customer/update.html.twig', [
+        return $this->render('admin/customer/edit.html.twig', [
+            'customer' => $customer,
             'form' => $form,
-            'customer' => $customer
         ]);
     }
 
-
-    #[Route('/delete/{id}/{token}', name: 'delete', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: 'get')]
-    public function delete(Customer $customer, string $token, EntityManagerInterface $manager): Response
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    public function delete(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $customer->getId(), $token)) {
-            $manager->remove($customer);
-            $manager->flush();
-
-            $this->addFlash('success', "Le client {$customer->getId()} a bien été supprimé");
+        if ($this->isCsrfTokenValid('delete' . $customer->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($customer);
+            $entityManager->flush();
         }
 
-        return $this->redirectToRoute('admin_customer_index');
+        return $this->redirectToRoute('admin_customer_index', [], Response::HTTP_SEE_OTHER);
     }
 }
