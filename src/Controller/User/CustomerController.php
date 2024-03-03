@@ -20,8 +20,11 @@ class CustomerController extends AbstractController
     #[Route('/', name: 'index', methods: 'get')]
     public function index(CustomerRepository $customerRepository): Response
     {
+        $user = $this->getUser();
+        $customer = $customerRepository->findCustomersForCompany($user);
+
         return $this->render('user/customer/index.html.twig', [
-            'customers' => $customerRepository->findAll(),
+            'customers' => $customer,
         ]);
     }
 
@@ -49,6 +52,7 @@ class CustomerController extends AbstractController
                 $this->addFlash('danger', "Cette adresse mail est déjà utilisée");
                 return $this->redirectToRoute('user_customer_new');
             }
+            $customer->setCompany($this->getUser()->getCompany());
 
             $manager->persist($customer);
             $manager->flush();

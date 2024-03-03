@@ -49,6 +49,7 @@ class CustomerController extends AbstractController
                 $this->addFlash('danger', "Cette adresse mail est déjà utilisée");
                 return $this->redirectToRoute('superadmin_customer_new');
             }
+            $customer->setCompany($this->getUser()->getCompany());
 
             $manager->persist($customer);
             $manager->flush();
