@@ -86,8 +86,8 @@ class InvoiceController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Invoice $invoice, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $invoice->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($invoice);
+        if ($this->isCsrfTokenValid('delete'.$invoice->getId(), $request->request->get('_token'))) {
+            $invoice->setStatus('archived');
             $entityManager->flush();
         }
 

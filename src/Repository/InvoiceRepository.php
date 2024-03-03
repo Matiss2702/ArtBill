@@ -62,8 +62,24 @@ class InvoiceRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('q')
             ->andWhere('q.company = :company')
+            ->andWhere('q.status != :status')
             ->setParameter('company', $company)
+            ->setParameter('status', 'archived')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findAllArchivedByCompany(User $user): ?array
+    {
+        $company = $user->getCompany();
+    
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.company = :company')
+            ->andWhere('q.status = :status')
+            ->setParameter('company', $company)
+            ->setParameter('status', 'archived') 
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }

@@ -92,6 +92,8 @@ class QuotationRepository extends ServiceEntityRepository
                     )
                 )
             )
+            ->andWhere('q.status != :status')
+            ->setParameter('status', 'archived') 
             ->getQuery();
 
         return $query->getResult();
@@ -114,7 +116,9 @@ class QuotationRepository extends ServiceEntityRepository
                     )
                 )
             )
+            ->andWhere('q.status != :status')
             ->setParameter('customer', $customer)
+            ->setParameter('status', 'archived') 
             ->getQuery();
 
         return $query->getResult();
@@ -139,9 +143,25 @@ class QuotationRepository extends ServiceEntityRepository
                 )
             )
             ->andWhere('q.company = :company')
+            ->andWhere('q.status != :status')
             ->setParameter('company', $company)
+            ->setParameter('status', 'archived') 
             ->getQuery();
 
         return $query->getResult();
+    }
+
+    public function findAllArchivedByCompany(User $user): ?array
+    {
+        $company = $user->getCompany();
+    
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.company = :company')
+            ->andWhere('q.status = :status')
+            ->setParameter('company', $company)
+            ->setParameter('status', 'archived') 
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }

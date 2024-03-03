@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Archives
+{% endblock %}
+
+{% block page_content %}
+	<h1>Factures archivées</h1>
+	{% include '_partials/_bills.index.html.twig' with {'items': invoices, 'type': "invoice"}%}
+	<h1>Devis archivées</h1>
+	{% include '_partials/_bills.index.html.twig' with {'items': quotations, 'type': "quotation"}%}
+{% endblock %}

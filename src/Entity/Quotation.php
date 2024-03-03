@@ -32,6 +32,7 @@ class Quotation
         'accepted',
         'paid',
         'expired',
+        'archived',
     ];
     #[ORM\Column(length: 100, options: ["default" => "created"])]
     #[Assert\Choice(options: self::QUOTATION_STATUS)]
@@ -114,7 +115,6 @@ class Quotation
 
         return $this;
     }
-
 
     public function getStatus(): ?string
     {

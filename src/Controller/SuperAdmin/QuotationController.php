@@ -96,7 +96,7 @@ class QuotationController extends AbstractController
     public function delete(Request $request, Quotation $quotation, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $quotation->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($quotation);
+            $quotation->setStatus('archived');
             $entityManager->flush();
         }
 
