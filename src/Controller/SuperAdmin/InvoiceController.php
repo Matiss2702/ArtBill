@@ -32,11 +32,8 @@ class InvoiceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $invoiceData = $form->getData();
-            $vatRates = $invoiceData->getVatRates();
-            if (!is_array($vatRates)) {
-                $vatRates = [$vatRates];
-            }
+            $invoice->setOwner($this->getUser());
+            $invoice->setCompany($this->getUser()->getCompany());
             $entityManager->persist($invoice);
             $entityManager->flush();
 
