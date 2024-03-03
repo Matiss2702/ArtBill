@@ -25,6 +25,7 @@ class QuotationController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(QuotationRepository $quotationRepository): Response
     {
+        dd($this->getUser()->getRoles());
         $user = $this->getUser();
         $quotations = $quotationRepository->findLatestQuotationsForCompany($user);
 
