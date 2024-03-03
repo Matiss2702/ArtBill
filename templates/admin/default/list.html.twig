@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block initializer %}
+    {{ parent() }}
+    <div class="init w-2.5 h-2.5 w-4 h-4"></div>
+{% endblock %}
+
+{% block page_content %}
+    {% set today = "now"|date('Y-m-d') %}
+
+    <div id="list" class="w-full px-6 mt-6 overflow-y-auto">
+        <table class="table-auto w-full text-sm text-left">
+            <thead class="sticky top-0 z-10 bg-white text-xs text-gray-500"><tr>{% block thead %}{% endblock %}</tr></thead>
+            <tbody>{% block tbody %}{% endblock %}</tbody>
+        </table>
+    </div>
+
+    <div id="list-footer" class="w-full px-6 py-2 flex justify-between items-center align-middle mt-auto text-sm">
+        <div class="flex gap-4">
+            <p>Affichage de 1 à 10 de 224 résultats</p>
+            <select class="relative -top-1 bg-white hover:bg-gray-100 transition-fast cursor-pointer border rounded-md px-2 py-1" name="resultsPerPage">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+
+        <div class="flex gap-2 relative -top-1.5">
+            <div class="w-8 h-8 flex justify-center items-center hover:bg-gray-100 transition-fast cursor-pointer border shadow-sm rounded-md p-1" id="prevPage" title="Page précédente">
+                <icon name="chevron-left" display="outline" color="gray" variant="600" size="5" />
+            </div>
+            <div class="w-8 h-8 flex justify-center items-center hover:bg-gray-100 transition-fast cursor-pointer border shadow-sm rounded-md p-1" id="nextPage" title="Page suivante">
+                <icon name="chevron-right" display="outline" color="gray" variant="600" size="5" />
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('list') }}
+{% endblock %}

@@ -45,7 +45,6 @@ class QuotationController extends AbstractController
             $calculService->calculAmounts($quotation);
             $quotation->setVersion(0);
 
-
             $entityManager->persist($quotation);
             $entityManager->flush();
 

@@ -32,8 +32,8 @@ class ServiceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (null === $service->getCreated()) {
-                $service->setCreated(new \DateTime());
+            if (null === $service->getCreatedAt()) {
+                $service->setCreatedAt(new \DateTime());
             }
 
             $entityManager->persist($service);

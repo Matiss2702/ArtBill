@@ -11,7 +11,6 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
@@ -45,17 +44,11 @@ class Service
     #[ORM\ManyToMany(targetEntity: Invoice::class, mappedBy: 'services')]
     private Collection $invoices;
 
-    public const VAT_RATES = [
-        0,
-        10,
-        20
-    ];
+    public const VAT_RATES = [0, 10, 20];
 
     #[ORM\Column]
     #[Assert\Choice(options: self::VAT_RATES)]
     private ?int $vatRate = 0;
-
-
 
     public function __construct()
     {
@@ -127,7 +120,6 @@ class Service
 
         return $this;
     }
-
 
     /**
      * @return Collection<int, Quotation>

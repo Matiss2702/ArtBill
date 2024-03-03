@@ -61,17 +61,17 @@
             <h1>{{ type|upper }}</h1>
         </div>
         <div class="details">
-            <p><strong>Customer:</strong></p>
+            <p><strong>Client:</strong></p>
             <p>{{ forPdf.customer.name }}</p>
             <p>{{ forPdf.customer.street }}, {{ forPdf.customer.city }}, {{ forPdf.customer.getZipCode() }}, {{ forPdf.customer.country }}</p>
         </div>
         <div class="details">
-            <p><strong>Company:</strong></p>
+            <p><strong>Entreprise:</strong></p>
             <p>{{ forPdf.company.name }}</p>
             <p>{{ forPdf.company.street }}, {{ forPdf.company.city }}, {{ forPdf.company.getZipCode() }}, {{ forPdf.company.country }}</p>
         </div>
         <div class="details">
-            <p><strong>Due Date:</strong></p>
+            <p><strong>Echéance:</strong></p>
             <p>{{ forPdf.dueDate ? forPdf.dueDate|date('Y-m-d') : '' }}</p>
         </div>
         <table>

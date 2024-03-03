@@ -34,6 +34,7 @@ class Quotation
         'expired',
         'archived',
     ];
+
     #[ORM\Column(length: 100, options: ["default" => "created"])]
     #[Assert\Choice(options: self::QUOTATION_STATUS)]
     private ?string $status = null;
@@ -163,7 +164,6 @@ class Quotation
 
         return $this;
     }
-
 
     public function getCustomer(): ?Customer
     {

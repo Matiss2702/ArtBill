@@ -25,13 +25,13 @@
           
 <a href="{{ path('superadmin_quotation_index') }}" class="btn btn-secondary">Retour à la liste</a>
 <a href="{{ path('superadmin_quotation_edit', {'id': quotation.id}) }}" class="btn btn-primary">Modifier</a>
-<a href="{{ path('superadmin_generate_pdf', {'id': quotation.id, 'type': 'devis'}) }}" target="_blank">Générer PDF</a>
+<a href="{{ path('generate_pdf', {'id': quotation.id, 'type': 'devis'}) }}" target="_blank">Générer PDF</a>
 <a href="{{ path('superadmin_quotation_generate_invoice', {'id': quotation.id}) }}" class="btn btn-primary">Générer la facture à partir du devis</a>
 {{ include('admin/quotation/_delete_form.html.twig') }}
 
 <button id="togglePreview">Afficher la prévisualisation</button>
 
-<div id="previewContainer">
+<div id="previewContainer" style='display: none;'>
     <iframe id="previewIframe" width="600" height="900;"></iframe>
 </div>
 
@@ -45,7 +45,7 @@
             previewContainer.style.display = 'block';
             
             const quotationId = "{{ quotation.id|raw }}";
-            document.getElementById('previewIframe').src = "{{ path('superadmin_preview_pdf') }}?id=" + quotationId + "&type=devis";
+            document.getElementById('previewIframe').src = "{{ path('preview_pdf') }}?id=" + quotationId + "&type=devis";
         } else {
             previewContainer.style.display = 'none';
             toggleButton.textContent = 'Afficher la prévisualisation';

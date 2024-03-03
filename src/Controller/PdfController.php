@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller;
 
 use App\Repository\InvoiceRepository;
 use App\Repository\QuotationRepository;
@@ -10,9 +10,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-#[IsGranted('ROLE_ADMIN')]
 class PdfController extends AbstractController
 {
     #[Route('/generate-pdf', name: 'generate_pdf', methods: ['GET'])]
@@ -29,8 +27,11 @@ class PdfController extends AbstractController
 
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
         $dompdf = new Dompdf($options);
-        $html = $this->renderView('admin/pdf/pdf_template.html.twig', [
+
+        $html = $this->renderView('_partials/_pdf_generate.html.twig', [
             'forPdf' => $forPdf,
             'type' => $type,
         ]);
@@ -62,7 +63,7 @@ class PdfController extends AbstractController
             $forPdf = $invoiceRepository->findOneById($id);
         }
 
-        return $this->render('admin/pdf/pdf_template.html.twig', [
+        return $this->render('_partials/_pdf_template.html.twig', [
             'forPdf' => $forPdf,
             'type' => $type,
         ]);
