@@ -1,5 +1,17 @@
-<h1>Activez votre compte</h1>
-<p>Bonjour {{ user.firstname }},</p>
-<p>Votre inscription sur le site Arbill à été effectuer</p>
-<p><a href="{{ url('app_login') }}">Veuillez vous connecter ici</a></p>
-<p>Ce lien expirera dans 3 heures</p>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compte Créé sur Artbill</title>
+</head>
+<body style="background-color: #edf2f7; font-family: Arial, sans-serif; padding: 20px; text-align: center;">
+    <div style="max-width: 600px; margin: auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <h1 style="color: #333333; font-size: 24px;">Activez votre compte</h1>
+        <p style="color: #333333; font-size: 16px;">Bonjour {{ user.firstname }},</p>
+        <p style="color: #333333; font-size: 16px;">Vous avez été inscrit(e) sur le site Artbill. Pour accéder à votre compte et profiter de nos services, veuillez vous connecter.</p>
+        <a href="{{ url('app_login') }}" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #4299e1; color: #ffffff; border-radius: 4px; text-decoration: none;">Se connecter</a>
+        <p style="color: #333333; font-size: 16px; margin-top: 20px;">Ce lien expirera dans 3 heures.</p>
+    </div>
+</body>
+</html>

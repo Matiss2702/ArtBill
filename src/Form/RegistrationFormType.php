@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationFormType extends AbstractType
 {
@@ -86,16 +87,15 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('siren', TextType::class, [
+            ->add('siren', IntegerType::class, [
                 'mapped' => false,
-                'required' => false, // Changez en true si nécessaire
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter the SIREN number',
                     ]),
-                    new Length([
-                        'min' => 9,
-                        'max' => 9,
+                    new Regex([
+                        'pattern' => '/^\d{9}$/',
+                        'message' => 'The SIREN number must be exactly 9 digits long',
                     ]),
                 ],
             ])

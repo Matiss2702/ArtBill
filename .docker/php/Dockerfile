@@ -17,7 +17,7 @@ RUN curl -sS https://getcomposer.org/installer -o composer-setup.php \
 
 # Installer Node.js et npm
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-        apt-get install -y nodejs
+        apt-get install -y nodejs npm -y
 
 WORKDIR /var/www/symfony
 
