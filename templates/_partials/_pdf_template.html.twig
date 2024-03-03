@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ type|upper }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7fafc;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            border-bottom: 1px solid #cbd5e0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            min-height : 45px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            margin: 0;
+            color: #2d3748;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+        .sender-receiver {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .client, .company{
+            width: 50%;
+        }
+        .company {
+            text-align: right;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+   
+        th, td {
+            border: 1px solid #cbd5e0;
+            padding: 10px;
+            text-align: left;
+            min-width: 60px;
+        }
+        th {
+            background-color: #edf2f7;
+            font-weight: bold;
+        }
+        .tva {
+            margin-top: 20px;
+            width: 40%;
+            height: 100px;
+        }
+        .end_table {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .total {
+            text-align: right;
+            width: 40%;
+        }
+        .total p {
+            margin: 5px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ type|upper }}</h1>
+        <img src="{{ asset('assets/images/logo.png') }}" alt="Logo ArtBill" width="auto" height="45px">
+</div>
+    <div class='sender-receiver'>
+        <div class="client">
+            <p><strong>Client:</strong></p>
+            <p>{{ forPdf.customer.name }}</p>
+            <p>{{ forPdf.customer.street }}, {{ forPdf.customer.city }}, {{ forPdf.customer.getZipCode() }}, {{ forPdf.customer.country }}</p>
+        </div>
+        <div class="company">
+            <p><strong>Entreprise:</strong></p>
+            <p>{{ forPdf.company.name }}</p>
+            <p>{{ forPdf.company.street }}, {{ forPdf.company.city }}, {{ forPdf.company.getZipCode() }}, {{ forPdf.company.country }}</p>
+        </div>
+    </div>
+        <div class="due_date">
+            <p><strong>Echéance:</strong></p>
+            <p>{{ forPdf.dueDate ? forPdf.dueDate|date('Y-m-d') : '' }}</p>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Quantité</th>
+                    <th>Prix unitaire</th>
+                    <th>TVA</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in forPdf.services %}
+                <tr>
+                    <td>{{ service.label }}</td>
+                    <td>{{ service.quantity }}</td>
+                    <td>{{ service.price|number_format(service.price is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+                    <td>{{ service.vatRate }}%</td>
+                    <td>{{ (service.price * service.quantity)|number_format((service.price * service.quantity) is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="end_table">
+        <table class="tva">
+        <thead>
+        <th>Taux TVA</th>
+        <th>Base TVA</th>
+        <th>TVA</th>
+        </thead>
+        <tbody>
+        <tr>
+        <td>10%</td>
+        <td>{{ forPdf.baseVatRate10|number_format(forPdf.vatRate10 is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+        <td>{{ forPdf.vatRate10|number_format(forPdf.vatRate10 is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+        </tr>
+        <tr>
+        <td>20%</td>
+        <td>{{ forPdf.baseVatRate20|number_format(forPdf.vatRate10 is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+        <td>{{ forPdf.vatRate20|number_format(forPdf.vatRate20 is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+        </tr>
+        <tr>
+        <td>Sans TVA</td>
+        <td>{{ forPdf.baseVatRate0|number_format(forPdf.baseVatRate0 is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+        <td>0</td>
+        </tr>
+        </tbody>
+        </table>
+        
+        <table class="total">
+            <tr>
+                <th>Total HT</th>
+                <td>{{ forPdf.amountHt|number_format(forPdf.amountHt is divisible by(1)? 0 : 2, ',', ' ') }} €</td>
+            </tr>
+            <tr>
+                <th>Total TTC</th>
+                <td>{{ forPdf.amountTtc|number_format(forPdf.amountTtc is divisible by(1)? 0 : 2, ',', ' ') }} €</td>
+            </tr>
+        </table>
+</div>
+
+
+    </div>
+</body>
+</html>

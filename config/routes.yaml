@@ -1,10 +1,14 @@
 home:
-    path: /
-    controller: App\Controller\HomeController::index
-    
+  path: /
+  controller: App\Controller\HomeController::index
+
 dashboard:
-    path: /dashboard
-    controller: App\Controller\DashboardController::index
+  path: /dashboard
+  controller: App\Controller\DashboardController::index
+
+pdf:
+  resource: ../src/Controller/PdfController.php
+  type: attribute
 
 controllers_security:
   resource: ../src/Controller/SecurityController.php
