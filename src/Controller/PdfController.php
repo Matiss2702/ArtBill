@@ -27,13 +27,18 @@ class PdfController extends AbstractController
 
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
+
+        $path = $this->getParameter('kernel.project_dir') . '/public/assets/images/logo.png';
+        $typePath = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $logo = 'data:image/' . $typePath . ';base64,' . base64_encode($data);
 
         $dompdf = new Dompdf($options);
 
         $html = $this->renderView('_partials/_pdf_generate.html.twig', [
             'forPdf' => $forPdf,
             'type' => $type,
+            'logo' => $logo,
         ]);
 
         $dompdf->loadHtml($html);
