@@ -27,6 +27,8 @@ class PdfController extends AbstractController
 
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
         $dompdf = new Dompdf($options);
 
         $html = $this->renderView('_partials/_pdf_template.html.twig', [
