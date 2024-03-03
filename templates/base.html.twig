@@ -69,14 +69,16 @@
                             </div>
                         </li>
                     </a>
-                    <a href="/superadmin/archived/">
-                        <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
-                            <div class="flex items-center gap-2">
-                                <icon name="document-text"></icon>
-                                <span>Archivage</span>
-                            </div>
-                        </li>
-                    </a>
+					{% if is_granted('ROLE_SUPERADMIN') or is_granted('ROLE_ADMIN') %}
+                        <a href="/superadmin/archived/">
+                            <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
+                                <div class="flex items-center gap-2">
+                                    <icon name="document-text"></icon>
+                                    <span>Archivage</span>
+                                </div>
+                            </li>
+                        </a>
+                    {% endif %}
                 </ul>
 
                 <ul class="flex flex-col p-3 mt-auto">
