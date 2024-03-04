@@ -82,11 +82,11 @@ class RegistrationController extends AbstractController
 
             // On récupère le user du token
             $user = $usersRepository->find($payload['user_id']);
-
             //On vérifie que l'utilisateur existe et n'a pas encore activé son compte
             if ($user && !$user->getIsVerified()) {
                 $user->setIsVerified(true);
-                $em->flush($user);
+                $em->persist($user);
+                $em->flush();
                 $this->addFlash('success', 'Utilisateur activé');
                 return $this->redirectToRoute('admin_profile_index', [], Response::HTTP_SEE_OTHER);
             }

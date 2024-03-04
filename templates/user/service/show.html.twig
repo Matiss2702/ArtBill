@@ -4,20 +4,6 @@
 
 {% block page_header %}
     <p class="text-2xl font-bold">Fiche prestation</p>
-    <div class="flex justify-end gap-3 text-sm">
-        <a href="{{ path('user_service_edit', {'id': service.id}) }}">
-            <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-primary text-white">
-                <icon name="pencil" display="solid" color="white" size="4"></icon>
-                <span>Modifier</span>
-            </div>
-        </a>
-        <a href="{{ path('user_service_delete', {'id': service.id}) }}">
-            <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-red-500 text-white">
-                <icon name="trash" display="solid" color="white" size="4"></icon>
-                <span>Supprimer</span>
-            </div>
-        </a>
-    </div>
 {% endblock %}
 
 {% block sheet %}
