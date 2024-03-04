@@ -1,3 +1,27 @@
+# Comptes Github:
+
+Nicolas BAELE: NicolasBAELE
+
+Jan PARACHA: janparacha
+
+Matiss HAILLOUY: Matiss2702, MatissHaillouy
+
+Sohaib MOHAMMAD: SohaibMhd745
+
+# Listing fonctionnalités
+
+Nicolas BAELE: 
+CRUD Customer, génération de PDF, archivage, dashboard, versionning quotation
+
+Jan PARACHA:
+CRUD Invoice Quotation Service, prévisualisation de PDF
+
+Matiss HAILLOUY:
+Structure, Docker, Mise en production, rôles, register, login, email (token jwt)
+
+Sohaib MOHAMMAD:
+CRUD Catégorie Service, Tailwind, bibliothèque d'icon JS
+
 # Symfony Docker (PHP8 / Caddy / Postgresql)
 
 A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework, with full [HTTP/2](https://symfony.com/doc/current/weblink.html), HTTP/3 and HTTPS support.
