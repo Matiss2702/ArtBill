@@ -23,11 +23,11 @@
     {% set role_prefix = is_granted('ROLE_SUPERADMIN') ? "superadmin" : is_granted('ROLE_ADMIN') ? "admin" : "user" %}
 
     <header class="fixed top-0 left-0 right-0 z-50 h-11 flex justify-between items-center bg-gray-100 border-b-[1px] px-5 py-2">
-        <img class="w-auto h-full" src="./../../assets/images/logo.png" alt="ArtBill"/>
+        <img class="w-auto h-full" src="/assets/images/logo.png" alt="ArtBill"/>
 
         <div class="w-6 h-6 rounded-full overflow-hidden">
             <a href="{{ '/' ~ role_prefix ~ '/profile' }}">
-                <img src="./../../assets/images/avatar-placeholder.png" alt="Avatar" class="w-full h-full object-cover">
+                <img src="/assets/images/avatar-placeholder.png" alt="Avatar" class="w-full h-full object-cover">
             </a>
         </div>
     </header>
@@ -71,6 +71,7 @@
                             </div>
                         </li>
                     </a>
+                   
                     <a href="{{ '/' ~ role_prefix ~ '/service' }}">
                         <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                             <div class="flex items-center gap-2">
@@ -135,8 +136,21 @@
             {% if form is defined %}
                 {{ form_end(form) }}
             {% endif %}
+             {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                {% for message in app.flashes('danger') %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
         </div>
+         
     </div>
+   
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </body>

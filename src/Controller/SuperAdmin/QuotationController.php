@@ -107,7 +107,7 @@ class QuotationController extends AbstractController
     public function generateInvoice(Quotation $quotation, GenerateInvoiceService $generateInvoiceService, EntityManagerInterface $entityManager): RedirectResponse
     {
         try {
-            $invoiceGenerated = $generateInvoiceService->generateInvoice($quotation);
+            $invoiceGenerated = $generateInvoiceService->generateInvoiceFromQuotation($quotation);
             $entityManager->persist($invoiceGenerated);
             $entityManager->flush();
             $quotation->addInvoice($invoiceGenerated);
@@ -116,6 +116,7 @@ class QuotationController extends AbstractController
             return $this->redirectToRoute('superadmin_invoice_show', ['id' => $id]);
         } catch (\Exception $e) {
             $this->addFlash('danger', 'Erreur lors de la génération de la facture');
+            return $this->redirectToRoute('superadmin_quotation_show', ['id' => $id]);
         }
     }
 }

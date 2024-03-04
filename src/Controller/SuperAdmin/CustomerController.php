@@ -66,29 +66,20 @@ class CustomerController extends AbstractController
         ]);
     }
 
-    #[Route('/update/{id}', name: 'update', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: ['get', 'post'])]
-    public function update(String  $id, CustomerRepository $customerRepository, Request $request, EntityManagerInterface $manager): Response
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    public function update(Request $request, CustomerRepository $customerRepository, EntityManagerInterface $entityManager, string $id,): Response
     {
         $customer = $customerRepository->getOneById($id);
         $form = $this->createForm(CustomerType::class, $customer);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $submittedEmail = $form->get('email')->getData();
-            $existingCustomer = $customerRepository->findOneBy(['email' => $submittedEmail]);
-
-            if ($existingCustomer && $existingCustomer->getId() !== $customer->getId()) {
-                $this->addFlash('error', 'Cet email n\'est pas disponible.');
-            } else {
-                $manager->flush();
-                
-                $this->addFlash('success', "Le client {$customer->getName()} a bien été modifié.");
-                
-                return $this->redirectToRoute('superadmin_customer_show', [
-                    'id' => $customer->getId()
-                ]);
-            }
+            $entityManager->flush();
+            $this->addFlash('success', "Le client {$customer->getName()} a bien été modifié.");
+            
+            return $this->redirectToRoute('superadmin_customer_show', [
+                'id' => $customer->getId()
+            ]);
         }        
 
         return $this->render('superadmin/customer/update.html.twig', [
@@ -97,17 +88,14 @@ class CustomerController extends AbstractController
         ]);
     }
 
-
-    #[Route('/delete/{id}/{token}', name: 'delete', requirements: ['id' => '[0-9a-fA-F\-]+'], methods: 'get')]
-    public function delete(Customer $customer, string $token, EntityManagerInterface $manager): Response
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    public function delete(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $customer->getId(), $token)) {
-            $manager->remove($customer);
-            $manager->flush();
-
-            $this->addFlash('success', "Le client {$customer->getId()} a bien été supprimé");
+        if ($this->isCsrfTokenValid('delete' . $customer->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($customer);
+            $entityManager->flush();
         }
 
-        return $this->redirectToRoute('superadmin_customer_index');
+        return $this->redirectToRoute('superadmin_customer_index', [], Response::HTTP_SEE_OTHER);
     }
 }

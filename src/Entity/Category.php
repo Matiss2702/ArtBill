@@ -13,7 +13,6 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 class Category
 {
     use Traits\Timestampable;
-
     #[ORM\Id]
     #[ORM\Column(type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "CUSTOM")]

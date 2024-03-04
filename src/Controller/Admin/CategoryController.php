@@ -32,9 +32,6 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (null === $category->getCreatedAt()) {
-                $category->setCreatedAt(new \DateTime());
-            }
 
             $entityManager->persist($category);
             $entityManager->flush();

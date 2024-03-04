@@ -6,9 +6,8 @@ use App\Entity\Invoice;
 
 class GenerateInvoiceService
 {
-    public function generateInvoice($quotation): Invoice
+    public function generateInvoiceFromQuotation($quotation): Invoice
     {
-
         $invoice = new Invoice();
         $invoice->setDescription($quotation->getDescription());
         $invoice->setOwner($quotation->getOwner());
@@ -17,6 +16,7 @@ class GenerateInvoiceService
         $invoice->setDate($quotation->getDate());
         $invoice->setDueDate($quotation->getDueDate());
         $invoice->setQuotations($quotation);
+        $invoice->setStatus('created');
 
 
         foreach ($quotation->getServices() as $service) {
@@ -40,7 +40,6 @@ class GenerateInvoiceService
         $invoice->setCreatedAt(new \DateTime());
         $invoice->setUpdatedAt(new \DateTime());
         $invoice->setQuotations($quotation);
-
         return $invoice;
     }
 }

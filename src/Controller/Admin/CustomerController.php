@@ -48,7 +48,6 @@ class CustomerController extends AbstractController
             $manager->flush();
 
             $this->addFlash('success', "Le client {$customer->getId()} a bien été enregistré");
-
             return $this->redirectToRoute('admin_customer_show', [
                 'id' => $customer->getId()
             ]);
@@ -76,21 +75,13 @@ class CustomerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $submittedEmail = $form->get('email')->getData();
-            $existingCustomer = $customerRepository->findOneBy(['email' => $submittedEmail]);
-
-            if ($existingCustomer && $existingCustomer->getId() !== $customer->getId()) {
-                $this->addFlash('error', 'Cet email n\'est pas disponible.');
-            } else {
-                $entityManager->flush();
-                
-                $this->addFlash('success', "Le client {$customer->getName()} a bien été modifié.");
-                
-                return $this->redirectToRoute('admin_customer_show', [
-                    'id' => $customer->getId()
-                ]);
-            }
-        }        
+            $entityManager->flush();
+            $this->addFlash('success', "Le client {$customer->getName()} a bien été modifié.");
+            
+            return $this->redirectToRoute('admin_customer_show', [
+                'id' => $customer->getId()
+            ]);
+        }
 
         return $this->render('admin/customer/edit.html.twig', [
             'customer' => $customer,

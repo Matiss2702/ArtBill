@@ -87,6 +87,6 @@
     </div>
 
     {% if quotations %}
-        {% include '_partials/_quotation.index.html.twig' with {'quotations': quotations}%}
+        {% include '_partials/_bills.index.html.twig' with {'items': quotations, 'type': "quotation" }%}
     {% endif %}
 {% endblock %}
