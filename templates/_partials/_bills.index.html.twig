@@ -49,16 +49,9 @@
 					<td class="px-3 py-2 whitespace-no-wrap">{{ item.quotations ? item.quotations.id : '' }}</td>
 				{% endif %}
 				<td class="px-3 py-2 whitespace-no-wrap">
-					{% if is_granted('ROLE_SUPERADMIN') %}
-						<a href="{{ path("superadmin_"~type~"_show", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Afficher</a>
-						<a href="{{ path("superadmin_"~type~"_edit", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Editer</a>
-					{% elseif is_granted('ROLE_ADMIN') %}
-						<a href="{{ path("admin_"~type~"_show", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Afficher</a>
-						<a href="{{ path("admin_"~type~"_edit", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Editer</a>
-					{% elseif is_granted('ROLE_USER') %}
-						<a href="{{ path("user_"~type~"_show", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Afficher</a>
-						<a href="{{ path("user_"~type~"_edit", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Editer</a>
-					{% endif %}
+					{% set role_prefix = is_granted('ROLE_SUPERADMIN') ? "superadmin" : is_granted('ROLE_ADMIN') ? "admin" : "user" %}
+					<a href="{{ path(role_prefix ~ type ~ "_show", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Afficher</a>
+					<a href="{{ path(role_prefix ~ type ~ "_edit", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Editer</a>
 				</td>
 			</tr>
 		{% endfor %}
