@@ -57,7 +57,6 @@
 						<a href="{{ path("admin_"~type~"_edit", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Editer</a>
 					{% elseif is_granted('ROLE_USER') %}
 						<a href="{{ path("user_"~type~"_show", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Afficher</a>
-						<a href="{{ path("user_"~type~"_edit", {'id': item.id}) }}" class="text-indigo-600 hover:text-indigo-900">Editer</a>
 					{% endif %}
 				</td>
 			</tr>
