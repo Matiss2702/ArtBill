@@ -11,13 +11,13 @@ Sohaib MOHAMMAD: SohaibMhd745
 # Listing fonctionnalités
 
 Nicolas BAELE: 
-CRUD Customer, génération de PDF, archivage, dashboard
+CRUD Customer, génération de PDF, archivage, dashboard, versionning quotation
 
 Jan PARACHA:
 CRUD Invoice Quotation Service, prévisualisation de PDF
 
 Matiss HAILLOUY:
-Structure, Docker, Mise en production, rôles
+Structure, Docker, Mise en production, rôles, register, login, email (token jwt)
 
 Sohaib MOHAMMAD:
 CRUD Catégorie Service, Tailwind, bibliothèque d'icon JS
