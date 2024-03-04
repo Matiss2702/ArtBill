@@ -15,18 +15,18 @@
     {% endblock %}
 </head>
 
-
-
 <body class="flex overflow-hidden">
     {% block initializer %}
         <div class="init w-5 h-5"></div>
     {% endblock %}
 
+    {% set role_prefix = is_granted('ROLE_SUPERADMIN') ? "superadmin" : is_granted('ROLE_ADMIN') ? "admin" : "user" %}
+
     <header class="fixed top-0 left-0 right-0 z-50 h-11 flex justify-between items-center bg-gray-100 border-b-[1px] px-5 py-2">
         <img class="w-auto h-full" src="./../../assets/images/logo.png" alt="ArtBill"/>
 
         <div class="w-6 h-6 rounded-full overflow-hidden">
-            <a href="/admin/profile">
+            <a href="{{ '/' ~ role_prefix ~ '/profile' }}">
                 <img src="./../../assets/images/avatar-placeholder.png" alt="Avatar" class="w-full h-full object-cover">
             </a>
         </div>
@@ -47,7 +47,7 @@
                 </ul>
 
                 <ul class="flex flex-col p-3">
-                    <a href="/admin/customer">
+                    <a href="{{ '/' ~ role_prefix ~ '/customer' }}">
                         <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                             <div class="flex items-center gap-2">
                                 <icon name="users"></icon>
@@ -55,7 +55,7 @@
                             </div>
                         </li>
                     </a>
-                    <a href="/admin/quotation">
+                    <a href="{{ '/' ~ role_prefix ~ '/quotation' }}">
                         <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                             <div class="flex items-center gap-2">
                                 <icon name="document-text"></icon>
@@ -63,7 +63,7 @@
                             </div>
                         </li>
                     </a>
-                    <a href="/admin/invoice">
+                    <a href="{{ '/' ~ role_prefix ~ '/invoice' }}">
                         <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                             <div class="flex items-center gap-2">
                                 <icon name="document-text"></icon>
@@ -71,7 +71,7 @@
                             </div>
                         </li>
                     </a>
-                    <a href="/admin/service">
+                    <a href="{{ '/' ~ role_prefix ~ '/service' }}">
                         <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                             <div class="flex items-center gap-2">
                                 <icon name="light-bulb"></icon>
@@ -79,7 +79,7 @@
                             </div>
                         </li>
                     </a>
-                    <a href="/admin/category">
+                    <a href="{{ '/' ~ role_prefix ~ '/category' }}">
                         <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                             <div class="flex items-center gap-2">
                                 <icon name="folder"></icon>
@@ -88,7 +88,7 @@
                         </li>
                     </a>
 					{% if is_granted('ROLE_SUPERADMIN') or is_granted('ROLE_ADMIN') %}
-                        <a href="/superadmin/archived/">
+                        <a href="{{ '/' ~ role_prefix ~ '/archived' }}">
                             <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                                 <div class="flex items-center gap-2">
                                     <icon name="document-text"></icon>
@@ -100,7 +100,7 @@
                 </ul>
 
                 <ul class="flex flex-col p-3 mt-auto">
-                    <a href="/admin/register">
+                    <a href="{{ '/' ~ role_prefix ~ '/register' }}">
                         <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                             <div class="flex items-center gap-2">
                                 <icon name="users"></icon>
@@ -108,7 +108,7 @@
                             </div>
                         </li>
                     </a>
-                    <a href="#">
+                    <a href="{{ '/' ~ role_prefix ~ '/settings' }}">
                         <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                             <div class="flex items-center gap-2">
                                 <icon name="cog-6-tooth"></icon>
