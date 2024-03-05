@@ -19,6 +19,7 @@
         <th>Date de la facture</th>
         <th>Date d'échéance</th>
         <th>Création</th>
+        <th>Client</th>
         <th></th>
     {% else %}
         <th class="text-center">Aucune donnée</th>
@@ -50,6 +51,7 @@
 
                 à {{ invoice.createdAt|date('H') }}h{{ invoice.createdAt|date('i') }}
             </td>
+            <td>{{ invoice.customer }}</td>
             <td>
 
             </td>

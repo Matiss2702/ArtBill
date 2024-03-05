@@ -72,6 +72,7 @@ class QuotationController extends AbstractController
     public function edit(Request $request, QuotationRepository $quotationRepository, Quotation $quotation, EntityManagerInterface $entityManager, CalculAmountService $calculService, SessionInterface $session, SetVersionsService $setVersion): Response
     {
         $bill = new Quotation();
+        $bill->setCustomer($quotation->getCustomer());
         $setVersion->process($bill, $quotation);
         $form = $this->createForm(QuotationType::class, $bill);
         $form->handleRequest($request);

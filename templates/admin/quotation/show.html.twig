@@ -169,6 +169,7 @@
                     <th>Date d'échéance</th>
                     <th>Statut</th>
                     <th>Création</th>
+                    <th>Client</th>
                     <th></th>
                 </tr>
             </thead>
@@ -197,6 +198,7 @@
 
                         à {{ quotation.createdAt|date('H') }}h{{ quotation.createdAt|date('i') }}
                     </td>
+                    <td>{{ quotation.customer }}</td>
                     <td>
                     </td>
                 </tr>
@@ -220,6 +222,7 @@
                     <th>Date d'échéance</th>
                     <th>Statut</th>
                     <th>Création</th>
+                    <th>Client</th>
                     <th></th>
                 </tr>
             </thead>
@@ -248,6 +251,7 @@
 
                         à {{ quotation.createdAt|date('H') }}h{{ quotation.createdAt|date('i') }}
                     </td>
+                    <td>{{ quotation.customer }}</td>
                     <td>
                     </td>
                 </tr>

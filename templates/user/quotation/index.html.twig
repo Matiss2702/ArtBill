@@ -19,6 +19,7 @@
         <th>Date d'échéance</th>
         <th>Statut</th>
         <th>Création</th>
+        <th>Client</th>
         <th></th>
     {% else %}
         <th class="text-center">Aucune donnée</th>
@@ -50,6 +51,7 @@
 
                 à {{ quotation.createdAt|date('H') }}h{{ quotation.createdAt|date('i') }}
             </td>
+            <td>{{ quotation.customer }}</td>
             <td>
             </td>
         </tr>

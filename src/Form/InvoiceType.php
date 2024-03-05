@@ -44,6 +44,7 @@ class InvoiceType extends AbstractType
                 },
                 'required' => false, 
                 'placeholder' => '--',
+                'data' => $options['data']->getCustomer() ?? null,
             ])
             ->add('services', CollectionType::class, [
                 'entry_type' => ServiceType::class,
