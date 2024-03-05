@@ -74,7 +74,12 @@ class InvoiceController extends AbstractController
             $entityManager->persist($invoice);
             $entityManager->flush();
             $previousUrl = $session->get('previous_url');
-            return new RedirectResponse($previousUrl);
+            if ($previousUrl){
+                return new RedirectResponse($previousUrl);
+            }
+            else {
+                return $this->redirectToRoute('admin_invoice_index', [], Response::HTTP_SEE_OTHER);
+            }
         }
 
         return $this->render('admin/invoice/edit.html.twig', [

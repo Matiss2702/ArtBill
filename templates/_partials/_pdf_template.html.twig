@@ -121,9 +121,10 @@
                 <tr>
                     <td>{{ service.label }}</td>
                     <td>{{ service.quantity }}</td>
-                    <td>{{ service.price|number_format(service.price is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+                    <td>{{ service.price|number_format(2, ',', ' ') }}</td>
                     <td>{{ service.vatRate }}%</td>
-                    <td>{{ (service.price * service.quantity)|number_format((service.price * service.quantity) is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+                    <td>{{ (service.price * service.quantity)|number_format(2, ',', ' ') }}</td>
+
                 </tr>
                 {% endfor %}
             </tbody>
@@ -139,17 +140,17 @@
         <tbody>
         <tr>
         <td>10%</td>
-        <td>{{ forPdf.baseVatRate10|number_format(forPdf.vatRate10 is divisible by(1)? 0 : 2, ',', ' ') }}</td>
-        <td>{{ forPdf.vatRate10|number_format(forPdf.vatRate10 is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+        <td>{{ forPdf.baseVatRate10|number_format(2, ',', ' ') }}</td>
+        <td>{{ forPdf.vatRate10|number_format(2, ',', ' ') }}</td>
         </tr>
         <tr>
         <td>20%</td>
-        <td>{{ forPdf.baseVatRate20|number_format(forPdf.vatRate10 is divisible by(1)? 0 : 2, ',', ' ') }}</td>
-        <td>{{ forPdf.vatRate20|number_format(forPdf.vatRate20 is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+        <td>{{ forPdf.baseVatRate20|number_format(2, ',', ' ') }}</td>
+        <td>{{ forPdf.vatRate20|number_format(2, ',', ' ') }}</td>
         </tr>
         <tr>
         <td>Sans TVA</td>
-        <td>{{ forPdf.baseVatRate0|number_format(forPdf.baseVatRate0 is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+        <td>{{ forPdf.baseVatRate0|number_format(2, ',', ' ') }}</td>
         <td>0</td>
         </tr>
         </tbody>
@@ -158,11 +159,11 @@
         <table class="total">
             <tr>
                 <th>Total HT</th>
-                <td>{{ forPdf.amountHt|number_format(forPdf.amountHt is divisible by(1)? 0 : 2, ',', ' ') }} €</td>
+                <td>{{ forPdf.amountHt|number_format(2, ',', ' ') }} €</td>
             </tr>
             <tr>
                 <th>Total TTC</th>
-                <td>{{ forPdf.amountTtc|number_format(forPdf.amountTtc is divisible by(1)? 0 : 2, ',', ' ') }} €</td>
+                <td>{{ forPdf.amountTtc|number_format(2, ',', ' ') }} €</td>
             </tr>
         </table>
 </div>

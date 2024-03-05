@@ -21,6 +21,14 @@ class CustomerRepository extends ServiceEntityRepository
         parent::__construct($registry, Customer::class);
     }
 
+    public function findAll()
+    {
+        return parent::createQueryBuilder('entity')
+            ->orderBy('entity.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Customer[] Returns an array of Customer objects
 //     */
@@ -62,6 +70,7 @@ class CustomerRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->andWhere('c.company = :company')
             ->setParameter('company', $company)
+            ->orderBy('q.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }

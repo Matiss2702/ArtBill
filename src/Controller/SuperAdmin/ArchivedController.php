@@ -18,8 +18,8 @@ class ArchivedController extends AbstractController
     {
         $user = $this->getUser();
         return $this->render('superadmin/archive.html.twig', [
-            'quotations' => $quotationRepository->findAllArchivedByCompany($user),
-            'invoices' => $invoiceRepository->findAllArchivedByCompany($user),
+            'quotations' => $quotationRepository->findAllArchived($user),
+            'invoices' => $invoiceRepository->findAllArchived($user),
         ]);
     }
 }

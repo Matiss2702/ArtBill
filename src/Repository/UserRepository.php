@@ -26,6 +26,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
+    public function findAll()
+    {
+        return parent::createQueryBuilder('entity')
+            ->orderBy('entity.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
@@ -45,6 +53,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $this->createQueryBuilder('u')
             ->andWhere('u.company = :company')
             ->setParameter('company', $company)
+            ->orderBy('q.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }

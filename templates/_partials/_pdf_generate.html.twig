@@ -68,8 +68,12 @@
         </div>
         <div class="details">
             <p><strong>Client:</strong></p>
-            <p>{{ forPdf.customer.name }}</p>
-            <p>{{ forPdf.customer.street }}, {{ forPdf.customer.city }}, {{ forPdf.customer.getZipCode() }}, {{ forPdf.customer.country }}</p>
+            {% if forPdf.customer %}
+                <p>{{ forPdf.customer.name }}</p>
+                <p>{{ forPdf.customer.street }}, {{ forPdf.customer.city }}, {{ forPdf.customer.getZipCode() }}, {{ forPdf.customer.country }}</p>
+            {% else %}
+                <p> Pas de clients</p>
+            {% endif %}
         </div>
         <div class="details">
             <p><strong>Entreprise:</strong></p>
@@ -95,23 +99,23 @@
                 <tr>
                     <td>{{ service.label }}</td>
                     <td>{{ service.quantity }}</td>
-                    <td>{{ service.price|number_format(service.price is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+                    <td>{{ service.price|number_format(2, ',', ' ') }}</td>
                     <td>{{ service.vatRate }}%</td>
-                    <td>{{ (service.price * service.quantity)|number_format((service.price * service.quantity) is divisible by(1)? 0 : 2, ',', ' ') }}</td>
+                    <td>{{ (service.price * service.quantity)|number_format(2, ',', ' ') }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
         <div class="details">
-            <p><strong> Base TVA 10%:</strong> {{ forPdf.baseVatRate10|number_format(forPdf.vatRate10 is divisible by(1)? 0 : 2, ',', ' ') }}</p>
-            <p><strong>TVA 10%:</strong> {{ forPdf.vatRate10|number_format(forPdf.vatRate10 is divisible by(1)? 0 : 2, ',', ' ') }}</p>
-            <p><strong>Base TVA 20%:</strong> {{ forPdf.baseVatRate20|number_format(forPdf.vatRate10 is divisible by(1)? 0 : 2, ',', ' ') }}</p>
-            <p><strong>TVA 20%:</strong> {{ forPdf.vatRate20|number_format(forPdf.vatRate20 is divisible by(1)? 0 : 2, ',', ' ') }}</p>
-            <p><strong>Sans TVA:</strong> {{ forPdf.baseVatRate0|number_format(forPdf.baseVatRate0 is divisible by(1)? 0 : 2, ',', ' ') }}</p>
+            <p><strong> Base TVA 10%:</strong> {{ forPdf.baseVatRate10|number_format(2, ',', ' ') }}</p>
+            <p><strong>TVA 10%:</strong> {{ forPdf.vatRate10|number_format(2, ',', ' ') }}</p>
+            <p><strong>Base TVA 20%:</strong> {{ forPdf.baseVatRate20|number_format(2, ',', ' ') }}</p>
+            <p><strong>TVA 20%:</strong> {{ forPdf.vatRate20|number_format(2, ',', ' ') }}</p>
+            <p><strong>Sans TVA:</strong> {{ forPdf.baseVatRate0|number_format(2, ',', ' ') }}</p>
         </div>
         <div class="total">
-            <p><strong>Total HT:</strong> {{ forPdf.amountHt|number_format(forPdf.amountHt is divisible by(1)? 0 : 2, ',', ' ') }} €</p>
-            <p><strong>Total TTC:</strong> {{ forPdf.amountTtc|number_format(forPdf.amountTtc is divisible by(1)? 0 : 2, ',', ' ') }} €</p>
+            <p><strong>Total HT:</strong> {{ forPdf.amountHt|number_format(2, ',', ' ') }} €</p>
+            <p><strong>Total TTC:</strong> {{ forPdf.amountTtc|number_format(2, ',', ' ') }} €</p>
         </div>
     </div>
 </body>

@@ -17,7 +17,6 @@
         'date': 'Date',
         'dueDate': 'Date d\'échéance',
         'customer': 'Client',
-        'services': 'Services',
 		'isPaid': 'Payé',
     } %}
 
@@ -30,38 +29,6 @@
     {% endfor %}
 {% endblock %}
 
-{% block javascripts %}
-	<script>
-		const addServiceFormDeleteLink = (item) => {
-			const removeFormButton = document.createElement('button');
-			removeFormButton.innerText = 'Supprimer ce service';
-
-			item.append(removeFormButton);
-
-			removeFormButton.addEventListener('click', (e) => {
-				e.preventDefault();
-				item.remove();
-			});
-		}
-
-		const addFormToCollection = (e) => {
-			const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
-			const item = document.createElement('li');
-
-			item.classList.add('bg-red-400');
-			item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
-
-			collectionHolder.insertBefore(item, collectionHolder.lastElementChild);
-			collectionHolder.dataset.index ++;
-			addServiceFormDeleteLink(item);
-		}
-
-		document.querySelectorAll('.add_item_link').forEach(btn => {
-			btn.addEventListener("click", addFormToCollection);
-		});
-
-		document.querySelectorAll('ul.services li').forEach((service) => {
-			addServiceFormDeleteLink(service)
-		})
-	</script>
+{% block form_extra %}
+    {{ include('admin/invoice/_service_form.html.twig') }}
 {% endblock %}

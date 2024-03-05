@@ -82,13 +82,13 @@ class CustomerController extends AbstractController
             ]);
         }        
 
-        return $this->render('superadmin/customer/update.html.twig', [
+        return $this->render('superadmin/customer/edit.html.twig', [
             'form' => $form,
             'customer' => $customer
         ]);
     }
 
-    #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'delete', methods: ['GET','POST'])]
     public function delete(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $customer->getId(), $request->request->get('_token'))) {

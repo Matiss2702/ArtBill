@@ -21,6 +21,14 @@ class CompanyRepository extends ServiceEntityRepository
         parent::__construct($registry, Company::class);
     }
 
+    public function findAll()
+    {
+        return parent::createQueryBuilder('entity')
+            ->orderBy('entity.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Company[] Returns an array of Company objects
 //     */

@@ -72,9 +72,7 @@
 			</div>
 			<div class="flex-1">
 				{% for service in invoice.services %}
-					{{ service.label }}
-					{{ service.price }}
-					{{ service.quantity }}
+					{{ service.label }}: {{ service.price }}€ x {{ service.quantity }}
 				{% endfor %}
 			</div>
 		</div>

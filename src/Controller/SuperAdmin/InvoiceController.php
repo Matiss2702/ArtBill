@@ -71,9 +71,10 @@ class InvoiceController extends AbstractController
             $calculService->calculAmounts($invoice);
             $entityManager->persist($invoice);
             $entityManager->flush();
-            $previousUrl = $session->get('previous_url');
-            return new RedirectResponse($previousUrl);
-        }
+            return $this->render('superadmin/invoice/show.html.twig', [
+                'invoice' => $invoice,
+            ]);
+            }
 
         return $this->render('superadmin/invoice/edit.html.twig', [
             'invoice' => $invoice,

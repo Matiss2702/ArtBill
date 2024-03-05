@@ -21,6 +21,14 @@ class ServiceRepository extends ServiceEntityRepository
         parent::__construct($registry, Service::class);
     }
 
+    public function findAll()
+    {
+        return parent::createQueryBuilder('entity')
+            ->orderBy('entity.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Service[] Returns an array of Service objects
 //     */

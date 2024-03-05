@@ -27,6 +27,14 @@ class QuotationRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
     }
 
+    public function findAll()
+    {
+        return parent::createQueryBuilder('entity')
+            ->orderBy('entity.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Quotation[] Returns an array of Quotation objects
     //     */
@@ -55,31 +63,27 @@ class QuotationRepository extends ServiceEntityRepository
     public function findAllPreviousVersions(Quotation $quotation): array
     {
         $previousQuotations = [];
-
         while ($quotation !== null && $quotation->getPreviousVersion() !== null) {
             $previousQuotations[] = $quotation->getPreviousVersion();
             $quotation = $quotation->getPreviousVersion();
         }
-
         return $previousQuotations;
     }
 
     public function findAllNextVersions(Quotation $quotation): array
     {
         $nextQuotations = [];
-
         while ($quotation !== null && $quotation->getNextQuotation() !== null) {
             $nextQuotations[] = $quotation->getNextQuotation();
             $quotation = $quotation->getNextQuotation();
         }
-
         return $nextQuotations;
     }
 
     public function findLatestQuotations(): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
-
+    
         $query = $queryBuilder->select('q')
             ->from('App\Entity\Quotation', 'q')
             ->where(
@@ -93,11 +97,13 @@ class QuotationRepository extends ServiceEntityRepository
                 )
             )
             ->andWhere('q.status != :status')
-            ->setParameter('status', 'archived') 
+            ->setParameter('status', 'archived')
+            ->orderBy('q.createdAt', 'DESC')
             ->getQuery();
-
+    
         return $query->getResult();
     }
+
 
     public function findLatestQuotationsForCustomer($customer): array
     {
@@ -120,6 +126,7 @@ class QuotationRepository extends ServiceEntityRepository
             ->andWhere('q.status != :status')
             ->setParameter('customer', $customer)
             ->setParameter('status', 'archived') 
+            ->orderBy('q.createdAt', 'DESC')
             ->getQuery();
 
         return $query->getResult();
@@ -146,7 +153,8 @@ class QuotationRepository extends ServiceEntityRepository
             ->andWhere('q.company = :company')
             ->andWhere('q.status != :status')
             ->setParameter('company', $company)
-            ->setParameter('status', 'archived') 
+            ->setParameter('status', 'archived')
+            ->orderBy('q.createdAt', 'DESC') 
             ->getQuery();
 
         return $query->getResult();
@@ -160,7 +168,19 @@ class QuotationRepository extends ServiceEntityRepository
             ->andWhere('q.company = :company')
             ->andWhere('q.status = :status')
             ->setParameter('company', $company)
-            ->setParameter('status', 'archived') 
+            ->setParameter('status', 'archived')
+            ->orderBy('q.createdAt', 'DESC') 
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findAllArchived(User $user): ?array
+    {
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.status = :status')
+            ->setParameter('status', 'archived')
+            ->orderBy('q.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;

@@ -22,6 +22,14 @@ class InvoiceRepository extends ServiceEntityRepository
         parent::__construct($registry, Invoice::class);
     }
 
+    public function findAll()
+    {
+        return parent::createQueryBuilder('entity')
+            ->orderBy('entity.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+    
     //    /**
     //     * @return Invoice[] Returns an array of Invoice objects
     //     */
@@ -65,6 +73,7 @@ class InvoiceRepository extends ServiceEntityRepository
             ->andWhere('q.status != :status')
             ->setParameter('company', $company)
             ->setParameter('status', 'archived')
+            ->orderBy('q.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -78,6 +87,18 @@ class InvoiceRepository extends ServiceEntityRepository
             ->andWhere('q.status = :status')
             ->setParameter('company', $company)
             ->setParameter('status', 'archived') 
+            ->orderBy('q.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findAllArchived(User $user): ?array
+    {
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.status = :status')
+            ->setParameter('status', 'archived') 
+            ->orderBy('q.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;

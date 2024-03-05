@@ -8,7 +8,6 @@
 
 {% block javascripts %}
     <script>
-
         const addServiceFormDeleteLink = (item) => {
             const removeFormButton = document.createElement('button');
             removeFormButton.innerText = 'Supprimer ce service';
@@ -40,6 +39,6 @@
 
         document.querySelectorAll('ul.services li').forEach((service) => {
             addServiceFormDeleteLink(service)
-        });
+        })
     </script>
 {% endblock %}

@@ -63,11 +63,9 @@
                             <span>Modifier</span>
                         </div>
                     </a>
-                    <a href="{{ path('admin_quotation_delete', {'id': quotation.id}) }}">
-                        <div class="w-8 h-8 flex justify-center items-center gap-1.5 border shadow-sm rounded-md py-1">
-                            <icon name="trash" display="solid" color="primary" size="4"></icon>
-                        </div>
-                    </a>
+                    <div class="w-8 h-8 flex justify-center items-center gap-1.5 border bg-red-500 shadow-sm rounded-md py-1">
+                        {{ include('admin/quotation/_delete_form.html.twig') }}
+                    </div>
                 </div>
             </td>
         </tr>
