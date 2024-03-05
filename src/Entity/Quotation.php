@@ -51,7 +51,7 @@ class Quotation
     private ?Company $company = null;
 
     #[ORM\ManyToOne(inversedBy: 'quotations')]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Customer $customer = null;
 
     #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'quotations', cascade: ["persist"])]

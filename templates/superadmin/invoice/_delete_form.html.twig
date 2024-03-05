@@ -1,4 +1,4 @@
 <form method="post" action="{{ path('superadmin_invoice_delete', {'id': invoice.id}) }}" onsubmit="return confirm('Voulez vous vraiment archiver cette facture ?');">
 	<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ invoice.id) }}">
-	<button class="btn">Archiver</button>
+    <button class="btn"><icon name="trash" display="solid" color="white" size="4"></icon></button>
 </form>

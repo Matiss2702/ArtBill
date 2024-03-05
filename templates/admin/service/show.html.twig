@@ -11,12 +11,9 @@
                 <span>Modifier</span>
             </div>
         </a>
-        <a href="{{ path('admin_service_delete', {'id': service.id}) }}">
-            <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-red-500 text-white">
-                <icon name="trash" display="solid" color="white" size="4"></icon>
-                <span>Supprimer</span>
-            </div>
-        </a>
+        <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-red-500 text-white">
+            {{ include('admin/service/_delete_form.html.twig') }}
+        </div>
     </div>
 {% endblock %}
 

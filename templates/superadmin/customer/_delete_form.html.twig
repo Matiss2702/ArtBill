@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('superadmin_customer_delete', {'id': customer.id}) }}" onsubmit="return confirm('Voulez vous vraiment supprimer ce client ?\nVous allez supprimer les factures et devis qui lui sont associées');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ customer.id) }}">
+    <button class="btn"><icon name="trash" display="solid" color="primary" size="4"></icon></button>
+</form>

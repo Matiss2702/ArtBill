@@ -31,7 +31,7 @@ class Invoice
     private ?User $owner = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Customer $customer = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoices')]
