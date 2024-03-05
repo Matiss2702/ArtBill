@@ -98,10 +98,15 @@ class QuotationController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
-    public function delete(Request $request, Quotation $quotation, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, QuotationRepository $quotationRepository, Quotation $quotation, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $quotation->getId(), $request->request->get('_token'))) {
             $quotation->setStatus('archived');
+            $previousVersions = $quotationRepository->findAllPreviousVersions($quotation);
+            foreach ($previousVersions as $previousVersion) {
+                $previousVersion->setStatus('archived');
+                $entityManager->persist($previousVersion);
+            }
             $entityManager->flush();
         }
 

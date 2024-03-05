@@ -162,27 +162,54 @@ class QuotationRepository extends ServiceEntityRepository
 
     public function findAllArchivedByCompany(User $user): ?array
     {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
         $company = $user->getCompany();
-    
-        return $this->createQueryBuilder('q')
+
+        $subQueryBuilder = $this->entityManager->createQueryBuilder();
+        $subQuery = $subQueryBuilder
+            ->select('qq.id')
+            ->from('App\Entity\Quotation', 'qq')
+            ->where('qq.previousVersion = q.id');
+
+        $query = $queryBuilder->select('q')
+            ->from('App\Entity\Quotation', 'q')
+            ->where(
+                $queryBuilder->expr()->not(
+                    $queryBuilder->expr()->exists($subQuery)
+                )
+            )
             ->andWhere('q.company = :company')
             ->andWhere('q.status = :status')
             ->setParameter('company', $company)
             ->setParameter('status', 'archived')
             ->orderBy('q.createdAt', 'DESC') 
-            ->getQuery()
-            ->getResult()
-        ;
+            ->getQuery();
+
+        return $query->getResult();
     }
 
     public function findAllArchived(User $user): ?array
     {
-        return $this->createQueryBuilder('q')
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        $subQueryBuilder = $this->entityManager->createQueryBuilder();
+        $subQuery = $subQueryBuilder
+            ->select('qq.id')
+            ->from('App\Entity\Quotation', 'qq')
+            ->where('qq.previousVersion = q.id');
+
+        $query = $queryBuilder->select('q')
+            ->from('App\Entity\Quotation', 'q')
+            ->where(
+                $queryBuilder->expr()->not(
+                    $queryBuilder->expr()->exists($subQuery)
+                )
+            )
             ->andWhere('q.status = :status')
             ->setParameter('status', 'archived')
-            ->orderBy('q.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult()
-        ;
+            ->orderBy('q.createdAt', 'DESC') 
+            ->getQuery();
+
+        return $query->getResult();
     }
 }
