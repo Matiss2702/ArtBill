@@ -102,20 +102,21 @@ class QuotationRepository extends ServiceEntityRepository
     public function findLatestQuotationsForCustomer($customer): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
+        
+        $subQueryBuilder = $this->entityManager->createQueryBuilder();
+        $subQuery = $subQueryBuilder
+            ->select('qq.id')
+            ->from('App\Entity\Quotation', 'qq')
+            ->where('qq.previousVersion = q.id');
 
         $query = $queryBuilder->select('q')
             ->from('App\Entity\Quotation', 'q')
             ->where(
                 $queryBuilder->expr()->not(
-                    $queryBuilder->expr()->exists(
-                        $this->entityManager->createQueryBuilder()
-                            ->select('qq.id')
-                            ->from('App\Entity\Quotation', 'qq')
-                            ->where('qq.previousVersion = q.id')
-                            ->andWhere('qq.customer = :customer')
-                    )
+                    $queryBuilder->expr()->exists($subQuery)
                 )
             )
+            ->andWhere('q.customer = :customer')
             ->andWhere('q.status != :status')
             ->setParameter('customer', $customer)
             ->setParameter('status', 'archived') 

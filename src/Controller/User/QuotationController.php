@@ -38,28 +38,11 @@ class QuotationController extends AbstractController
     {
         $previousVersions = $quotationRepository->findAllPreviousVersions($quotation);
         $nextVersions = $quotationRepository->findAllNextVersions($quotation);
-        // dd($previousVersions);
 
         return $this->render('user/quotation/show.html.twig', [
             'quotation' => $quotation,
             'previousVersions' => $previousVersions,
             'nextVersions' => $nextVersions,
         ]);
-    }
-
-    #[Route('/generate-invoice/{id}', name: 'generate_invoice', methods: ['GET'])]
-    public function generateInvoice(Quotation $quotation, GenerateInvoiceService $generateInvoiceService, EntityManagerInterface $entityManager): RedirectResponse
-    {
-        try {
-            $invoiceGenerated = $generateInvoiceService->generateInvoice($quotation);
-            $entityManager->persist($invoiceGenerated);
-            $entityManager->flush();
-            $quotation->addInvoice($invoiceGenerated);
-            $id = $invoiceGenerated->getId();
-            $this->addFlash('success', 'Facture générée');
-            return $this->redirectToRoute('user_invoice_show', ['id' => $id]);
-        } catch (\Exception $e) {
-            $this->addFlash('danger', 'Erreur lors de la génération de la facture');
-        }
     }
 }

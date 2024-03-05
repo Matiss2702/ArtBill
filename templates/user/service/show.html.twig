@@ -41,7 +41,7 @@
             Date et heure de création
         </div>
         <div class="flex-1">
-            {{ service.created|date('d/m/Y à H') }}h{{ service.created|date('i') }}
+            {{ service.createdAt|date('d/m/Y à H') }}h{{ service.createdAt|date('i') }}
         </div>
     </div>
 {% endblock %}

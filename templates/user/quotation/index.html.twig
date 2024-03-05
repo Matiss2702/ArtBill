@@ -4,6 +4,9 @@
 
 {% block page_header %}
     <p class="text-2xl font-bold">Devis</p>
+    <div class="flex gap-3">
+        <input class="w-96 border rounded-md text-sm outline-primary px-2 py-1" type="text" name="search" value="" placeholder="Rechercher..." />
+    </div>
 {% endblock %}
 
 {% block thead %}
@@ -48,19 +51,6 @@
                 à {{ quotation.createdAt|date('H') }}h{{ quotation.createdAt|date('i') }}
             </td>
             <td>
-                <div class="flex justify-end gap-3">
-                    <a href="{{ path('user_quotation_edit', {'id': quotation.id}) }}">
-                        <div class="h-8 flex justify-center items-center gap-1.5 border shadow-sm rounded-md px-2.5 p-1 bg-primary text-white">
-                            <icon name="pencil" display="solid" color="white" size="4"></icon>
-                            <span>Modifier</span>
-                        </div>
-                    </a>
-                    <a href="{{ path('user_quotation_delete', {'id': quotation.id}) }}">
-                        <div class="w-8 h-8 flex justify-center items-center gap-1.5 border shadow-sm rounded-md py-1">
-                            <icon name="trash" display="solid" color="primary" size="4"></icon>
-                        </div>
-                    </a>
-                </div>
             </td>
         </tr>
     {% endfor %}

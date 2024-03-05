@@ -62,7 +62,6 @@ class QuotationController extends AbstractController
     {
         $previousVersions = $quotationRepository->findAllPreviousVersions($quotation);
         $nextVersions = $quotationRepository->findAllNextVersions($quotation);
-        // dd($previousVersions);
 
         return $this->render('admin/quotation/show.html.twig', [
             'quotation' => $quotation,
