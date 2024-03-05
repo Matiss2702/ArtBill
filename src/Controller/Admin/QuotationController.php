@@ -71,7 +71,7 @@ class QuotationController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Quotation $quotation, EntityManagerInterface $entityManager, CalculAmountService $calculService, SessionInterface $session, SetVersionsService $setVersion): Response
+    public function edit(Request $request, QuotationRepository $quotationRepository, Quotation $quotation, EntityManagerInterface $entityManager, CalculAmountService $calculService, SessionInterface $session, SetVersionsService $setVersion): Response
     {
         $bill = new Quotation();
         $setVersion->process($bill, $quotation);
@@ -82,10 +82,14 @@ class QuotationController extends AbstractController
             $calculService->calculAmounts($bill);
             $entityManager->persist($bill);
             $entityManager->flush();
-            $previousUrl = $session->get('previous_url');
-            return new RedirectResponse($previousUrl);
+            $previousVersions = $quotationRepository->findAllPreviousVersions($bill);
+            $nextVersions = $quotationRepository->findAllNextVersions($bill);
+            return $this->render('admin/quotation/show.html.twig', [
+                'quotation' => $bill,
+                'previousVersions' => $previousVersions,
+                'nextVersions' => $nextVersions,
+            ]);
         }
-        $session->set('previous_url', $request->headers->get('referer'));
 
         return $this->render('admin/quotation/edit.html.twig', [
             'quotation' => $quotation,

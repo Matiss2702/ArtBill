@@ -132,6 +132,24 @@
         </div>
     </div>
 
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Client
+        </div>
+        <div class="flex-1">
+            {{ invoice.customer }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Entreprise
+        </div>
+        <div class="flex-1">
+            {{ invoice.company.name }}
+        </div>
+    </div>
+
     <a href="{{ path('admin_invoice_index') }}" class="btn btn-secondary">Retour à la liste</a>
     <a href="{{ path('generate_pdf', {'id': invoice.id, 'type': 'invoice'}) }}" target="_blank">Générer PDF</a>
 

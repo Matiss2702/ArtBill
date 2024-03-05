@@ -121,6 +121,24 @@
             {{ quotation.createdAt|date('d/m/Y à H') }}h{{ quotation.createdAt|date('i') }}
         </div>
     </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Client
+        </div>
+        <div class="flex-1">
+            {{ quotation.customer }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Entreprise
+        </div>
+        <div class="flex-1">
+            {{ quotation.company.name }}
+        </div>
+    </div>
 </br>
 
 {% if previousVersions is not empty %}

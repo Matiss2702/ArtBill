@@ -131,6 +131,24 @@
             {{ invoice.createdAt|date('d/m/Y à H') }}h{{ invoice.createdAt|date('i') }}
         </div>
     </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Client
+        </div>
+        <div class="flex-1">
+            {{ invoice.customer }}
+        </div>
+    </div>
+
+    <div class="w-full flex">
+        <div class="w-1/4 text-xs text-gray-500">
+            Entreprise
+        </div>
+        <div class="flex-1">
+            {{ invoice.company.name }}
+        </div>
+    </div>
           
 <a href="{{ path('superadmin_invoice_index') }}" class="btn btn-secondary">Retour à la liste</a>
 <a href="{{ path('superadmin_invoice_edit', {'id': invoice.id}) }}" class="btn btn-primary">Modifier</a>
