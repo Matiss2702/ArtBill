@@ -103,7 +103,7 @@
                 </ul>
 
                 <ul class="flex flex-col p-3 mt-auto">
-					{% if is_granted('ROLE_SUPERADMIN') or is_granted('ROLE_ADMIN') %}
+					{% if not is_granted('ROLE_SUPERADMIN') and is_granted('ROLE_ADMIN') %}
                         <a href="{{ '/' ~ role_prefix ~ '/register' }}">
                             <li class="w-full rounded-md hover:bg-gray-200 transition-fast px-2 py-1.5">
                                 <div class="flex items-center gap-2">

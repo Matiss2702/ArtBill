@@ -70,7 +70,7 @@ class CustomerRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->andWhere('c.company = :company')
             ->setParameter('company', $company)
-            ->orderBy('q.createdAt', 'DESC')
+            ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
