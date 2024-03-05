@@ -9,33 +9,49 @@ use App\Entity\Service;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\ChoiceList\ChoiceList;
-use Symfony\Component\Form\ChoiceList\Factory\Cache\ChoiceLabel;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Security\Core\Security;
+use Doctrine\ORM\EntityRepository;
+
 
 class QuotationType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    private $security;
+
+    public function __construct(Security $security)
     {
+        $this->security = $security;
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $user = $this->security->getUser();
+        $company = $user->getCompany();
+
         $builder
             ->add('description', TextareaType::class, [
                 'required' => false,
             ])
-            ->add(
-                'status',
-                ChoiceType::class,
-                ['choices' => array_combine(Quotation::QUOTATION_STATUS, Quotation::QUOTATION_STATUS)]
-            )
-            ->add('date')
+            ->add('status', ChoiceType::class, [
+                'choices' => array_combine(Quotation::QUOTATION_STATUS, Quotation::QUOTATION_STATUS)
+            ])
+            ->add('date') 
             ->add('dueDate')
             ->add('customer', EntityType::class, [
                 'class' => Customer::class,
                 'choice_label' => 'email',
+                'query_builder' => function(EntityRepository $er) use ($company) {
+                    return $er->createQueryBuilder('c')
+                        ->where('c.company = :company')
+                        ->setParameter('company', $company);
+                },
+                'required' => false, 
+                'placeholder' => '--',
             ])
             ->add('services', CollectionType::class, [
                 'entry_type' => ServiceType::class,
@@ -53,3 +69,4 @@ class QuotationType extends AbstractType
         ]);
     }
 }
+
