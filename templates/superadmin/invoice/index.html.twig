@@ -25,6 +25,7 @@
         <th>Date d'échéance</th>
         <th>Création</th>
         <th>Client</th>
+        <th>Entrprise</th>
         <th></th>
     {% else %}
         <th class="text-center">Aucune donnée</th>
@@ -57,6 +58,7 @@
                 à {{ invoice.createdAt|date('H') }}h{{ invoice.createdAt|date('i') }}
             </td>
             <td>{{ invoice.customer }}</td>
+            <td>{{ invoice.company.name }}</td>
             <td>
                 <div class="flex justify-end gap-3">
                     <a href="{{ path('superadmin_invoice_edit', {'id': invoice.id}) }}">
