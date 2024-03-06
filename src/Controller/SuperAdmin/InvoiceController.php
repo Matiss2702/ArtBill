@@ -47,7 +47,7 @@ class InvoiceController extends AbstractController
             return $this->redirectToRoute('superadmin_invoice_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('admin/invoice/new.html.twig', [
+        return $this->render('superadmin/invoice/new.html.twig', [
             'invoice' => $invoice,
             'form' => $form,
         ]);

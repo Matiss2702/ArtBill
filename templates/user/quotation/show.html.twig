@@ -3,7 +3,7 @@
 {% block page_title %}Fiche devis - ArtBill{% endblock %}
 
 {% block page_header %}
-    <p class="text-2xl font-bold">Fiche devis</p>
+    <p class="text-2xl font-bold">Fiche devis {% if quotation.status == 'archived' %}<strong>- Archivé</Strong>{% endif %}</p>
    
 {% endblock %}
 
