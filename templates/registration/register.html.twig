@@ -12,23 +12,29 @@
 
                 <fieldset class="space-y-4">
                     <legend class="text-xl font-semibold text-gray-700">Informations personnelles</legend>
-                    {{ form_row(registrationForm.email, {'attr': {'class': 'input'}}) }}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            {{ form_row(registrationForm.firstname, {'attr': {'class': 'input', 'placeholder': 'Prénom'}}) }}
+                            {% if registrationForm.firstname.vars.errors %}
+                                <div class="text-red-500">{{ form_errors(registrationForm.firstname) }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            {{ form_row(registrationForm.lastname, {'attr': {'class': 'input', 'placeholder': 'Nom'}}) }}
+                            {% if registrationForm.lastname.vars.errors %}
+                                <div class="text-red-500">{{ form_errors(registrationForm.lastname) }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {{ form_row(registrationForm.email, {'attr': {'class': 'input', 'placeholder': 'Email'}}) }}
                     {% if registrationForm.email.vars.errors %}
                         <div class="text-red-500">{{ form_errors(registrationForm.email) }}</div>
                     {% endif %}
-                    {{ form_row(registrationForm.firstname, {'attr': {'class': 'input'}}) }}
-                    {% if registrationForm.firstname.vars.errors %}
-                        <div class="text-red-500">{{ form_errors(registrationForm.firstname) }}</div>
-                    {% endif %}
-                    {{ form_row(registrationForm.lastname, {'attr': {'class': 'input'}}) }}
-                    {% if registrationForm.lastname.vars.errors %}
-                        <div class="text-red-500">{{ form_errors(registrationForm.lastname) }}</div>
-                    {% endif %}
-                    {{ form_row(registrationForm.plainPassword.first, {'attr': {'class': 'input'}}) }}
+                    {{ form_row(registrationForm.plainPassword.first, {'attr': {'class': 'input', 'placeholder': 'Mot de passe'}}) }}
                     {% if registrationForm.plainPassword.first.vars.errors %}
                         <div class="text-red-500">{{ form_errors(registrationForm.plainPassword.first) }}</div>
                     {% endif %}
-                    {{ form_row(registrationForm.plainPassword.second, {'attr': {'class': 'input'}}) }}
+                    {{ form_row(registrationForm.plainPassword.second, {'attr': {'class': 'input', 'placeholder': 'Répéter le mot de passe'}}) }}
                     {% if registrationForm.plainPassword.second.vars.errors %}
                         <div class="text-red-500">{{ form_errors(registrationForm.plainPassword.second) }}</div>
                     {% endif %}
@@ -36,21 +42,27 @@
 
                 <fieldset class="space-y-4 mt-6">
                     <legend class="text-xl font-semibold text-gray-700">Informations de la compagnie</legend>
-                    {{ form_row(registrationForm.companyName, {'attr': {'class': 'input'}}) }}
+                    {{ form_row(registrationForm.companyName, {'attr': {'class': 'input', 'placeholder': 'Nom de la compagnie'}}) }}
                     {% if registrationForm.companyName.vars.errors %}
                         <div class="text-red-500">{{ form_errors(registrationForm.companyName) }}</div>
                     {% endif %}
-                    {{ form_row(registrationForm.siren, {'attr': {'class': 'input'}}) }}
-                    {% if registrationForm.siren.vars.errors %}
-                        <div class="text-red-500">{{ form_errors(registrationForm.siren) }}</div>
-                    {% endif %}
-                    {{ form_row(registrationForm.vatNumber, {'attr': {'class': 'input'}}) }}
-                    {{ form_row(registrationForm.zipCode, {'attr': {'class': 'input'}}) }}
-                    {{ form_row(registrationForm.street, {'attr': {'class': 'input'}}) }}
-                    {{ form_row(registrationForm.city, {'attr': {'class': 'input'}}) }}
-                    {{ form_row(registrationForm.country, {'attr': {'class': 'input'}}) }}
-                    {{ form_row(registrationForm.shareCapital, {'attr': {'class': 'input'}}) }}
-                    {{ form_row(registrationForm.bankInformationStatement, {'attr': {'class': 'input'}}) }}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            {{ form_row(registrationForm.siren, {'attr': {'class': 'input', 'placeholder': 'SIREN'}}) }}
+                            {% if registrationForm.siren.vars.errors %}
+                                <div class="text-red-500">{{ form_errors(registrationForm.siren) }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            {{ form_row(registrationForm.vatNumber, {'attr': {'class': 'input', 'placeholder': 'Numéro de TVA'}}) }}
+                        </div>
+                    </div>
+                    {{ form_row(registrationForm.zipCode, {'attr': {'class': 'input', 'placeholder': 'Code postal'}}) }}
+                    {{ form_row(registrationForm.street, {'attr': {'class': 'input', 'placeholder': 'Adresse'}}) }}
+                    {{ form_row(registrationForm.city, {'attr': {'class': 'input', 'placeholder': 'Ville'}}) }}
+                    {{ form_row(registrationForm.country, {'attr': {'class': 'input', 'placeholder': 'Pays'}}) }}
+                    {{ form_row(registrationForm.shareCapital, {'attr': {'class': 'input', 'placeholder': 'Capital social'}}) }}
+                    {{ form_row(registrationForm.bankInformationStatement, {'attr': {'class': 'input', 'placeholder': 'Déclaration d\'information bancaire'}}) }}
                 </fieldset>
 
                 {{ form_row(registrationForm.RGPDConsent, {'attr': {'class': 'mt-4'}}) }}

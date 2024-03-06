@@ -24,8 +24,8 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            // Les champs pour l'utilisateur...
             ->add('email', EmailType::class, [
+                'label' => 'Email',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter an email',
@@ -33,11 +33,13 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('firstname', TextType::class, [
+                'label' => 'First Name',
                 'constraints' => [
                     new NotBlank(),
                 ],
             ])
             ->add('lastname', TextType::class, [
+                'label' => 'Last Name',
                 'constraints' => [
                     new NotBlank(),
                 ],
@@ -45,8 +47,9 @@ class RegistrationFormType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => false,
-                'options' => ['attr' => ['autocomplete' => 'password']],
+                'options' => ['attr' => ['autocomplete' => 'new-password']],
                 'first_options' => [
+                    'label' => 'Password',
                     'constraints' => [
                         new NotBlank([
                             'message' => 'Please enter a password',
@@ -56,31 +59,24 @@ class RegistrationFormType extends AbstractType
                             'max' => 4096,
                         ]),
                     ],
-                    'label' => 'password',
                 ],
                 'second_options' => [
                     'label' => 'Repeat Password',
                 ],
                 'invalid_message' => 'The password fields must match.',
-                // Enable/disable CSRF protection for this form
-                'csrf_protection' => true,
-                // the name of the hidden HTML field that stores the token
-                'csrf_field_name' => '_token',
-                // an arbitrary string used to generate the value of the token
-                'csrf_token_id'   => 'authenticate',
             ])
             ->add('RGPDConsent', CheckboxType::class, [
                 'mapped' => false,
+                'label' => 'Accept Terms',
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You should agree to our terms.',
                     ]),
                 ],
-                'label' => 'Accepter les termes',
             ])
-            // Les champs pour la création de l'entreprise...
             ->add('companyName', TextType::class, [
                 'mapped' => false,
+                'label' => 'Company Name',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter the company name',
@@ -89,6 +85,7 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('siren', IntegerType::class, [
                 'mapped' => false,
+                'label' => 'SIREN Number',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter the SIREN number',
@@ -102,25 +99,21 @@ class RegistrationFormType extends AbstractType
             ->add('street', TextType::class, [
                 'mapped' => false,
                 'required' => false,
+                'label' => 'Street',
             ])
             ->add('city', TextType::class, [
                 'mapped' => false,
                 'required' => false,
+                'label' => 'City',
             ])
             ->add('country', CountryType::class, [
                 'mapped' => false,
                 'required' => false,
+                'label' => 'Country',
             ])
-            // ->add('name', TextType::class, [
-            //     'mapped' => false,
-            //     'constraints' => [
-            //         new NotBlank([
-            //             'message' => 'Please enter the company name',
-            //         ]),
-            //     ],
-            // ])
             ->add('vatNumber', IntegerType::class, [
                 'mapped' => false,
+                'label' => 'VAT Number',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter the VAT number',
@@ -130,13 +123,16 @@ class RegistrationFormType extends AbstractType
             ->add('shareCapital', IntegerType::class, [
                 'mapped' => false,
                 'required' => false,
+                'label' => 'Share Capital',
             ])
             ->add('bankInformationStatement', TextareaType::class, [
                 'mapped' => false,
                 'required' => false,
+                'label' => 'Bank Information Statement',
             ])
             ->add('zipCode', IntegerType::class, [
                 'mapped' => false,
+                'label' => 'Zip Code',
                 'constraints' => [
                     new Length([
                         'min' => 5,
@@ -153,5 +149,4 @@ class RegistrationFormType extends AbstractType
             'data_class' => User::class,
         ]);
     }
-    
 }
