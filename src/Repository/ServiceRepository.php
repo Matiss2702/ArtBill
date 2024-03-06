@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Service;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -25,6 +26,18 @@ class ServiceRepository extends ServiceEntityRepository
     {
         return parent::createQueryBuilder('entity')
             ->orderBy('entity.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllByCompany(User $user): ?array
+    {
+        $company = $user->getCompany();
+
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.company = :company')
+            ->setParameter('company', $company)
+            ->orderBy('q.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }

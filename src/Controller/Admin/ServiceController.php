@@ -19,8 +19,9 @@ class ServiceController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(ServiceRepository $serviceRepository): Response
     {
+        $user = $this->getUser();
         return $this->render('admin/service/index.html.twig', [
-            'services' => $serviceRepository->findAll(),
+            'services' => $serviceRepository->findAllByCompany($user),
         ]);
     }
 
@@ -32,9 +33,8 @@ class ServiceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (null === $service->getCreatedAt()) {
-                $service->setCreatedAt(new \DateTime());
-            }
+            $company = $this->getUser()->getCompany();
+            $service->setCompany($company);
 
             $entityManager->persist($service);
             $entityManager->flush();

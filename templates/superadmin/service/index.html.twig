@@ -21,6 +21,8 @@
         <th>Description</th>
         <th>Prix</th>
         <th>Création</th>
+        <th>Catégorie</th>
+        <th>Entreprise</th>
         <th></th>
     {% else %}
         <th class="text-center">Aucune donnée</th>
@@ -38,6 +40,8 @@
             <td><a class="font-bold text-primary" href="{{ path('superadmin_service_show', {'id': service.id}) }}">{{ service.label }}</a></td>
             <td>{{ service.description }}</td>
             <td>{{ service.price }}<span class="text-xs"> €</span></td>
+            <td>{{ service.category }}</td>
+            <td>{{ service.company.name ?? "" }}</td>
             <td>
                 {% if today == service.createdAt|date('Y-m-d') %}
                     Aujourd'hui
