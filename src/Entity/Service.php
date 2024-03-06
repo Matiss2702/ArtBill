@@ -50,6 +50,9 @@ class Service
     #[Assert\Choice(options: self::VAT_RATES)]
     private ?int $vatRate = 0;
 
+    #[ORM\ManyToOne(inversedBy: 'services')]
+    private ?Company $company = null;
+
     public function __construct()
     {
         $this->quotations = new ArrayCollection();
@@ -183,6 +186,18 @@ class Service
     public function setVatRate(int $vatRate): static
     {
         $this->vatRate = $vatRate;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }

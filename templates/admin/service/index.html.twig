@@ -20,6 +20,7 @@
         <th>Libellé</th>
         <th>Description</th>
         <th>Prix</th>
+        <th>Catégorie</th>
         <th>Création</th>
         <th></th>
     {% else %}
@@ -38,6 +39,7 @@
             <td><a class="font-bold text-primary" href="{{ path('admin_service_show', {'id': service.id}) }}">{{ service.label }}</a></td>
             <td>{{ service.description }}</td>
             <td>{{ service.price }}<span class="text-xs"> €</span></td>
+            <td>{{ service.category }}</td>
             <td>
                 {% if today == service.createdAt|date('Y-m-d') %}
                     Aujourd'hui

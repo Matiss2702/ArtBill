@@ -30,6 +30,11 @@ class Category
         $this->services = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->label;
+    }
+
     public function getId(): ?UuidInterface
     {
         return $this->id;

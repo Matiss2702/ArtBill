@@ -59,12 +59,16 @@ class Company
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Customer::class)]
     private Collection $customers;
 
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Service::class)]
+    private Collection $services;
+
     public function __construct()
     {
         $this->quotations = new ArrayCollection();
         $this->invoices = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->customers = new ArrayCollection();
+        $this->services = new ArrayCollection();
     }
 
     public function getId(): ?UuidInterface
@@ -294,6 +298,36 @@ class Company
             // set the owning side to null (unless already changed)
             if ($customer->getCompany() === $this) {
                 $customer->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Service>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Service $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Service $service): static
+    {
+        if ($this->services->removeElement($service)) {
+            // set the owning side to null (unless already changed)
+            if ($service->getCompany() === $this) {
+                $service->setCompany(null);
             }
         }
 
