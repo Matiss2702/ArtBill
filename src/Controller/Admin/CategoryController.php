@@ -19,8 +19,9 @@ class CategoryController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(CategoryRepository $categoryRepository): Response
     {
+        $user = $this->getUser();
         return $this->render('admin/category/index.html.twig', [
-            'categories' => $categoryRepository->findAll(),
+            'categories' => $categoryRepository->findAllByCompany($user)
         ]);
     }
 
@@ -32,6 +33,8 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $company = $this->getUser()->getCompany();
+            $category->setCompany($company);
 
             $entityManager->persist($category);
             $entityManager->flush();

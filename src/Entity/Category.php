@@ -25,6 +25,9 @@ class Category
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Service::class)]
     private Collection $services;
 
+    #[ORM\ManyToOne(inversedBy: 'categories')]
+    private ?Company $company = null;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -78,6 +81,18 @@ class Category
                 $service->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }

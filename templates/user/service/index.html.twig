@@ -15,8 +15,8 @@
         <th>Libellé</th>
         <th>Description</th>
         <th>Prix</th>
+        <th>Catégorie</th>
         <th>Création</th>
-        <th>Statut</th>
         <th></th>
     {% else %}
         <th class="text-center">Aucune donnée</th>
@@ -34,6 +34,7 @@
             <td><a class="font-bold text-primary" href="{{ path('user_service_show', {'id': service.id}) }}">{{ service.label }}</a></td>
             <td>{{ service.description }}</td>
             <td>{{ service.price }}<span class="text-xs"> €</span></td>
+            <td>{{ service.category }}</td>
             <td>
                 {% if today == service.createdAt|date('Y-m-d') %}
                     Aujourd'hui
@@ -44,12 +45,6 @@
                 {% endif %}
 
                 à {{ service.createdAt|date('H') }}h{{ service.createdAt|date('i') }}
-            </td>
-            <td>
-                <div class="flex items-center gap-2">
-                    <icon name="point" display="solid" color="status-orange" size="2.5" viewBox="16"></icon>
-                    <span>En cours</span>
-                </div>
             </td>
             <td>
             </td>

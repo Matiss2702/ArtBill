@@ -19,8 +19,9 @@ class CategoryController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(CategoryRepository $categoryRepository): Response
     {
+        $user = $this->getUser();
         return $this->render('user/category/index.html.twig', [
-            'categories' => $categoryRepository->findAll(),
+            'categories' => $categoryRepository->findAllByCompany($user),
         ]);
     }
 

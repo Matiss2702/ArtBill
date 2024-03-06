@@ -23,7 +23,6 @@ class CategoryController extends AbstractController
             'categories' => $categoryRepository->findAll(),
         ]);
     }
-    //Ajout
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -33,9 +32,8 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (null === $category->getCreatedAt()) {
-                $category->setCreatedAt(new \DateTime());
-            }
+            $company = $this->getUser()->getCompany();
+            $category->setCompany($company);
 
             $entityManager->persist($category);
             $entityManager->flush();
