@@ -6,69 +6,48 @@
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-xl mx-auto bg-white rounded-lg overflow-hidden md:max-w-2xl shadow-md">
         <div class="md:flex">
-            <div class="w-full p-6">
+            <div class="w-full p-20">
                 <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Inscription</h1>
                 {{ form_start(registrationForm, {'attr': {'class': 'space-y-4'}}) }}
+                <div style="color: red;">
+                    {{ form_errors(registrationForm) }}
+                </div>
 
                 <fieldset class="space-y-4">
                     <legend class="text-xl font-semibold text-gray-700">Informations personnelles</legend>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            {{ form_row(registrationForm.firstname, {'attr': {'class': 'input', 'placeholder': 'Prénom'}}) }}
-                            {% if registrationForm.firstname.vars.errors %}
-                                <div class="text-red-500">{{ form_errors(registrationForm.firstname) }}</div>
-                            {% endif %}
+                            {{ form_row(registrationForm.firstname) }}
                         </div>
                         <div>
-                            {{ form_row(registrationForm.lastname, {'attr': {'class': 'input', 'placeholder': 'Nom'}}) }}
-                            {% if registrationForm.lastname.vars.errors %}
-                                <div class="text-red-500">{{ form_errors(registrationForm.lastname) }}</div>
-                            {% endif %}
+                            {{ form_row(registrationForm.lastname) }}
                         </div>
                     </div>
-                    {{ form_row(registrationForm.email, {'attr': {'class': 'input', 'placeholder': 'Email'}}) }}
-                    {% if registrationForm.email.vars.errors %}
-                        <div class="text-red-500">{{ form_errors(registrationForm.email) }}</div>
-                    {% endif %}
-                    {{ form_row(registrationForm.plainPassword.first, {'attr': {'class': 'input', 'placeholder': 'Mot de passe'}}) }}
-                    {% if registrationForm.plainPassword.first.vars.errors %}
-                        <div class="text-red-500">{{ form_errors(registrationForm.plainPassword.first) }}</div>
-                    {% endif %}
-                    {{ form_row(registrationForm.plainPassword.second, {'attr': {'class': 'input', 'placeholder': 'Répéter le mot de passe'}}) }}
-                    {% if registrationForm.plainPassword.second.vars.errors %}
-                        <div class="text-red-500">{{ form_errors(registrationForm.plainPassword.second) }}</div>
-                    {% endif %}
+                    {{ form_row(registrationForm.email) }}
+                    {{ form_row(registrationForm.plainPassword.first) }}
+                    {{ form_row(registrationForm.plainPassword.second) }}
                 </fieldset>
 
                 <fieldset class="space-y-4 mt-6">
                     <legend class="text-xl font-semibold text-gray-700">Informations de la compagnie</legend>
-                    {{ form_row(registrationForm.companyName, {'attr': {'class': 'input', 'placeholder': 'Nom de la compagnie'}}) }}
-                    {% if registrationForm.companyName.vars.errors %}
-                        <div class="text-red-500">{{ form_errors(registrationForm.companyName) }}</div>
-                    {% endif %}
+                    {{ form_row(registrationForm.companyName) }}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            {{ form_row(registrationForm.siren, {'attr': {'class': 'input', 'placeholder': 'SIREN'}}) }}
-                            {% if registrationForm.siren.vars.errors %}
-                                <div class="text-red-500">{{ form_errors(registrationForm.siren) }}</div>
-                            {% endif %}
+                            {{ form_row(registrationForm.siren) }}
                         </div>
                         <div>
-                            {{ form_row(registrationForm.vatNumber, {'attr': {'class': 'input', 'placeholder': 'Numéro de TVA'}}) }}
+                            {{ form_row(registrationForm.vatNumber) }}
                         </div>
                     </div>
-                    {{ form_row(registrationForm.zipCode, {'attr': {'class': 'input', 'placeholder': 'Code postal'}}) }}
-                    {{ form_row(registrationForm.street, {'attr': {'class': 'input', 'placeholder': 'Adresse'}}) }}
-                    {{ form_row(registrationForm.city, {'attr': {'class': 'input', 'placeholder': 'Ville'}}) }}
-                    {{ form_row(registrationForm.country, {'attr': {'class': 'input', 'placeholder': 'Pays'}}) }}
-                    {{ form_row(registrationForm.shareCapital, {'attr': {'class': 'input', 'placeholder': 'Capital social'}}) }}
-                    {{ form_row(registrationForm.bankInformationStatement, {'attr': {'class': 'input', 'placeholder': 'Déclaration d\'information bancaire'}}) }}
+                    {{ form_row(registrationForm.zipCode) }}
+                    {{ form_row(registrationForm.street) }}
+                    {{ form_row(registrationForm.city) }}
+                    {{ form_row(registrationForm.country) }}
+                    {{ form_row(registrationForm.shareCapital) }}
+                    {{ form_row(registrationForm.bankInformationStatement) }}
                 </fieldset>
 
                 {{ form_row(registrationForm.RGPDConsent, {'attr': {'class': 'mt-4'}}) }}
-                {% if registrationForm.RGPDConsent.vars.errors %}
-                    <div class="text-red-500">{{ form_errors(registrationForm.RGPDConsent) }}</div>
-                {% endif %}
 
                 <div class="flex justify-center mt-6">
                     <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition ease-in-out duration-150">

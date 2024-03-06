@@ -14,7 +14,7 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Cette adresse mail n\'est pas disponible')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use Traits\Timestampable;
