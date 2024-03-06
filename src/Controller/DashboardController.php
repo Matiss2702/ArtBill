@@ -13,7 +13,12 @@ class DashboardController extends AbstractController
     #[Route('/dashboard', name: 'dashboard')]
     public function index(CustomerRepository $customerRepository, InvoiceRepository $invoiceRepository): Response
     {
-        $customers = $customerRepository->findCustomersForCompany($this->getUser()); 
+        $user = $this->getUser();
+        if (in_array('ROLE_SUPERADMIN', $user->getRoles(), true)) {
+            $customers = $customerRepository->findAll($user); 
+        } else {
+            $customers = $customerRepository->findCustomersForCompany($user); 
+        }
 
         $customerData = [];
         foreach ($customers as $customer) {
@@ -29,7 +34,6 @@ class DashboardController extends AbstractController
                 'totalAmountTTC' => $totalAmounts['totalAmountTTC'],
             ];
         }
-        // dd($customerData);
 
         return $this->render('dashboard.html.twig', [
             'customerData' => $customerData,
