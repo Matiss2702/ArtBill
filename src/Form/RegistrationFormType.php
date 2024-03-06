@@ -28,20 +28,24 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Email',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter an email',
+                        'message' => 'Veuillez saisir une adresse email',
                     ]),
                 ],
             ])
             ->add('firstname', TextType::class, [
-                'label' => 'First Name',
+                'label' => 'Prénom',
                 'constraints' => [
-                    new NotBlank(),
+                    new NotBlank([
+                        'message' => 'Veuillez saisir votre prénom',
+                    ]),
                 ],
             ])
             ->add('lastname', TextType::class, [
-                'label' => 'Last Name',
+                'label' => 'Nom',
                 'constraints' => [
-                    new NotBlank(),
+                    new NotBlank([
+                        'message' => 'Veuillez saisir votre nom',
+                    ]),
                 ],
             ])
             ->add('plainPassword', RepeatedType::class, [
@@ -49,10 +53,10 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'options' => ['attr' => ['autocomplete' => 'new-password']],
                 'first_options' => [
-                    'label' => 'Password',
+                    'label' => 'Mot de passe',
                     'constraints' => [
                         new NotBlank([
-                            'message' => 'Please enter a password',
+                            'message' => 'Veuillez saisir un mot de passe',
                         ]),
                         new Length([
                             'min' => 6,
@@ -61,83 +65,83 @@ class RegistrationFormType extends AbstractType
                     ],
                 ],
                 'second_options' => [
-                    'label' => 'Repeat Password',
+                    'label' => 'Répéter le mot de passe',
                 ],
-                'invalid_message' => 'The password fields must match.',
+                'invalid_message' => 'Les champs de mot de passe doivent correspondre.',
             ])
             ->add('RGPDConsent', CheckboxType::class, [
                 'mapped' => false,
-                'label' => 'Accept Terms',
+                'label' => 'Accepter les conditions',
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez accepter nos conditions.',
                     ]),
                 ],
             ])
             ->add('companyName', TextType::class, [
                 'mapped' => false,
-                'label' => 'Company Name',
+                'label' => 'Nom de l\'entreprise',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter the company name',
+                        'message' => 'Veuillez saisir le nom de l\'entreprise',
                     ]),
                 ],
             ])
             ->add('siren', IntegerType::class, [
                 'mapped' => false,
-                'label' => 'SIREN Number',
+                'label' => 'Numéro SIREN',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter the SIREN number',
+                        'message' => 'Veuillez saisir le numéro SIREN',
                     ]),
                     new Regex([
                         'pattern' => '/^\d{9}$/',
-                        'message' => 'The SIREN number must be exactly 9 digits long',
+                        'message' => 'Le numéro SIREN doit comporter exactement 9 chiffres',
                     ]),
                 ],
             ])
             ->add('street', TextType::class, [
                 'mapped' => false,
                 'required' => false,
-                'label' => 'Street',
+                'label' => 'Rue',
             ])
             ->add('city', TextType::class, [
                 'mapped' => false,
                 'required' => false,
-                'label' => 'City',
+                'label' => 'Ville',
             ])
             ->add('country', CountryType::class, [
                 'mapped' => false,
                 'required' => false,
-                'label' => 'Country',
+                'label' => 'Pays',
             ])
             ->add('vatNumber', IntegerType::class, [
                 'mapped' => false,
-                'label' => 'VAT Number',
+                'label' => 'Numéro de TVA',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter the VAT number',
+                        'message' => 'Veuillez saisir le numéro de TVA',
                     ]),
                 ],
             ])
             ->add('shareCapital', IntegerType::class, [
                 'mapped' => false,
                 'required' => false,
-                'label' => 'Share Capital',
+                'label' => 'Capital social',
             ])
             ->add('bankInformationStatement', TextareaType::class, [
                 'mapped' => false,
                 'required' => false,
-                'label' => 'Bank Information Statement',
+                'label' => 'Relevé d\'information bancaire',
             ])
             ->add('zipCode', IntegerType::class, [
                 'mapped' => false,
-                'label' => 'Zip Code',
+                'label' => 'Code postal',
                 'constraints' => [
                     new Length([
                         'min' => 5,
                         'max' => 5,
-                        'exactMessage' => 'The zip code must be exactly {{ limit }} characters long',
+                        'exactMessage' => 'Le code postal doit comporter exactement {{ limit }} caractères',
                     ]),
                 ],
             ]);
