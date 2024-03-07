@@ -30,5 +30,7 @@
 {% endblock %}
 
 {% block form_extra %}
-    {{ include('superadmin/invoice/_service_form.html.twig') }}
+    <div class="flex flex-col">
+        {{ include('_partials/_service_form.html.twig') }}
+    </div>
 {% endblock %}

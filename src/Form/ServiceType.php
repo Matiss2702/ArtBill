@@ -17,9 +17,10 @@ class ServiceType extends AbstractType
         $builder
             ->add('label', null, [
                 'attr' => [
-                    'class' => 'w-full'
-                ]
-            ])
+                    'class' => 'w-full',
+                ],
+                'label' => 'Libellé',
+             ])
             ->add('description', null, [
                 'attr' => [
                     'class' => 'w-full'
@@ -29,25 +30,32 @@ class ServiceType extends AbstractType
                 'attr' => [
                     'step' => 0.01,
                     'class' => 'w-full'
-                ]
+                ],
+                'label' => 'Prix',
+
             ])
             ->add('quantity', null, [
                 'attr' => [
                     'class' => 'w-full'
-                ]
+                ],
+                'label' => 'Quantité',
             ])
             ->add('vat_rate', ChoiceType::class, [
                 'choices' => array_combine(["0%", "10%", "20%"], Service::VAT_RATES),
                 'attr' => [
                     'class' => 'w-full'
-                ]
+                ],
+                'label' => 'Taux de TVA',
+
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'label',
                 'attr' => [
                     'class' => 'w-full'
-                ]
+                ],
+                'label' => 'Catégories',
+
             ]);
     }
 
