@@ -141,23 +141,31 @@
             {% if form is defined %}
                 {{ form_end(form) }}
             {% endif %}
-             {% for message in app.flashes('success') %}
-                    <div class="alert alert-success">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-
-                {% for message in app.flashes('danger') %}
-                    <div class="alert alert-danger">
-                        {{ message }}
-                    </div>
-                {% endfor %}
+            <div id="snackbar"></div>
         </div>
-         
     </div>
-   
-
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        function showSnackbar(message, className) {
+            var snackbar = document.getElementById('snackbar');
+            snackbar.className = className;
+            snackbar.textContent = message;
+            snackbar.classList.remove('hidden');
+            setTimeout(function() {
+                snackbar.classList.add('hidden');
+            }, 3000); 
+        }
+
+        {% for message in app.flashes('success') %}
+            showSnackbar("{{ message }}", "min-w-250 bg-green-500 text-white text-center rounded-md p-4 fixed z-10 left-1/2 transform -translate-x-1/2 bottom-12");
+        {% endfor %}
+
+        {% for message in app.flashes('danger') %}
+            showSnackbar("{{ message }}", "min-w-250 bg-red-500 text-white text-center rounded-md p-4 fixed z-10 left-1/2 transform -translate-x-1/2 bottom-12");
+        {% endfor %}
+    });
+    </script>
 </body>
 
 </html>
