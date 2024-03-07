@@ -34,7 +34,14 @@ class CustomerController extends AbstractController
         $customer = new Customer();
         $form = $this->createForm(CustomerType::class, $customer);
 
-        $form->handleRequest($request);
+        try {
+            $form->handleRequest($request);
+        } catch (\Throwable $th) {
+            if (strpos($th->getMessage(), "zip_code") !== false) {
+                $this->addFlash('danger', "Le code postal doit être composé uniquement de chiffres");
+            }
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $existingCustomer = $customerRepository->findOneByEmail($customer->getEmail());
     
@@ -47,7 +54,7 @@ class CustomerController extends AbstractController
             $manager->persist($customer);
             $manager->flush();
 
-            $this->addFlash('success', "Le client {$customer->getId()} a bien été enregistré");
+            $this->addFlash('success', "Le client {$customer} a bien été enregistré");
             return $this->redirectToRoute('admin_customer_show', [
                 'id' => $customer->getId()
             ]);

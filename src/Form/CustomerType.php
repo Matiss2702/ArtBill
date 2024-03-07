@@ -14,37 +14,34 @@ class CustomerType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $defaultFieldOptions = [
+            'label_attr' => ['class' => 'block mb-2 text-sm font-medium text-gray-900'],
+            'attr' => [
+                'class' => 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5',
+                'style' => 'padding: 10px;'
+            ],
+            'error_bubbling' => true,
+        ];
+
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom',
-                'attr' => ['class' => 'form-input mt-1 block w-full border-gray-300 rounded-md'],
-                'label_attr' => ['class' => 'block text-sm font-semibold text-gray-700 mb-1']
-            ])
+            ], $defaultFieldOptions)
             ->add('email', EmailType::class, [
                 'label' => 'Email',
-                'attr' => ['class' => 'form-input mt-1 block w-full border-gray-300 rounded-md'],
-                'label_attr' => ['class' => 'block text-sm font-semibold text-gray-700 mb-1']
-            ])
-            ->add('street', TextareaType::class, [
+            ], $defaultFieldOptions)
+            ->add('street', TextType::class, [
                 'label' => 'Adresse',
-                'attr' => ['class' => 'form-input mt-1 block w-full border-gray-300 rounded-md'],
-                'label_attr' => ['class' => 'block text-sm font-semibold text-gray-700 mb-1']
-            ])
+            ], $defaultFieldOptions)
             ->add('city', TextType::class, [
                 'label' => 'Ville',
-                'attr' => ['class' => 'form-input mt-1 block w-1/2 border-gray-300 rounded-md'],
-                'label_attr' => ['class' => 'block text-sm font-semibold text-gray-700 mb-1']
-            ])
+            ], $defaultFieldOptions)
             ->add('zip_code', TextType::class, [
                 'label' => 'Code postal',
-                'attr' => ['class' => 'form-input mt-1 block w-1/4 border-gray-300 rounded-md'],
-                'label_attr' => ['class' => 'block text-sm font-semibold text-gray-700 mb-1']
-            ])
+            ], $defaultFieldOptions)
             ->add('country', TextType::class, [
                 'label' => 'Pays',
-                'attr' => ['class' => 'form-input mt-1 block w-1/4 border-gray-300 rounded-md'],
-                'label_attr' => ['class' => 'block text-sm font-semibold text-gray-700 mb-1']
-            ]);
+            ], $defaultFieldOptions);
     }
  
     public function configureOptions(OptionsResolver $resolver): void
