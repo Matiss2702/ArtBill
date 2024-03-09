@@ -1,8 +1,8 @@
 {% extends '_partials/default/form.html.twig' %}
 
-{% block page_title %}Modifier un devis - ArtBill{% endblock %}
+{% block page_title %}Ajouter un devis - ArtBill{% endblock %}
 {% block page_header %}
-    <p class="text-2xl font-bold">Modifier un devis</p>
+    <p class="text-2xl font-bold">Ajouter un devis</p>
     <div class="flex justify-end gap-3 text-sm">
         <div class="h-9 flex justify-center items-center gap-1.5 border shadow-sm rounded-md p-3 bg-primary text-white">
             <icon name="check" display="solid" color="white" size="4"></icon>
@@ -30,5 +30,14 @@
 {% endblock %}
 
 {% block form_extra %}
-    {{ include('superadmin/quotation/_service_form.html.twig') }}
+    <div class="flex flex-col">
+        {{ include('_partials/_service_form.html.twig') }}
+    </div>
+
+{# En cours de développement d'ajout de bouton pour choisir les services #}
+    {# {% for prestation in prestations %}
+        <p> {{prestation.label}} </p>
+    {% endfor %} #}
+
 {% endblock %}
+

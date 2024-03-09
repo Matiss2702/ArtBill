@@ -5,6 +5,7 @@ namespace App\Controller\SuperAdmin;
 use App\Entity\Quotation;
 use App\Form\QuotationType;
 use App\Repository\QuotationRepository;
+use App\Repository\ServiceRepository;
 use App\Service\CalculAmountService;
 use App\Service\GenerateInvoiceService;
 use App\Service\SetOwnerAndCompanyService;
@@ -31,9 +32,11 @@ class QuotationController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, CalculAmountService $calculService, SetOwnerAndCompanyService $setOwnerAndCompany): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, CalculAmountService $calculService, SetOwnerAndCompanyService $setOwnerAndCompany, ServiceRepository $services): Response
     {
         $quotation = new Quotation();
+        $user = $this->getUser();
+        $prestations = $services->findAllByCompany($user);
         $form = $this->createForm(QuotationType::class, $quotation);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -52,6 +55,7 @@ class QuotationController extends AbstractController
         return $this->render('superadmin/quotation/new.html.twig', [
             'quotation' => $quotation,
             'form' => $form,
+            'prestations' => $prestations,
         ]);
     }
 
