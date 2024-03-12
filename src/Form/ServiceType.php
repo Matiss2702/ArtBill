@@ -40,7 +40,7 @@ class ServiceType extends AbstractType
                 ],
                 'label' => 'Quantité',
             ])
-            ->add('vat_rate', ChoiceType::class, [
+            ->add('vatRate', ChoiceType::class, [
                 'choices' => array_combine(["0%", "10%", "20%"], Service::VAT_RATES),
                 'attr' => [
                     'class' => 'w-full'

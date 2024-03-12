@@ -10,7 +10,8 @@
 </ul>
 <button type="button" id="add_service" class="add_item_link" data-collection-holder-class="services">Ajouter un nouveau service</button>
 
-
+{# En cours de développement d'ajout de bouton pour choisir les services #}
+   
 {% block javascripts %}
     <script>
         const addServiceFormDeleteLink = (item) => {
@@ -37,7 +38,29 @@
 
             collectionHolder.dataset.index++;
 
+            addSelectService(item);
             addServiceFormDeleteLink(item);
+
+        }
+
+        const addSelectService = (item) => {
+             const selectElement = document.createElement('select');
+             selectElement.classList.add('prestation_select');
+             {% for prestation in prestations %}
+                const option = document.createElement('option');
+                option.setAttribute('data-label', '{{ prestation.label|e('js') }}');
+                option.setAttribute('data-description', '{{ prestation.description|e('js') }}' );
+                option.setAttribute('data-price', {{prestation.price}});
+                option.setAttribute('data-quantity', {{prestation.quantity}});
+                option.setAttribute('data-category', '{{ prestation.category|e('js') }}');
+                option.setAttribute('data-vatRate', {{prestation.vatRate}});
+                option.textContent = '{{ prestation.label|e('js') }}';
+                option.value = '{{ prestation.label|e('js') }}';
+                selectElement.appendChild(option);
+            {% endfor %}
+                item.appendChild(selectElement);
+
+
         }
 
         document.querySelectorAll('.add_item_link').forEach(btn => {
@@ -45,7 +68,9 @@
         });
 
         document.querySelectorAll('ul.services li').forEach((service) => {
+            addSelectService(service);
             addServiceFormDeleteLink(service);
+
         });
     </script>
 {% endblock %}
