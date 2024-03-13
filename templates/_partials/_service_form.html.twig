@@ -48,6 +48,7 @@
              selectElement.classList.add('prestation_select');
              {% for prestation in prestations %}
                 const option = document.createElement('option');
+                option.classList.add('option-prestation')
                 option.setAttribute('data-label', '{{ prestation.label|e('js') }}');
                 option.setAttribute('data-description', '{{ prestation.description|e('js') }}' );
                 option.setAttribute('data-price', {{prestation.price}});
@@ -59,9 +60,15 @@
                 selectElement.appendChild(option);
             {% endfor %}
                 item.appendChild(selectElement);
+        }
 
+        const updateService = (option) => {
 
         }
+
+        document.querySelectorAll('.option-prestation').forEach(option => {
+            option.addEventListener("click", updateService(option));
+        })
 
         document.querySelectorAll('.add_item_link').forEach(btn => {
             btn.addEventListener("click", addFormToCollection);
